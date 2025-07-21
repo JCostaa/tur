@@ -1,0 +1,1228 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2024-01-15T13:15:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "req_root",
+      "parentId": "wrk_sistema_tur",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/health",
+      "name": "Health Check",
+      "description": "Verificar se a API está funcionando",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1703123456789,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_auth_login",
+      "parentId": "fld_auth",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/auth/login",
+      "name": "Login",
+      "description": "Fazer login no sistema",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456789,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_auth_register",
+      "parentId": "fld_auth",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/auth/register",
+      "name": "Register",
+      "description": "Registrar novo usuário",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"novo_usuario\",\n  \"email\": \"usuario@exemplo.com\",\n  \"password\": \"senha123\",\n  \"role\": \"admin\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456790,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_auth_validate",
+      "parentId": "fld_auth",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/auth/validate",
+      "name": "Validate Token",
+      "description": "Validar token JWT",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456791,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_content_list",
+      "parentId": "fld_content",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/content",
+      "name": "List Content",
+      "description": "Listar todo o conteúdo",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "active",
+          "value": "true",
+          "description": "Filtrar apenas conteúdo ativo"
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456789,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_content_by_type",
+      "parentId": "fld_content",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/content/type/{{ _.content_type }}",
+      "name": "Get Content by Type",
+      "description": "Buscar conteúdo por tipo",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456790,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_content_search",
+      "parentId": "fld_content",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/content/search",
+      "name": "Search Content",
+      "description": "Buscar conteúdo por texto",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "q",
+          "value": "{{ _.search_query }}",
+          "description": "Termo de busca"
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456791,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_content_get",
+      "parentId": "fld_content",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/content/{{ _.content_id }}",
+      "name": "Get Content by ID",
+      "description": "Buscar conteúdo por ID",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456792,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_content_create",
+      "parentId": "fld_content",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/content",
+      "name": "Create Content",
+      "description": "Criar novo conteúdo",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"type\": \"page\",\n  \"title\": \"Nova Página\",\n  \"content\": \"Conteúdo da página...\",\n  \"metadata\": \"{\\\"author\\\": \\\"Admin\\\"}\",\n  \"isActive\": true\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456793,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_content_update",
+      "parentId": "fld_content",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/content/{{ _.content_id }}",
+      "name": "Update Content",
+      "description": "Atualizar conteúdo existente",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"title\": \"Título Atualizado\",\n  \"content\": \"Conteúdo atualizado...\",\n  \"isActive\": true\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456794,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_content_delete",
+      "parentId": "fld_content",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/content/{{ _.content_id }}",
+      "name": "Delete Content",
+      "description": "Deletar conteúdo",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456795,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_content_toggle",
+      "parentId": "fld_content",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/content/{{ _.content_id }}/toggle",
+      "name": "Toggle Content Status",
+      "description": "Alternar status ativo/inativo do conteúdo",
+      "method": "PATCH",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456796,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_menu_list",
+      "parentId": "fld_menu",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/menu",
+      "name": "List Menu Items",
+      "description": "Listar itens do menu",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "active",
+          "value": "true",
+          "description": "Filtrar apenas itens ativos"
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456789,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_menu_tree",
+      "parentId": "fld_menu",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/menu/tree",
+      "name": "Get Menu Tree",
+      "description": "Obter estrutura hierárquica do menu",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456790,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_menu_get",
+      "parentId": "fld_menu",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/menu/{{ _.menu_id }}",
+      "name": "Get Menu Item",
+      "description": "Buscar item do menu por ID",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456791,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_menu_create",
+      "parentId": "fld_menu",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/menu",
+      "name": "Create Menu Item",
+      "description": "Criar novo item do menu",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Novo Item\",\n  \"url\": \"/novo-item\",\n  \"orderIndex\": 1,\n  \"isActive\": true,\n  \"parentId\": null\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456792,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_menu_update",
+      "parentId": "fld_menu",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/menu/{{ _.menu_id }}",
+      "name": "Update Menu Item",
+      "description": "Atualizar item do menu",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Item Atualizado\",\n  \"url\": \"/item-atualizado\",\n  \"orderIndex\": 2,\n  \"isActive\": true\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456793,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_menu_delete",
+      "parentId": "fld_menu",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/menu/{{ _.menu_id }}",
+      "name": "Delete Menu Item",
+      "description": "Deletar item do menu",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456794,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_menu_toggle",
+      "parentId": "fld_menu",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/menu/{{ _.menu_id }}/toggle",
+      "name": "Toggle Menu Status",
+      "description": "Alternar status ativo/inativo do menu",
+      "method": "PATCH",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456795,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_menu_reorder",
+      "parentId": "fld_menu",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/menu/reorder",
+      "name": "Reorder Menu Items",
+      "description": "Reordenar itens do menu",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"menuItems\": [\n    {\"id\": 1, \"orderIndex\": 1},\n    {\"id\": 2, \"orderIndex\": 2},\n    {\"id\": 3, \"orderIndex\": 3}\n  ]\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456796,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_settings_list",
+      "parentId": "fld_settings",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/settings",
+      "name": "List Settings",
+      "description": "Listar todas as configurações",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "asObject",
+          "value": "true",
+          "description": "Retornar como objeto chave-valor"
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456789,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_settings_by_type",
+      "parentId": "fld_settings",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/settings/type/{{ _.setting_type }}",
+      "name": "Get Settings by Type",
+      "description": "Buscar configurações por tipo",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456790,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_settings_get",
+      "parentId": "fld_settings",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/settings/{{ _.setting_id }}",
+      "name": "Get Setting by ID",
+      "description": "Buscar configuração por ID",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456791,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_settings_get_key",
+      "parentId": "fld_settings",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/settings/key/{{ _.setting_key }}",
+      "name": "Get Setting by Key",
+      "description": "Buscar configuração por chave",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456792,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_settings_create",
+      "parentId": "fld_settings",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/settings",
+      "name": "Create Setting",
+      "description": "Criar nova configuração",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"key\": \"nova_config\",\n  \"value\": \"valor da configuração\",\n  \"type\": \"string\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456793,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_settings_update",
+      "parentId": "fld_settings",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/settings/{{ _.setting_id }}",
+      "name": "Update Setting",
+      "description": "Atualizar configuração por ID",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"key\": \"config_atualizada\",\n  \"value\": \"novo valor\",\n  \"type\": \"string\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456794,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_settings_update_key",
+      "parentId": "fld_settings",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/settings/key/{{ _.setting_key }}",
+      "name": "Update Setting by Key",
+      "description": "Atualizar configuração por chave",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"value\": \"novo valor\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456795,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_settings_delete",
+      "parentId": "fld_settings",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/settings/{{ _.setting_id }}",
+      "name": "Delete Setting",
+      "description": "Deletar configuração",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456796,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_settings_bulk_update",
+      "parentId": "fld_settings",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/settings/bulk-update",
+      "name": "Bulk Update Settings",
+      "description": "Atualizar múltiplas configurações",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"settings\": {\n    \"site_title\": \"Novo Título\",\n    \"primary_color\": \"#ff0000\",\n    \"contact_email\": \"novo@email.com\"\n  }\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456797,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_upload_list",
+      "parentId": "fld_upload",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/upload",
+      "name": "List Files",
+      "description": "Listar todos os arquivos",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456789,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_upload_stats",
+      "parentId": "fld_upload",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/upload/stats",
+      "name": "Get File Stats",
+      "description": "Obter estatísticas dos arquivos",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456790,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_upload_search",
+      "parentId": "fld_upload",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/upload/search",
+      "name": "Search Files",
+      "description": "Buscar arquivos por nome",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "q",
+          "value": "{{ _.search_query }}",
+          "description": "Termo de busca"
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456791,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_upload_get",
+      "parentId": "fld_upload",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/upload/{{ _.file_id }}",
+      "name": "Get File",
+      "description": "Buscar arquivo por ID",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456792,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_upload_download",
+      "parentId": "fld_upload",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/upload/{{ _.file_id }}/download",
+      "name": "Download File",
+      "description": "Download de arquivo",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456793,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_upload_upload",
+      "parentId": "fld_upload",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/upload",
+      "name": "Upload File",
+      "description": "Upload de arquivo",
+      "method": "POST",
+      "body": {
+        "mimeType": "multipart/form-data",
+        "params": [
+          {
+            "name": "file",
+            "value": "",
+            "type": "file",
+            "fileName": "",
+            "description": "Arquivo para upload"
+          }
+        ]
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456794,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_upload_delete",
+      "parentId": "fld_upload",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "url": "{{ _.base_url }}/api/upload/{{ _.file_id }}",
+      "name": "Delete File",
+      "description": "Deletar arquivo",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1703123456795,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "env_development",
+      "parentId": "wrk_sistema_tur",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "name": "Development",
+      "data": {
+        "base_url": "http://localhost:5000",
+        "auth_token": "",
+        "content_id": "1",
+        "content_type": "page",
+        "search_query": "exemplo",
+        "menu_id": "1",
+        "setting_id": "1",
+        "setting_key": "site_title",
+        "setting_type": "string",
+        "file_id": "1"
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "base_url",
+          "auth_token",
+          "content_id",
+          "content_type",
+          "search_query",
+          "menu_id",
+          "setting_id",
+          "setting_key",
+          "setting_type",
+          "file_id"
+        ]
+      },
+      "color": "#7d69cb",
+      "isPrivate": false,
+      "metaSortKey": -1703123456789,
+      "_type": "environment"
+    },
+    {
+      "_id": "wrk_sistema_tur",
+      "parentId": null,
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "name": "Sistema Tur API",
+      "description": "API completa do Sistema Tur com todas as rotas",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "fld_auth",
+      "parentId": "wrk_sistema_tur",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "name": "🔐 Authentication",
+      "description": "Rotas de autenticação",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1703123456789,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_content",
+      "parentId": "wrk_sistema_tur",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "name": "📄 Content",
+      "description": "Gerenciamento de conteúdo",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1703123456790,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_menu",
+      "parentId": "wrk_sistema_tur",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "name": "🍽️ Menu",
+      "description": "Gerenciamento de menu",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1703123456791,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_settings",
+      "parentId": "wrk_sistema_tur",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "name": "⚙️ Settings",
+      "description": "Gerenciamento de configurações",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1703123456792,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_upload",
+      "parentId": "wrk_sistema_tur",
+      "modified": 1703123456789,
+      "created": 1703123456789,
+      "name": "📁 Upload",
+      "description": "Gerenciamento de arquivos",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1703123456793,
+      "_type": "request_group"
+    }
+  ]
+} 
