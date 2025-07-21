@@ -6,65 +6,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import TravelPackages from '../components/TravelPackages';
 import Grid from '@mui/material/Grid';
 import Header from '../components/Header';
-
-// MOCK DATA
-const MOCK_TOURS = [
-  {
-    id: 1,
-    title: 'Passeio de Barco na Lagoa',
-    location: 'Barra de São Miguel',
-    rating: 4.8,
-    duration: '3h',
-    price: 'R$ 120',
-    image: '/images/browse-1.jpg',
-    people: 10,
-    description: 'Explore as belezas naturais da lagoa com guia local e paradas para banho.'
-  },
-  {
-    id: 2,
-    title: 'Trilha Ecológica',
-    location: 'Barra de São Miguel',
-    rating: 4.6,
-    duration: '2h',
-    price: 'R$ 80',
-    image: '/images/browse-2.jpg',
-    people: 15,
-    description: 'Caminhada guiada por trilhas ecológicas, com observação de fauna e flora.'
-  },
-  {
-    id: 3,
-    title: 'Passeio de Buggy',
-    location: 'Praia do Gunga',
-    rating: 4.9,
-    duration: '4h',
-    price: 'R$ 200',
-    image: '/images/browse-3.jpg',
-    people: 4,
-    description: 'Aventura pelas dunas e praias paradisíacas com buggy.'
-  },
-  {
-    id: 4,
-    title: 'Mergulho com Cilindro',
-    location: 'Barra de São Miguel',
-    rating: 4.7,
-    duration: '1h',
-    price: 'R$ 250',
-    image: '/images/browse-4.jpg',
-    people: 2,
-    description: 'Experiência de mergulho para iniciantes e avançados, com instrutor.'
-  },
-  {
-    id: 5,
-    title: 'Passeio de Stand Up Paddle',
-    location: 'Praia do Francês',
-    rating: 4.5,
-    duration: '1.5h',
-    price: 'R$ 70',
-    image: '/images/browse-5.jpg',
-    people: 6,
-    description: 'Remada tranquila pelas águas calmas, ideal para todas as idades.'
-  },
-];
+import { MOCK_TOURS } from './mockData';
 
 const LOCATIONS = [
   'Barra de São Miguel',

@@ -3,6 +3,7 @@ import React from 'react';
 import { theme } from '../theme/theme';
 import TravelPackages from '../components/TravelPackages';
 import { useNavigate } from 'react-router-dom';
+import { MOCK_RESTAURANTS } from './mockData';
 
 const Restaurants: React.FC = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Restaurants: React.FC = () => {
         <h3 style={{ color: theme.palette.primary.main, fontWeight: 600, letterSpacing: 2 }}>RESTAURANTES</h3>
         <h1 style={{ fontSize: 36, fontWeight: 700, margin: '8px 0 0 0', color: theme.palette.text.primary }}>no município</h1>
       </div>
-      <TravelPackages hideTitle detailRoute="restaurant" />
+      <TravelPackages customPackages={MOCK_RESTAURANTS} hideTitle detailRoute="restaurant" />
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
         <button
           style={{

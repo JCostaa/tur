@@ -15,7 +15,7 @@ import {
 
 const SectionWrapper = styled(Box)(({ theme }) => ({
   padding: theme.spacing(8, 0),
-  backgroundColor: '#fff',
+  backgroundColor: '#f5f5f5',
 }));
 
 const SectionTitle = styled(Typography)(({ theme }) => ({

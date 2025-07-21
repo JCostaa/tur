@@ -11,19 +11,19 @@ const filters = [
 
 const experiences = [
   {
-    image: '/public/images/browse-1.jpg',
+    image: '/images/browse-1.jpg',
     title: 'Cidade Noturna',
     subtitle: 'Descubra a vida noturna vibrante',
     type: 'Cultural',
   },
   {
-    image: '/public/images/browse-2.jpg',
+    image: '/images/browse-2.jpg',
     title: 'Centro Histórico',
     subtitle: 'Passeios guiados e cultura',
     type: 'Cultural',
   },
   {
-    image: '/public/images/browse-3.jpg',
+    image: '/images/browse-3.jpg',
     title: 'Arquitetura Exótica',
     subtitle: 'Belezas arquitetônicas únicas',
     type: 'Cultural',

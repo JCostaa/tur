@@ -16,7 +16,7 @@ export const theme = createTheme({
       contrastText: brandColors.neutral.white,
     },
     background: {
-      default: brandColors.neutral.white,
+      default: brandColors.neutral.lightGray,
       paper: brandColors.neutral.white,
     },
     text: {

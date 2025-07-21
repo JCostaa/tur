@@ -6,65 +6,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import TravelPackages from '../components/TravelPackages';
 import Grid from '@mui/material/Grid';
 import Header from '../components/Header';
-
-// MOCK DATA
-const MOCK_ACCOMMODATIONS = [
-  {
-    id: 1,
-    title: 'Pousada Pantanal Encantado',
-    location: 'Pantanal',
-    rating: 4.8,
-    duration: '1 noite',
-    price: 'R$ 420',
-    image: '/images/category-1.jpg',
-    people: 2,
-    description: 'Conforto e contato com a natureza, piscina, Wi-Fi e estacionamento.'
-  },
-  {
-    id: 2,
-    title: 'Hotel Beira Rio',
-    location: 'Beira Rio',
-    rating: 4.6,
-    duration: '1 noite',
-    price: 'R$ 350',
-    image: '/images/browse-2.jpg',
-    people: 3,
-    description: 'Vista para o rio, café da manhã incluso, quartos amplos.'
-  },
-  {
-    id: 3,
-    title: 'Resort Paraíso das Águas',
-    location: 'Praia',
-    rating: 4.9,
-    duration: '1 noite',
-    price: 'R$ 600',
-    image: '/images/browse-3.jpg',
-    people: 4,
-    description: 'Resort completo com lazer, spa, piscinas e restaurante.'
-  },
-  {
-    id: 4,
-    title: 'Hostel Trilha Jovem',
-    location: 'Centro',
-    rating: 4.5,
-    duration: '1 noite',
-    price: 'R$ 80',
-    image: '/images/browse-4.jpg',
-    people: 1,
-    description: 'Opção econômica, ambiente jovem e descontraído.'
-  },
-  {
-    id: 5,
-    title: 'Pousada Vida Verde',
-    location: 'Centro',
-    rating: 4.7,
-    duration: '1 noite',
-    price: 'R$ 150',
-    image: '/images/browse-5.jpg',
-    people: 2,
-    description: 'Ambiente familiar, café da manhã e estacionamento.'
-  },
-];
+import { MOCK_ACCOMMODATIONS } from './mockData';
 
 const LOCATIONS = [
   'Pantanal',

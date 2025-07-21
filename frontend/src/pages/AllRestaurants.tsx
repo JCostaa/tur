@@ -6,65 +6,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import TravelPackages from '../components/TravelPackages';
 import Grid from '@mui/material/Grid';
 import Header from '../components/Header';
-
-// MOCK DATA
-const MOCK_RESTAURANTS = [
-  {
-    id: 1,
-    title: 'Restaurante Sabor do Pantanal',
-    location: 'Centro',
-    rating: 4.7,
-    duration: 'Almoço',
-    price: 'R$ 60',
-    image: '/images/category-2.jpg',
-    people: 50,
-    description: 'Pratos típicos da região, ambiente acolhedor e música ao vivo.'
-  },
-  {
-    id: 2,
-    title: 'Peixaria do Zé',
-    location: 'Beira Rio',
-    rating: 4.5,
-    duration: 'Jantar',
-    price: 'R$ 80',
-    image: '/images/browse-2.jpg',
-    people: 40,
-    description: 'Especialidade em peixes frescos e frutos do mar.'
-  },
-  {
-    id: 3,
-    title: 'Churrascaria Boi na Brasa',
-    location: 'Centro',
-    rating: 4.8,
-    duration: 'Almoço/Jantar',
-    price: 'R$ 90',
-    image: '/images/browse-3.jpg',
-    people: 100,
-    description: 'Rodízio de carnes nobres e buffet variado.'
-  },
-  {
-    id: 4,
-    title: 'Pizzaria Bella Massa',
-    location: 'Praia',
-    rating: 4.6,
-    duration: 'Noite',
-    price: 'R$ 50',
-    image: '/images/browse-4.jpg',
-    people: 30,
-    description: 'Pizzas artesanais e ambiente familiar.'
-  },
-  {
-    id: 5,
-    title: 'Restaurante Vegetariano Vida Verde',
-    location: 'Centro',
-    rating: 4.9,
-    duration: 'Almoço',
-    price: 'R$ 55',
-    image: '/images/browse-5.jpg',
-    people: 25,
-    description: 'Opções vegetarianas e veganas, sucos naturais.'
-  },
-];
+import { MOCK_RESTAURANTS } from './mockData';
 
 const LOCATIONS = [
   'Centro',

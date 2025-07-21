@@ -103,7 +103,7 @@ const HeroSubtitle = styled(Typography)(({ theme }) => ({
 }));
 
 const CTAButton = styled(Button)(({ theme }) => ({
-  backgroundColor: '#fff',
+  backgroundColor: '#f5f5f5',
   color: '#333',
   textTransform: 'none',
   fontSize: '1rem',

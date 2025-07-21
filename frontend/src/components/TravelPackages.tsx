@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Container,
@@ -18,26 +18,27 @@ import { useNavigate } from 'react-router-dom';
 
 const SectionWrapper = styled(Box)(({ theme }) => ({
   padding: theme.spacing(8, 0),
-  backgroundColor: '#fff',
+  backgroundColor: '#f5f5f5',
 }));
 
 const SectionTitle = styled(Typography)(({ theme }) => ({
   fontFamily: '"Playfair Display", serif',
-  fontSize: '2.5rem',
-  fontWeight: 700,
+  fontSize: '2rem', // menor
+  fontWeight: 600, // menos negrito
   textAlign: 'center',
-  marginBottom: theme.spacing(6),
-  color: '#333',
+  marginBottom: theme.spacing(4), // menos espaço
+  color: '#232323',
   [theme.breakpoints.down('md')]: {
-    fontSize: '2rem',
+    fontSize: '1.5rem',
   },
 }));
 
-const PackagesGrid = styled(Box)(({ theme }) => ({
+const PackagesGrid = styled(Box)<{ cardsPerView: number }>(({ theme, cardsPerView }) => ({
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+  gridTemplateColumns: `repeat(${cardsPerView}, 350px)`,
   gap: theme.spacing(4),
   marginTop: theme.spacing(4),
+  justifyContent: 'center',
 }));
 
 const PackageCard = styled(Card)(({ theme }) => ({
@@ -148,18 +149,18 @@ const CardContentStyled = styled(CardContent)(({ theme }) => ({
 }));
 
 const PackageTitle = styled(Typography)(({ theme }) => ({
-  fontSize: '1.7rem',
-  fontWeight: 700,
+  fontSize: '1.2rem', // menor
+  fontWeight: 600,
   color: '#232323',
-  marginBottom: theme.spacing(1),
+  marginBottom: theme.spacing(0.5),
   fontFamily: '"Playfair Display", serif',
-  letterSpacing: 0.2,
+  letterSpacing: 0.1,
 }));
 
 const PackageLocation = styled(Typography)(({ theme }) => ({
-  fontSize: '1rem',
+  fontSize: '0.95rem',
   color: '#888',
-  marginBottom: theme.spacing(1),
+  marginBottom: theme.spacing(0.5),
   display: 'flex',
   alignItems: 'center',
   gap: theme.spacing(0.5),
@@ -167,43 +168,49 @@ const PackageLocation = styled(Typography)(({ theme }) => ({
 
 const PackageDescription = styled(Typography)(({ theme }) => ({
   color: '#666',
-  fontSize: 15,
-  marginBottom: theme.spacing(1),
+  fontSize: 13,
+  marginBottom: theme.spacing(0.5),
 }));
 
 const PackagePrice = styled(Typography)(({ theme }) => ({
-  fontSize: '2rem',
-  fontWeight: 800,
+  fontSize: '1.2rem', // menor
+  fontWeight: 700,
   color: '#FF5722',
   fontFamily: '"Playfair Display", serif',
-  marginTop: theme.spacing(2),
-  marginBottom: theme.spacing(2),
-  letterSpacing: 0.5,
+  marginTop: theme.spacing(1),
+  marginBottom: theme.spacing(1),
+  letterSpacing: 0.2,
 }));
 
 const CardActionsStyled = styled(Box)(({ theme }) => ({
   display: 'flex',
-  justifyContent: 'space-between',
-  marginTop: theme.spacing(2), // Espaço fixo acima dos botões
-  gap: theme.spacing(2),
+  justifyContent: 'flex-end',
+  marginTop: theme.spacing(1),
+  gap: theme.spacing(1.5),
 }));
 
-const ActionButton = styled('button')(({ theme }) => ({
-  padding: '12px 32px',
-  borderRadius: 24,
-  border: 'none',
-  background: '#FF5722',
-  color: '#fff',
-  fontWeight: 700,
-  fontSize: 18,
+const ActionButton = styled('button')<{
+  variant?: 'contained' | 'outlined';
+}>(({ theme, variant }) => ({
+  padding: '7px 18px',
+  borderRadius: 18,
+  border: variant === 'outlined' ? '1.5px solid #FF5722' : 'none',
+  background: variant === 'outlined' ? 'transparent' : '#FF5722',
+  color: variant === 'outlined' ? '#FF5722' : '#fff',
+  fontWeight: 600,
+  fontSize: 15,
   cursor: 'pointer',
-  boxShadow: '0 2px 8px rgba(255,87,34,0.10)',
-  transition: 'all 0.2s',
-  letterSpacing: 0.5,
+  boxShadow: variant === 'outlined' ? 'none' : '0 1px 4px rgba(255,87,34,0.08)',
+  transition: 'all 0.18s',
+  letterSpacing: 0.2,
+  minWidth: 0,
+  minHeight: 0,
   '&:hover': {
-    background: '#e64a19',
-    transform: 'translateY(-2px) scale(1.04)',
-    boxShadow: '0 6px 18px rgba(255,87,34,0.18)',
+    background: variant === 'outlined' ? 'rgba(255,87,34,0.08)' : '#e64a19',
+    color: '#FF5722',
+    borderColor: '#e64a19',
+    boxShadow: variant === 'outlined' ? '0 1px 6px rgba(255,87,34,0.10)' : '0 4px 12px rgba(255,87,34,0.15)',
+    transform: 'translateY(-1px) scale(1.03)',
   },
 }));
 
@@ -278,13 +285,48 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
   const packages = customPackages || defaultPackages;
   const navigate = useNavigate();
 
+  // Carrossel: estado do índice inicial
+  const [startIndex, setStartIndex] = useState(0);
+  const cardsPerView = isMobile ? 1 : 3;
+  const canGoBack = startIndex > 0;
+  const canGoForward = startIndex + cardsPerView < packages.length;
+
+  const handlePrev = () => {
+    if (canGoBack) setStartIndex(startIndex - cardsPerView);
+  };
+  const handleNext = () => {
+    if (canGoForward) setStartIndex(startIndex + cardsPerView);
+  };
+
   const handleCardClick = (id: number) => {
     navigate(`/${detailRoute}/${id}`);
   };
 
+  // Estilos para as setas
+  const arrowStyle = {
+    position: 'absolute' as const,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    zIndex: 10,
+    background: '#fff',
+    border: 'none',
+    borderRadius: '50%',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+    width: 40,
+    height: 40,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    fontSize: 24,
+    color: theme.palette.primary.main,
+    opacity: 0.95,
+    transition: 'background 0.2s',
+  };
+
   return (
-    <SectionWrapper>
-      <Container maxWidth="xl">
+    <SectionWrapper style={{ position: 'relative' }}>
+      <Container maxWidth="xl" style={{ position: 'relative' }}>
         {!hideTitle && (
           <>
             <SectionTitle>
@@ -294,13 +336,13 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
               variant="h2"
               sx={{
                 fontFamily: '"Playfair Display", serif',
-                fontSize: '3rem',
-                fontWeight: 700,
+                fontSize: '1.5rem',
+                fontWeight: 500,
                 textAlign: 'center',
-                marginBottom: theme.spacing(6),
+                marginBottom: theme.spacing(3),
                 color: '#333',
                 [theme.breakpoints.down('md')]: {
-                  fontSize: '2.5rem',
+                  fontSize: '1.2rem',
                 },
               }}
             >
@@ -309,8 +351,30 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
           </>
         )}
 
-        <PackagesGrid>
-          {packages.map((pkg, index) => (
+        {/* Setas de navegação */}
+        {canGoBack && (
+          <button
+            aria-label="Voltar"
+            style={{ ...arrowStyle, left: -20 }}
+            onClick={handlePrev}
+            disabled={!canGoBack}
+          >
+            &#8592;
+          </button>
+        )}
+        {canGoForward && (
+          <button
+            aria-label="Avançar"
+            style={{ ...arrowStyle, right: -20 }}
+            onClick={handleNext}
+            disabled={!canGoForward}
+          >
+            &#8594;
+          </button>
+        )}
+
+        <PackagesGrid cardsPerView={cardsPerView} style={{ position: 'relative', overflow: 'hidden', minHeight: 350 }}>
+          {packages.slice(startIndex, startIndex + cardsPerView).map((pkg, index) => (
             <PackageCard
               key={pkg.id}
               className="animate-zoomIn hover-from-left"
@@ -325,13 +389,13 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
                 />
                 <ImageGradient />
                 <RatingBadge className="rating-badge">
-                  <StarIconStyled style={{ color: '#FFD700', fontSize: 18, marginRight: 4 }} />
-                  <Typography variant="body2" sx={{ fontWeight: 700, fontSize: 15 }}>
+                  <StarIconStyled style={{ color: '#FFD700', fontSize: 15, marginRight: 3 }} />
+                  <Typography variant="body2" sx={{ fontWeight: 600, fontSize: 13 }}>
                     {pkg.rating}
                   </Typography>
                 </RatingBadge>
                 <DurationBadge className="package-overlay">
-                  <Typography variant="body2" sx={{ fontWeight: 700, fontSize: 15 }}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, fontSize: 13 }}>
                     {pkg.duration}
                   </Typography>
                 </DurationBadge>
@@ -356,8 +420,11 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
                   Start From {pkg.price}
                 </PackagePrice>
                 <CardActionsStyled>
-                  <ActionButton onClick={e => { e.stopPropagation(); handleCardClick(pkg.id); }}>Leia Mais</ActionButton>
-                  <ActionButton>Reserve Agora</ActionButton>
+                  <ActionButton
+                    variant="outlined"
+                    onClick={e => { e.stopPropagation(); handleCardClick(pkg.id); }}
+                  >Leia Mais</ActionButton>
+                  <ActionButton variant="contained">Reserve Agora</ActionButton>
                 </CardActionsStyled>
               </CardContentStyled>
             </PackageCard>

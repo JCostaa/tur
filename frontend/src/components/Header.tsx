@@ -128,14 +128,21 @@ const Header: React.FC = () => {
 
   // Corrigido: só faz scroll suave para âncoras, deixa rotas normais para o NavLink
   const handleMenuClick = (href: string) => (e: React.MouseEvent) => {
+    if (href === '/') {
+      e.preventDefault();
+      if (location.pathname === '/') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        navigate('/', { state: { scrollToTop: true } });
+      }
+      return;
+    }
     if (href.startsWith('#') || href.startsWith('/#')) {
       e.preventDefault();
       const id = href.replace('/#', '').replace('#', '');
       if (location.pathname !== '/') {
-        // Navega para Home e passa a âncora via state
         navigate('/', { state: { anchor: id } });
       } else {
-        // Já está na Home, faz scroll suave
         const section = document.getElementById(id);
         if (section) {
           section.scrollIntoView({ behavior: 'smooth' });
@@ -354,7 +361,6 @@ const Header: React.FC = () => {
           </IconButton>
           <Box sx={{ mt: 2 }}>
             {menuItems.map((item) => {
-              const isAnchor = item.href.startsWith('#') || item.href.startsWith('/#');
               return (
                 <NavLink
                   to={item.href}
@@ -372,7 +378,7 @@ const Header: React.FC = () => {
                       backgroundColor: alpha(brandColors.primary.orange, 0.1),
                     },
                   }}
-                  onClick={isAnchor ? handleMenuClick(item.href) : undefined}
+                  onClick={handleMenuClick(item.href)}
                 >
                   {item.text}
                 </NavLink>

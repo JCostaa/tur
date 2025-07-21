@@ -14,6 +14,7 @@ import Restaurants from './ Restaurants';
 import Layout from '../components/Layout';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+
 const tours = [
   {
     id: 1,
@@ -113,6 +114,10 @@ const Home: React.FC = () => {
       // Limpa o state para evitar scroll repetido
       navigate(location.pathname, { replace: true, state: {} });
     }
+    if (location.state && (location.state as any).scrollToTop) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      navigate(location.pathname, { replace: true, state: {} });
+    }
   }, [location, navigate]);
   return (
     <Layout>
@@ -128,13 +133,13 @@ const Home: React.FC = () => {
           < Experiences />
         </Box>
         <Box id="tours">
-          <TravelPackages customPackages={tours} hideTitle detailRoute="tour" />
+          <Tours />
         </Box>
         <Box id="accommodations">
-          <TravelPackages customPackages={accommodations} hideTitle detailRoute="accommodation" />
+          <Accommodation />
         </Box>
         <Box id="restaurants">
-          <TravelPackages customPackages={restaurants} hideTitle detailRoute="restaurant" />
+          <Restaurants />
         </Box>
         <Box id="contato" sx={{ minHeight: 300 }}>
           {/* Seção de contato pode ser implementada aqui */}
