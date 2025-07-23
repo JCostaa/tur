@@ -62,7 +62,7 @@ export class UserService {
 
     const token = jwt.sign(
       { userId: user.id, username: user.username, role: user.role },
-      process.env.JWT_SECRET || 'your-secret-key',
+      process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production',
       { expiresIn: '24h' }
     );
 
@@ -71,9 +71,10 @@ export class UserService {
 
   async validateToken(token: string): Promise<User | null> {
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key') as any;
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production') as any;
       return await this.findUserById(decoded.userId);
     } catch (error) {
+      console.error('Token validation error:', error);
       return null;
     }
   }

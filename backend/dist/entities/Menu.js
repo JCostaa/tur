@@ -44,7 +44,7 @@ __decorate([
 ], Menu.prototype, "updatedAt", void 0);
 __decorate([
     ManyToOne(() => Menu, menu => menu.children),
-    JoinColumn({ name: 'parent_id' }),
+    JoinColumn({ name: 'parentId' }),
     __metadata("design:type", Menu)
 ], Menu.prototype, "parent", void 0);
 __decorate([

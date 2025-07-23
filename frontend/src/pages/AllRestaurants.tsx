@@ -6,13 +6,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import TravelPackages from '../components/TravelPackages';
 import Grid from '@mui/material/Grid';
 import Header from '../components/Header';
-import { MOCK_RESTAURANTS } from './mockData';
-
-const LOCATIONS = [
-  'Centro',
-  'Beira Rio',
-  'Praia',
-];
+import { useQuery } from '@tanstack/react-query';
+import { getRestaurants } from '../services/restaurants';
+import { useNavigate } from 'react-router-dom';
 
 const RATINGS = [4, 4.5, 5];
 
@@ -34,21 +30,56 @@ const AllRestaurants: React.FC = () => {
   const [selectedDurations, setSelectedDurations] = useState<number[]>([]);
   const [price, setPrice] = useState<number[]>(PRICE_RANGE);
 
+  const { data: restaurantsData, isLoading, isError } = useQuery({
+    queryKey: ['restaurants'],
+    queryFn: getRestaurants,
+  });
+
+  // Mapeamento para o formato esperado pelo TravelPackages
+  const mapRestaurantToPackage = (restaurant: any) => ({
+    id: restaurant.id,
+    title: restaurant.title || restaurant.name || 'Restaurante',
+    location: restaurant.location?.city || restaurant.location?.address || restaurant.location || 'Local não informado',
+    rating: restaurant.rating || 5,
+    duration: restaurant.duration_description || restaurant.duration || 'Almoço/Jantar',
+    price: restaurant.price || 'R$ 0',
+    image: restaurant.image,
+    people: restaurant.people || 2,
+    gallery: restaurant.gallery || [],
+    provider: restaurant.provider || {},
+    // Tags: atributos lançados como tags (array de string)
+    tags: Array.isArray(restaurant.attributes)
+      ? restaurant.attributes.flatMap((attr: any) => Array.isArray(attr.items) ? attr.items : [attr.name || attr])
+      : [],
+    // Descrição: usar content ou description, limitado a 120 caracteres
+    description: (restaurant.content || restaurant.description || '').replace(/<[^>]+>/g, '').slice(0, 120) + '...',
+  });
+  const allRestaurants = Array.isArray(restaurantsData?.data?.restaurants)
+    ? restaurantsData.data.restaurants.map(mapRestaurantToPackage)
+    : Array.isArray(restaurantsData)
+      ? restaurantsData.map(mapRestaurantToPackage)
+      : [];
+
+  // Gerar lista dinâmica de localidades a partir dos dados
+  const dynamicLocations: string[] = Array.from(new Set(
+    allRestaurants.map((r: any) => r.location).filter((loc: string | undefined): loc is string => !!loc)
+  ));
+
   // Filtro de busca simples (por nome)
-  let filteredPackages = MOCK_RESTAURANTS.filter(pkg =>
+  let filteredPackages = allRestaurants.filter((pkg: any) =>
     pkg.title.toLowerCase().includes(search.toLowerCase())
   );
 
   // Filtros laterais
   if (selectedLocations.length > 0) {
-    filteredPackages = filteredPackages.filter(pkg => selectedLocations.includes(pkg.location));
+    filteredPackages = filteredPackages.filter((pkg: any) => selectedLocations.includes(pkg.location));
   }
   if (selectedRatings.length > 0) {
-    filteredPackages = filteredPackages.filter(pkg => selectedRatings.some(r => pkg.rating >= r));
+    filteredPackages = filteredPackages.filter((pkg: any) => selectedRatings.some(r => pkg.rating >= r));
   }
   if (selectedDurations.length > 0) {
-    filteredPackages = filteredPackages.filter(pkg => {
-      return selectedDurations.some(d => {
+    filteredPackages = filteredPackages.filter((pkg: any) => {
+      return selectedDurations.some((d: number) => {
         if (d === 1) return pkg.duration.includes('Almoço');
         if (d === 2) return pkg.duration.includes('Jantar');
         if (d === 3) return pkg.duration.includes('Noite');
@@ -57,8 +88,8 @@ const AllRestaurants: React.FC = () => {
       });
     });
   }
-  filteredPackages = filteredPackages.filter(pkg => {
-    const priceNumber = Number(pkg.price.replace(/\D/g, ''));
+  filteredPackages = filteredPackages.filter((pkg: any) => {
+    const priceNumber = Number(String(pkg.price).replace(/\D/g, ''));
     return priceNumber >= price[0] && priceNumber <= price[1];
   });
 
@@ -81,6 +112,11 @@ const AllRestaurants: React.FC = () => {
     setPrice(PRICE_RANGE);
   };
 
+  const navigate = useNavigate();
+  const handleRestaurantCardClick = (restaurant: any) => {
+    console.log('restaurant', restaurant);
+    navigate(`/restaurant/${restaurant.id}`, { state: { restaurant } });
+  };
   return (
     <>
       <Header />
@@ -125,7 +161,7 @@ const AllRestaurants: React.FC = () => {
                   {/* Localidade */}
                   <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>Localidade</Typography>
                   <Stack spacing={0.5} mb={2}>
-                    {LOCATIONS.map(loc => (
+                    {dynamicLocations.map(loc => (
                       <FormControlLabel
                         key={loc}
                         control={<Checkbox checked={selectedLocations.includes(loc)} onChange={() => handleLocationChange(loc)} />}
@@ -176,10 +212,22 @@ const AllRestaurants: React.FC = () => {
             </Box>
             {/* Resultados */}
             <Box sx={{ flex: 1 }}>
-              {filteredPackages.length === 0 ? (
+              {isLoading ? (
+                <Typography align="center" sx={{ mt: 8, color: '#888' }}>Carregando restaurantes...</Typography>
+              ) : isError ? (
+                <Typography align="center" sx={{ mt: 8, color: 'error.main' }}>Erro ao carregar restaurantes.</Typography>
+              ) : filteredPackages.length === 0 ? (
                 <Typography align="center" sx={{ mt: 8, color: '#888' }}>Nenhum restaurante encontrado.</Typography>
               ) : (
-                <TravelPackages customPackages={filteredPackages} hideTitle detailRoute="restaurant" />
+                <TravelPackages
+                  customPackages={filteredPackages}
+                  hideTitle
+                  detailRoute="restaurant"
+                  showArrows={false}
+                  hidePeopleAndPrice={true}
+                  showReserveButton={false}
+                  onCardClick={handleRestaurantCardClick}
+                />
               )}
             </Box>
           </Box>

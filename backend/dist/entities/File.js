@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 let File = class File {
 };
 __decorate([
@@ -47,6 +47,10 @@ __decorate([
     JoinColumn({ name: 'uploadedById' }),
     __metadata("design:type", Object)
 ], File.prototype, "uploadedBy", void 0);
+__decorate([
+    OneToMany('Banner', 'image', { lazy: true }),
+    __metadata("design:type", Array)
+], File.prototype, "banners", void 0);
 File = __decorate([
     Entity('files')
 ], File);

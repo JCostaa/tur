@@ -1,0 +1,1 @@
+{"version":3,"file":"1703123456793-CreateSegmentsTable.d.ts","sourceRoot":"","sources":["../../src/migrations/1703123456793-CreateSegmentsTable.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,kBAAkB,EAAE,WAAW,EAA0B,MAAM,SAAS,CAAC;AAElF,qBAAa,gCAAiC,YAAW,kBAAkB;IAC5D,EAAE,CAAC,WAAW,EAAE,WAAW,GAAG,OAAO,CAAC,IAAI,CAAC;IAqE3C,IAAI,CAAC,WAAW,EAAE,WAAW,GAAG,OAAO,CAAC,IAAI,CAAC;CAU3D"}

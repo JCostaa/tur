@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
 @Entity('files')
 export class File {
@@ -29,4 +29,7 @@ export class File {
   @ManyToOne('User', 'files', { lazy: true })
   @JoinColumn({ name: 'uploadedById' })
   uploadedBy?: any;
+
+  @OneToMany('Banner', 'image', { lazy: true })
+  banners?: any[];
 } 

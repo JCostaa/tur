@@ -6,14 +6,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import TravelPackages from '../components/TravelPackages';
 import Grid from '@mui/material/Grid';
 import Header from '../components/Header';
-import { MOCK_ACCOMMODATIONS } from './mockData';
-
-const LOCATIONS = [
-  'Pantanal',
-  'Beira Rio',
-  'Praia',
-  'Centro',
-];
+import { useQuery } from '@tanstack/react-query';
+import { getAccommodations } from '../services/accommodations';
+import { useNavigate } from 'react-router-dom';
 
 const RATINGS = [4, 4.5, 5];
 
@@ -34,33 +29,104 @@ const AllAccommodation: React.FC = () => {
   const [selectedDurations, setSelectedDurations] = useState<number[]>([]);
   const [price, setPrice] = useState<number[]>(PRICE_RANGE);
 
-  // Filtro de busca simples (por nome)
-  let filteredPackages = MOCK_ACCOMMODATIONS.filter(pkg =>
-    pkg.title.toLowerCase().includes(search.toLowerCase())
+  const { data: accommodationsData, isLoading, isError } = useQuery({
+    queryKey: ['accommodations'],
+    queryFn: getAccommodations,
+  });
+
+  // Mapeamento para o formato esperado pelo TravelPackages
+  const mapAccommodationToPackage = (accommodation: any) => {
+    let location = '';
+    if (typeof accommodation.location === 'string' && accommodation.location) {
+      location = accommodation.location;
+    } else if (
+      accommodation.location &&
+      (accommodation.location.address || accommodation.location.city || accommodation.location.state)
+    ) {
+      location = [
+        accommodation.location.address,
+        accommodation.location.city,
+        accommodation.location.state,
+      ]
+        .filter(Boolean)
+        .join(', ');
+    }
+    if (!location) location = 'Localidade não informada';
+
+    return {
+      id: accommodation.id,
+      title: accommodation.title || accommodation.name || 'Hospedagem',
+      location,
+      rating: accommodation.rating || 5,
+      duration: accommodation.duration_description || accommodation.duration || '1 noite',
+      price: accommodation.price || 'R$ 0',
+      image: accommodation.image,
+      people: accommodation.people || 2,
+      gallery: accommodation.gallery || [],
+      provider: accommodation.provider || {},
+      // Tags: atributos lançados como tags (array de string)
+      tags: Array.isArray(accommodation.attributes)
+        ? accommodation.attributes.flatMap((attr: any) =>
+            Array.isArray(attr.terms)
+              ? attr.terms
+              : Array.isArray(attr.items)
+              ? attr.items
+              : [attr.name || attr]
+          )
+        : [],
+      // Descrição: usar content ou description, limitado a 120 caracteres
+      description:
+        (accommodation.content || accommodation.description || '')
+          .replace(/<[^>]+>/g, '')
+          .slice(0, 120) + '...',
+    };
+  };
+
+  const allAccommodations = Array.isArray(accommodationsData?.data?.hotels)
+    ? accommodationsData.data.hotels.map(mapAccommodationToPackage)
+    : Array.isArray(accommodationsData)
+      ? accommodationsData.map(mapAccommodationToPackage)
+      : [];
+
+  // Ignorar todos os filtros e busca, sempre mostrar todos os hotéis
+  const filteredPackages = allAccommodations;
+
+  // Gerar lista dinâmica de localidades a partir dos dados
+  const dynamicLocations: string[] = Array.from(
+    new Set(
+      allAccommodations
+        .map((a: any) => a.location || 'Localidade não informada')
+        .filter((loc: string | undefined): loc is string => !!loc)
+    )
   );
 
+  // Filtro de busca simples (por nome)
+  // let filteredPackages = allAccommodations.filter((pkg: any) =>
+  //   pkg.title.toLowerCase().includes(search.toLowerCase())
+  // );
+
   // Filtros laterais
-  if (selectedLocations.length > 0) {
-    filteredPackages = filteredPackages.filter(pkg => selectedLocations.includes(pkg.location));
-  }
-  if (selectedRatings.length > 0) {
-    filteredPackages = filteredPackages.filter(pkg => selectedRatings.some(r => pkg.rating >= r));
-  }
-  if (selectedDurations.length > 0) {
-    filteredPackages = filteredPackages.filter(pkg => {
-      return selectedDurations.some(d => {
-        const durationNumber = Number(pkg.duration.replace(/[^\d.]/g, ''));
-        if (d === 1) return durationNumber === 1;
-        if (d === 2) return durationNumber === 2;
-        if (d === 3) return durationNumber >= 3;
-        return false;
-      });
-    });
-  }
-  filteredPackages = filteredPackages.filter(pkg => {
-    const priceNumber = Number(pkg.price.replace(/\D/g, ''));
-    return priceNumber >= price[0] && priceNumber <= price[1];
-  });
+  // if (selectedLocations.length > 0) {
+  //   filteredPackages = filteredPackages.filter((pkg: any) => selectedLocations.includes(pkg.location));
+  // }
+  // if (selectedRatings.length > 0) {
+  //   filteredPackages = filteredPackages.filter((pkg: any) => selectedRatings.some(r => pkg.rating >= r));
+  // }
+  // if (selectedDurations.length > 0) {
+  //   filteredPackages = filteredPackages.filter((pkg: any) => {
+  //     return selectedDurations.some((d: number) => {
+  //       const durationNumber = Number(String(pkg.duration).replace(/[^\d.]/g, ''));
+  //       if (d === 1) return durationNumber === 1;
+  //       if (d === 2) return durationNumber === 2;
+  //       if (d === 3) return durationNumber >= 3;
+  //       return false;
+  //     });
+  //   });
+  // }
+  // filteredPackages = filteredPackages.filter((pkg: any) => {
+  //   const priceNumber = Number(String(pkg.price).replace(/\D/g, ''));
+  //   return priceNumber >= price[0] && priceNumber <= price[1];
+  // });
 
   const handleLocationChange = (loc: string) => {
     setSelectedLocations(prev => prev.includes(loc) ? prev.filter(l => l !== loc) : [...prev, loc]);
@@ -79,6 +145,12 @@ const AllAccommodation: React.FC = () => {
     setSelectedRatings([]);
     setSelectedDurations([]);
     setPrice(PRICE_RANGE);
+  };
+
+  const navigate = useNavigate();
+  const handleAccommodationCardClick = (accommodation: any) => {
+    console.log('accommodation', accommodation);
+    navigate(`/accommodation/${accommodation.id}`, { state: { accommodation } });
   };
 
   return (
@@ -125,7 +197,7 @@ const AllAccommodation: React.FC = () => {
                   {/* Localidade */}
                   <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>Localidade</Typography>
                   <Stack spacing={0.5} mb={2}>
-                    {LOCATIONS.map(loc => (
+                    {dynamicLocations.map(loc => (
                       <FormControlLabel
                         key={loc}
                         control={<Checkbox checked={selectedLocations.includes(loc)} onChange={() => handleLocationChange(loc)} />}
@@ -176,10 +248,22 @@ const AllAccommodation: React.FC = () => {
             </Box>
             {/* Resultados */}
             <Box sx={{ flex: 1 }}>
-              {filteredPackages.length === 0 ? (
+              {isLoading ? (
+                <Typography align="center" sx={{ mt: 8, color: '#888' }}>Carregando hospedagens...</Typography>
+              ) : isError ? (
+                <Typography align="center" sx={{ mt: 8, color: 'error.main' }}>Erro ao carregar hospedagens.</Typography>
+              ) : filteredPackages.length === 0 ? (
                 <Typography align="center" sx={{ mt: 8, color: '#888' }}>Nenhuma hospedagem encontrada.</Typography>
               ) : (
-                <TravelPackages customPackages={filteredPackages} hideTitle />
+                <TravelPackages
+                  customPackages={filteredPackages}
+                  hideTitle
+                  detailRoute="accommodation"
+                  showArrows={false}
+                  hidePeopleAndPrice={true}
+                  showReserveButton={false}
+                  onCardClick={handleAccommodationCardClick}
+                />
               )}
             </Box>
           </Box>

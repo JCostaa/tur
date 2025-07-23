@@ -8,5 +8,6 @@ export declare class File {
     uploadedById?: number;
     createdAt: Date;
     uploadedBy?: any;
+    banners?: any[];
 }
 //# sourceMappingURL=File.d.ts.map

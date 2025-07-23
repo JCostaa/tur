@@ -6,7 +6,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import TravelPackages from '../components/TravelPackages';
 import Grid from '@mui/material/Grid';
 import Header from '../components/Header';
-import { MOCK_TOURS } from './mockData';
+import { useQuery } from '@tanstack/react-query';
+import { getTours } from '../services/tours';
+import { useNavigate } from 'react-router-dom';
 
 const LOCATIONS = [
   'Barra de São Miguel',
@@ -26,6 +28,7 @@ const DURATIONS = [
 const PRICE_RANGE = [0, 300];
 
 const AllTours: React.FC = () => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [search, setSearch] = useState('');
@@ -34,35 +37,35 @@ const AllTours: React.FC = () => {
   const [selectedDurations, setSelectedDurations] = useState<number[]>([]);
   const [price, setPrice] = useState<number[]>(PRICE_RANGE);
 
-  // Filtro de busca simples (por nome)
-  let filteredPackages = MOCK_TOURS.filter(pkg =>
-    pkg.title.toLowerCase().includes(search.toLowerCase())
-  );
-
-  // Filtros laterais
-  if (selectedLocations.length > 0) {
-    filteredPackages = filteredPackages.filter(pkg => selectedLocations.includes(pkg.location));
-  }
-  if (selectedRatings.length > 0) {
-    filteredPackages = filteredPackages.filter(pkg => selectedRatings.some(r => pkg.rating >= r));
-  }
-  if (selectedDurations.length > 0) {
-    filteredPackages = filteredPackages.filter(pkg => {
-      return selectedDurations.some(d => {
-        // Converter duração para número de horas para comparação
-        const durationNumber = Number(pkg.duration.replace(/[^\d.]/g, ''));
-        if (d === 1) return durationNumber <= 1;
-        if (d === 2) return durationNumber > 1 && durationNumber <= 2;
-        if (d === 4) return durationNumber > 2 && durationNumber <= 4;
-        if (d === 5) return durationNumber > 4;
-        return false;
-      });
-    });
-  }
-  filteredPackages = filteredPackages.filter(pkg => {
-    const priceNumber = Number(pkg.price.replace(/\D/g, ''));
-    return priceNumber >= price[0] && priceNumber <= price[1];
+  const { data: toursData, isLoading, isError } = useQuery({
+    queryKey: ['tours'],
+    queryFn: getTours,
   });
+
+  // Ignorar filtros e listar todos os passeios
+  const allTours = Array.isArray(toursData?.data?.tours) ? toursData.data.tours : [];
+  console.log(allTours);
+
+  // Mapeamento para o formato esperado pelo TravelPackages
+  const mapTourToPackage = (tour: any) => ({
+    id: tour.id,
+    title: tour.title,
+    location: tour.location?.city || tour.location?.address || 'Local não informado',
+    rating: 5, // valor padrão
+    duration: tour.duration_description || (tour.duration ? `${tour.duration} min` : 'Duração não informada'),
+    price: tour.price,
+    image: tour.image,
+    people: 2, // valor padrão
+    description: tour.content ? tour.content.replace(/<[^>]+>/g, '') : '', // remove HTML
+  });
+  const mappedPackages = allTours.map(mapTourToPackage);
+
+  // Gerar lista dinâmica de cidades a partir dos dados
+  const dynamicLocations: string[] = Array.from(new Set(
+    (toursData?.data?.tours || [])
+      .map((tour: any) => tour.location?.city)
+      .filter((city: string | undefined): city is string => !!city)
+  ));
 
   const handleLocationChange = (loc: string) => {
     setSelectedLocations(prev => prev.includes(loc) ? prev.filter(l => l !== loc) : [...prev, loc]);
@@ -81,6 +84,10 @@ const AllTours: React.FC = () => {
     setSelectedRatings([]);
     setSelectedDurations([]);
     setPrice(PRICE_RANGE);
+  };
+
+  const handleTourCardClick = (tour: any) => {
+    navigate(`/tour/${tour.id}`, { state: { tour } });
   };
 
   return (
@@ -127,7 +134,7 @@ const AllTours: React.FC = () => {
                   {/* Localidade */}
                   <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>Localidade</Typography>
                   <Stack spacing={0.5} mb={2}>
-                    {LOCATIONS.map(loc => (
+                    {dynamicLocations.map((loc: string) => (
                       <FormControlLabel
                         key={loc}
                         control={<Checkbox checked={selectedLocations.includes(loc)} onChange={() => handleLocationChange(loc)} />}
@@ -178,10 +185,14 @@ const AllTours: React.FC = () => {
             </Box>
             {/* Resultados */}
             <Box sx={{ flex: 1 }}>
-              {filteredPackages.length === 0 ? (
+              {isLoading ? (
+                <Typography align="center" sx={{ mt: 8, color: '#888' }}>Carregando passeios...</Typography>
+              ) : isError ? (
+                <Typography align="center" sx={{ mt: 8, color: 'error.main' }}>Erro ao carregar passeios.</Typography>
+              ) : allTours.length === 0 ? (
                 <Typography align="center" sx={{ mt: 8, color: '#888' }}>Nenhum passeio encontrado.</Typography>
               ) : (
-                <TravelPackages customPackages={filteredPackages} hideTitle />
+                <TravelPackages customPackages={mappedPackages} hideTitle showArrows={false} onCardClick={handleTourCardClick} />
               )}
             </Box>
           </Box>

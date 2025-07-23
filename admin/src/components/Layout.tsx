@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
   Box,
   Drawer,
@@ -22,8 +22,10 @@ import {
   Dashboard as DashboardIcon,
   Article as ArticleIcon,
   MenuBook as MenuBookIcon,
+  Image as ImageIcon,
   Settings as SettingsIcon,
   Folder as FolderIcon,
+  Category as CategoryIcon,
   AccountCircle,
   Logout,
 } from '@mui/icons-material';
@@ -35,6 +37,10 @@ const menuItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
   { text: 'Conteúdo', icon: <ArticleIcon />, path: '/content' },
   { text: 'Menu', icon: <MenuBookIcon />, path: '/menu' },
+  { text: 'Banners', icon: <ImageIcon />, path: '/banners' },
+  { text: 'Segmentos', icon: <CategoryIcon />, path: '/segments' },
+  { text: 'Categorias', icon: <CategoryIcon />, path: '/categories' },
+  { text: 'Experiências', icon: <ImageIcon />, path: '/experiences' },
   { text: 'Arquivos', icon: <FolderIcon />, path: '/files' },
   { text: 'Configurações', icon: <SettingsIcon />, path: '/settings' },
 ];
@@ -43,6 +49,8 @@ const Layout: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -61,6 +69,11 @@ const Layout: React.FC = () => {
     handleProfileMenuClose();
   };
 
+  const handleMenuClick = (path: string) => {
+    navigate(path);
+    setMobileOpen(false);
+  };
+
   const drawer = (
     <div>
       <Toolbar>
@@ -72,7 +85,10 @@ const Layout: React.FC = () => {
       <List>
         {menuItems.map((item) => (
           <ListItem key={item.text} disablePadding>
-            <ListItemButton>
+            <ListItemButton
+              onClick={() => handleMenuClick(item.path)}
+              selected={location.pathname === item.path}
+            >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItemButton>

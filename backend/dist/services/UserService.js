@@ -47,15 +47,16 @@ export class UserService {
         const isValidPassword = await bcrypt.compare(password, user.password);
         if (!isValidPassword)
             return null;
-        const token = jwt.sign({ userId: user.id, username: user.username, role: user.role }, process.env.JWT_SECRET || 'your-secret-key', { expiresIn: '24h' });
+        const token = jwt.sign({ userId: user.id, username: user.username, role: user.role }, process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production', { expiresIn: '24h' });
         return { user, token };
     }
     async validateToken(token) {
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+            const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production');
             return await this.findUserById(decoded.userId);
         }
         catch (error) {
+            console.error('Token validation error:', error);
             return null;
         }
     }

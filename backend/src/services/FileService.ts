@@ -21,14 +21,29 @@ export class FileService {
   async createFile(fileData: Partial<any>): Promise<any> {
     await this.initializeRepositories();
     const file = this.fileRepository.create(fileData);
-    return await this.fileRepository.save(file);
+    const savedFile = await this.fileRepository.save(file);
+    
+    // Add URL to the response
+    return {
+      ...savedFile,
+      url: `/uploads/${savedFile.filename}`
+    };
   }
 
   async findFileById(id: number): Promise<any | null> {
     await this.initializeRepositories();
-    return await this.fileRepository.findOne({ 
+    const file = await this.fileRepository.findOne({ 
       where: { id }
     });
+    
+    if (file) {
+      return {
+        ...file,
+        url: `/uploads/${file.filename}`
+      };
+    }
+    
+    return null;
   }
 
   async findFileByFilename(filename: string): Promise<any | null> {
@@ -66,9 +81,14 @@ export class FileService {
 
   async getAllFiles(): Promise<any[]> {
     await this.initializeRepositories();
-    return await this.fileRepository.find({
+    const files = await this.fileRepository.find({
       order: { createdAt: 'DESC' }
     });
+    
+    return files.map(file => ({
+      ...file,
+      url: `/uploads/${file.filename}`
+    }));
   }
 
   async getFilesByUser(userId: number): Promise<any[]> {

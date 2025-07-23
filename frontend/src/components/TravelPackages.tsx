@@ -33,9 +33,11 @@ const SectionTitle = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const PackagesGrid = styled(Box)<{ cardsPerView: number }>(({ theme, cardsPerView }) => ({
+const PackagesGrid = styled(Box)<{ cardsPerView: number; showArrows?: boolean }>(({ theme, cardsPerView, showArrows }) => ({
   display: 'grid',
-  gridTemplateColumns: `repeat(${cardsPerView}, 350px)`,
+  gridTemplateColumns: showArrows
+    ? `repeat(${cardsPerView}, 350px)`
+    : 'repeat(auto-fit, minmax(320px, 1fr))',
   gap: theme.spacing(4),
   marginTop: theme.spacing(4),
   justifyContent: 'center',
@@ -235,12 +237,17 @@ interface TravelPackage {
   image: string;
   people: number;
   description: string;
+  tags?: string[]; // Adicionar tags
 }
 
 interface TravelPackagesProps {
   customPackages?: TravelPackage[];
   hideTitle?: boolean;
   detailRoute?: string; // new prop
+  showArrows?: boolean; // novo: controla exibição das setas
+  hidePeopleAndPrice?: boolean; // novo: esconde pessoas e preço
+  onCardClick?: (pkg: TravelPackage) => void; // novo: callback de clique
+  showReserveButton?: boolean; // novo: controla exibição do botão "Reserve Agora"
 }
 
 const defaultPackages = [
@@ -254,6 +261,7 @@ const defaultPackages = [
     image: '/images/browse-1.jpg',
     people: 2,
     description: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt nemo quia quae illum aperiam fugiat voluptatem repellat',
+    tags: ['Aves', 'Natureza', 'Fotografia'],
   },
   {
     id: 2,
@@ -265,6 +273,7 @@ const defaultPackages = [
     image: '/images/browse-2.jpg',
     people: 2,
     description: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt nemo quia quae illum aperiam fugiat voluptatem repellat',
+    tags: ['Cultura', 'Comunidade', 'História'],
   },
   {
     id: 3,
@@ -276,10 +285,11 @@ const defaultPackages = [
     image: '/images/browse-3.jpg',
     people: 2,
     description: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt nemo quia quae illum aperiam fugiat voluptatem repellat',
+    tags: ['Passeio', 'Rio', 'Natureza'],
   },
 ];
 
-const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTitle, detailRoute = 'restaurant' }) => {
+const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTitle, detailRoute = 'restaurant', showArrows = true, hidePeopleAndPrice = false, onCardClick, showReserveButton = true }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const packages = customPackages || defaultPackages;
@@ -298,8 +308,16 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
     if (canGoForward) setStartIndex(startIndex + cardsPerView);
   };
 
-  const handleCardClick = (id: number) => {
-    navigate(`/${detailRoute}/${id}`);
+  const handleCardClick = (pkg: TravelPackage) => {
+    if (typeof onCardClick === 'function') {
+      onCardClick(pkg);
+    } else {
+      if (!showArrows) {
+        navigate(`/tour/${pkg.id}`);
+      } else {
+        navigate(`/${detailRoute}/${pkg.id}`);
+      }
+    }
   };
 
   // Estilos para as setas
@@ -352,7 +370,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
         )}
 
         {/* Setas de navegação */}
-        {canGoBack && (
+        {showArrows && canGoBack && (
           <button
             aria-label="Voltar"
             style={{ ...arrowStyle, left: -20 }}
@@ -362,7 +380,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
             &#8592;
           </button>
         )}
-        {canGoForward && (
+        {showArrows && canGoForward && (
           <button
             aria-label="Avançar"
             style={{ ...arrowStyle, right: -20 }}
@@ -373,13 +391,17 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
           </button>
         )}
 
-        <PackagesGrid cardsPerView={cardsPerView} style={{ position: 'relative', overflow: 'hidden', minHeight: 350 }}>
-          {packages.slice(startIndex, startIndex + cardsPerView).map((pkg, index) => (
+        <PackagesGrid cardsPerView={cardsPerView} showArrows={showArrows} style={{ position: 'relative', overflow: 'hidden', minHeight: 350 }}>
+          {(
+            showArrows
+              ? packages.slice(startIndex, startIndex + cardsPerView)
+              : packages
+          ).map((pkg: TravelPackage, index: number) => (
             <PackageCard
               key={pkg.id}
               className="animate-zoomIn hover-from-left"
               style={{ animationDelay: `${index * 0.1}s` }}
-              onClick={() => handleCardClick(pkg.id)}
+              onClick={() => handleCardClick(pkg)}
             >
               <ImageContainer>
                 <PackageImage
@@ -399,9 +421,11 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
                     {pkg.duration}
                   </Typography>
                 </DurationBadge>
-                <PeopleBadge>
-                  <span role="img" aria-label="pessoas">👥</span> {pkg.people} Pessoas
-                </PeopleBadge>
+                {!hidePeopleAndPrice && (
+                  <PeopleBadge>
+                    <span role="img" aria-label="pessoas">👥</span> {pkg.people} Pessoas
+                  </PeopleBadge>
+                )}
               </ImageContainer>
               <CardContentStyled>
                 <PackageTitle>
@@ -413,18 +437,41 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
                     {pkg.location}
                   </Typography>
                 </PackageLocation>
+                {/* Tags como chips/badges */}
+                {pkg.tags && Array.isArray(pkg.tags) && pkg.tags.length > 0 && (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 1 }}>
+                    {pkg.tags.map((tag: string, idx: number) => (
+                      <Box key={idx} sx={{
+                        background: '#e0e0e0',
+                        color: '#333',
+                        borderRadius: 12,
+                        px: 1.5,
+                        py: 0.2,
+                        fontSize: 12,
+                        fontWeight: 500,
+                        mr: 0.5,
+                        mb: 0.5,
+                        display: 'inline-block',
+                      }}>{tag}</Box>
+                    ))}
+                  </Box>
+                )}
                 <PackageDescription>
                   {pkg.description}
                 </PackageDescription>
-                <PackagePrice>
-                  Start From {pkg.price}
-                </PackagePrice>
+                {!hidePeopleAndPrice && (
+                  <PackagePrice>
+                    {pkg.price}
+                  </PackagePrice>
+                )}
                 <CardActionsStyled>
                   <ActionButton
                     variant="outlined"
-                    onClick={e => { e.stopPropagation(); handleCardClick(pkg.id); }}
+                    onClick={e => { e.stopPropagation(); handleCardClick(pkg); }}
                   >Leia Mais</ActionButton>
-                  <ActionButton variant="contained">Reserve Agora</ActionButton>
+                  {showReserveButton && (
+                    <ActionButton variant="contained">Reserve Agora</ActionButton>
+                  )}
                 </CardActionsStyled>
               </CardContentStyled>
             </PackageCard>

@@ -42,9 +42,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const checkAuth = async () => {
     try {
-      const response = await api.get('/validate');
+      console.log('Checking authentication...');
+      const token = localStorage.getItem('token');
+      console.log('Token from localStorage:', token ? 'exists' : 'not found');
+      
+      if (!token) {
+        console.log('No token found, skipping auth check');
+        setLoading(false);
+        return;
+      }
+      
+      const response = await api.get('/auth/validate');
+      console.log('Auth response:', response.data);
       setUser(response.data.user);
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Auth check failed:', error.response?.data || error.message);
+      console.error('Error details:', error);
       localStorage.removeItem('token');
       delete api.defaults.headers.common['Authorization'];
     } finally {
