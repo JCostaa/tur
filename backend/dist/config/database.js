@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 // Determine if we're in production (compiled) or development
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === 'production' || __dirname.includes('dist');
 // Use absolute paths for entities and migrations
 const projectRoot = isProduction ? path.join(__dirname, '..') : path.join(__dirname, '..', '..');
 const entitiesPath = isProduction ? path.join(projectRoot, 'entities', '*.js') : path.join(projectRoot, 'src', 'entities', '*.ts');
