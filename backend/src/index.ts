@@ -46,7 +46,7 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:5173'],
+  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:5173'],
   credentials: true
 }));
 app.use(morgan('combined'));
@@ -60,6 +60,13 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads'), {
     res.setHeader('Access-Control-Allow-Origin', '*');
   }
 }));
+
+// Create uploads directory if it doesn't exist
+import fs from 'fs';
+const uploadsDir = path.join(__dirname, '../uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
 
 // Public routes (no authentication required)
 app.use('/api/auth', authRoutes);
