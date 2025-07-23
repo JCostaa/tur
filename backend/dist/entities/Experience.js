@@ -8,6 +8,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, ManyToOne, JoinColumn } from 'typeorm';
+import { Category } from './Category.js';
 let Experience = class Experience {
 };
 __decorate([
@@ -44,7 +45,7 @@ __decorate([
     __metadata("design:type", Object)
 ], Experience.prototype, "image", void 0);
 __decorate([
-    ManyToMany('Category', { lazy: true }),
+    ManyToMany(() => Category, category => category.experiences, { lazy: true }),
     JoinTable({
         name: 'experience_categories',
         joinColumn: { name: 'experienceId', referencedColumnName: 'id' },

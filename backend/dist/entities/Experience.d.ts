@@ -1,3 +1,4 @@
+import { Category } from './Category.js';
 export declare class Experience {
     id: number;
     title: string;
@@ -7,6 +8,6 @@ export declare class Experience {
     createdAt: Date;
     updatedAt: Date;
     image?: any;
-    categories?: any[];
+    categories?: Category[];
 }
 //# sourceMappingURL=Experience.d.ts.map

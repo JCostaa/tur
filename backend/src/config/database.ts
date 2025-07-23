@@ -1,13 +1,29 @@
 import { DataSource } from 'typeorm';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Determine if we're in production (compiled) or development
+const isProduction = process.env.NODE_ENV === 'production';
+
+// Use absolute paths for entities and migrations
+const projectRoot = isProduction ? path.join(__dirname, '..') : path.join(__dirname, '..', '..');
+const entitiesPath = isProduction ? path.join(projectRoot, 'entities', '*.js') : path.join(projectRoot, 'src', 'entities', '*.ts');
+const migrationsPath = isProduction ? path.join(projectRoot, 'migrations', '*.js') : path.join(projectRoot, 'src', 'migrations', '*.ts');
+
+// Database file path - in production, it should be in the dist folder
+const databasePath = isProduction ? path.join(projectRoot, 'database.sqlite') : path.join(projectRoot, 'database.sqlite');
 
 export const AppDataSource = new DataSource({
   type: 'sqlite',
-  database: 'database.sqlite',
+  database: databasePath,
   synchronize: false, // Desabilitado para usar migrations
   logging: false,
-  entities: ['src/entities/*.ts'],
+  entities: [entitiesPath],
   subscribers: [],
-  migrations: ['src/migrations/*.ts'],
+  migrations: [migrationsPath],
   migrationsTableName: 'migrations',
 });
 
@@ -30,9 +46,9 @@ export const initializeDatabase = async () => {
 
 async function insertDefaultData() {
   // Import entities dynamically to avoid circular references
-  const { User } = await import('../entities/User.js');
-  const { Setting } = await import('../entities/Setting.js');
-  const { Menu } = await import('../entities/Menu.js');
+  const { User } = await import(isProduction ? '../entities/User.js' : '../entities/User.ts');
+  const { Setting } = await import(isProduction ? '../entities/Setting.js' : '../entities/Setting.ts');
+  const { Menu } = await import(isProduction ? '../entities/Menu.js' : '../entities/Menu.ts');
   
   const userRepository = AppDataSource.getRepository(User);
   const settingRepository = AppDataSource.getRepository(Setting);

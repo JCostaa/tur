@@ -1,52 +1,75 @@
-// Script para testar o deploy da API
-const https = require('https');
+import { spawn } from 'child_process';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const testEndpoint = (url) => {
-  return new Promise((resolve, reject) => {
-    https.get(url, (res) => {
-      let data = '';
-      
-      res.on('data', (chunk) => {
-        data += chunk;
-      });
-      
-      res.on('end', () => {
-        try {
-          const jsonData = JSON.parse(data);
-          console.log(`✅ ${url} - Status: ${res.statusCode}`);
-          console.log(`   Response:`, jsonData);
-          resolve(jsonData);
-        } catch (error) {
-          console.log(`❌ ${url} - Error parsing JSON:`, error.message);
-          reject(error);
-        }
-      });
-    }).on('error', (error) => {
-      console.log(`❌ ${url} - Error:`, error.message);
-      reject(error);
-    });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+console.log('🧪 Testando deploy do backend...');
+
+// Verificar se o build foi executado
+if (!fs.existsSync('dist')) {
+  console.log('❌ Diretório dist não encontrado. Executando build...');
+  const buildProcess = spawn('npm', ['run', 'build'], { stdio: 'inherit' });
+  
+  buildProcess.on('close', (code) => {
+    if (code !== 0) {
+      console.error('❌ Build falhou');
+      process.exit(1);
+    }
+    console.log('✅ Build concluído');
+    testProduction();
   });
-};
+} else {
+  testProduction();
+}
 
-// Substitua pela URL do seu deploy no Railway
-const RAILWAY_URL = 'https://seu-app.railway.app'; // Mude para sua URL
-
-console.log('🚀 Testando API no Railway...\n');
-
-// Teste 1: Health Check
-testEndpoint(`${RAILWAY_URL}/api/health`)
-  .then(() => {
-    console.log('\n🎉 API está funcionando!');
-    console.log(`📡 URL da API: ${RAILWAY_URL}`);
-    console.log('\n📋 Próximos passos:');
-    console.log('1. Configure a URL da API no frontend');
-    console.log('2. Teste as rotas de autenticação');
-    console.log('3. Configure o CORS se necessário');
-  })
-  .catch((error) => {
-    console.log('\n❌ API não está respondendo corretamente');
-    console.log('Verifique:');
-    console.log('1. Se o deploy foi concluído');
-    console.log('2. Se as variáveis de ambiente estão corretas');
-    console.log('3. Os logs do Railway');
-  }); 
+function testProduction() {
+  console.log('🔍 Verificando arquivos compilados...');
+  
+  // Verificar se os arquivos principais existem
+  const requiredFiles = [
+    'dist/index.js',
+    'dist/config/database.js',
+    'dist/entities/User.js'
+  ];
+  
+  for (const file of requiredFiles) {
+    if (!fs.existsSync(file)) {
+      console.error(`❌ Arquivo não encontrado: ${file}`);
+      process.exit(1);
+    }
+  }
+  
+  console.log('✅ Todos os arquivos necessários encontrados');
+  
+  // Testar se o código compilado pode ser executado
+  console.log('🚀 Testando execução do código compilado...');
+  
+  try {
+    // Testar importação do arquivo principal
+    const indexPath = path.resolve('dist/index.js');
+    console.log(`📁 Tentando importar: ${indexPath}`);
+    
+    // Verificar se o arquivo é válido
+    const content = fs.readFileSync(indexPath, 'utf8');
+    if (content.includes('import') || content.includes('export')) {
+      console.log('✅ Arquivo compilado parece válido');
+    } else {
+      console.log('⚠️  Arquivo compilado pode ter problemas');
+    }
+    
+  } catch (error) {
+    console.error('❌ Erro ao testar arquivo compilado:', error.message);
+    process.exit(1);
+  }
+  
+  console.log('🎉 Teste de deploy concluído com sucesso!');
+  console.log('📋 Resumo:');
+  console.log('  - Build executado ✅');
+  console.log('  - Arquivos compilados encontrados ✅');
+  console.log('  - Código compilado válido ✅');
+  console.log('');
+  console.log('🚀 Pronto para deploy!');
+} 

@@ -1,9 +1,9 @@
-import { getRepository } from 'typeorm';
+import { AppDataSource } from '../config/database.js';
 import { Category } from '../entities/Category.js';
 export class CategoryController {
     async getAllCategories(req, res) {
         try {
-            const categoryRepo = getRepository(Category);
+            const categoryRepo = AppDataSource.getRepository(Category);
             const categories = await categoryRepo.find();
             res.json(categories);
         }
@@ -15,7 +15,7 @@ export class CategoryController {
     async getCategoryById(req, res) {
         try {
             const { id } = req.params;
-            const categoryRepo = getRepository(Category);
+            const categoryRepo = AppDataSource.getRepository(Category);
             const category = await categoryRepo.findOne({ where: { id: Number(id) } });
             if (!category) {
                 return res.status(404).json({ error: 'Category not found' });
@@ -30,7 +30,7 @@ export class CategoryController {
     async createCategory(req, res) {
         try {
             const { name } = req.body;
-            const categoryRepo = getRepository(Category);
+            const categoryRepo = AppDataSource.getRepository(Category);
             const category = categoryRepo.create({ name });
             const savedCategory = await categoryRepo.save(category);
             res.status(201).json(savedCategory);
@@ -44,7 +44,7 @@ export class CategoryController {
         try {
             const { id } = req.params;
             const { name } = req.body;
-            const categoryRepo = getRepository(Category);
+            const categoryRepo = AppDataSource.getRepository(Category);
             let category = await categoryRepo.findOne({ where: { id: Number(id) } });
             if (!category) {
                 return res.status(404).json({ error: 'Category not found' });
@@ -61,7 +61,7 @@ export class CategoryController {
     async deleteCategory(req, res) {
         try {
             const { id } = req.params;
-            const categoryRepo = getRepository(Category);
+            const categoryRepo = AppDataSource.getRepository(Category);
             const result = await categoryRepo.delete(Number(id));
             if (result.affected === 0) {
                 return res.status(404).json({ error: 'Category not found' });
