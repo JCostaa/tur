@@ -46,7 +46,7 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use(cors({
-  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:5173'],
+  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:5173','https://turismo-bb8mt4953-julio-costas-projects.vercel.app'],
   credentials: true
 }));
 app.use(morgan('combined'));
