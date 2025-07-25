@@ -2,7 +2,9 @@ import React from 'react';
 import { styled, keyframes } from '@mui/material/styles';
 
 interface ExperienceCardProps {
-  image: string;
+  image: {
+    path: string;
+  };
   title: string;
   subtitle: string;
 }
@@ -76,7 +78,7 @@ const Subtitle = styled('p')({
 
 const ExperienceCard: React.FC<ExperienceCardProps> = ({ image, title, subtitle }) => (
   <Card>
-    <Image src={image} alt={title} />
+    <Image src={`${import.meta.env.VITE_API_URL}/${image.path}`} alt={title} />
     <Overlay>
       <Title>{title}</Title>
       <Subtitle>{subtitle}</Subtitle>

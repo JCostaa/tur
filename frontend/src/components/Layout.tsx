@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Container, CssBaseline } from '@mui/material';
 import Header from './Header';
 import { FaArrowUp } from 'react-icons/fa';
+import Footer from './Footer';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -44,6 +45,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       >
         <FaArrowUp size={22} />
       </button>
+      <Footer />
     </Box>
   );
 };

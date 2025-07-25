@@ -1,14 +1,9 @@
 import axios from 'axios';
 
-const isDev = import.meta.env.DEV;
-
-// Alternative CORS proxy services (uncomment one if needed)
-// const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
-// const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
-// const CORS_PROXY = 'https://thingproxy.freeboard.io/fetch/';
+const baseURL = import.meta.env.VITE_SKOOBTUR_API_URL || 'https://www.skoobtur.com/api/public';
 
 const api = axios.create({
-  baseURL: isDev ? '/api/public' : '/api/proxy',
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
     ...(import.meta.env.VITE_SKOOBTUR_API_KEY && {

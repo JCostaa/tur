@@ -17,6 +17,8 @@ import {
   Instagram,
   LinkedIn
 } from '@mui/icons-material';
+import { useQuery } from '@tanstack/react-query';
+import { getBanners } from '../services/banners';
 
 const HeroSection = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -168,79 +170,72 @@ const Indicator = styled(Box)<{ $active: boolean }>(({ theme, $active }) => ({
   },
 }));
 
-const images = [
-  '/images/header-1.jpg',
-  '/images/header-2.jpg',
-  '/images/header-3.jpg',
-];
+// Banner type (ajuste conforme necessário)
+type Banner = {
+  id: number;
+  title: string;
+  description?: string;
+  link?: string;
+  orderIndex: number;
+  isActive: boolean;
+  imageId?: number;
+  image?: {
+    id: number;
+    filename: string;
+    originalName: string;
+    url: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+};
 
 const HeroBanner: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % images.length);
-    }, 5000);
+  // Query banners
+  const { data: banners, isLoading, isError } = useQuery<Banner[]>({
+    queryKey: ['banners'],
+    queryFn: getBanners,
+  });
 
+  // Atualizar slide para banners dinâmicos
+  useEffect(() => {
+    if (!banners || banners.length === 0) return;
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % banners.length);
+    }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [banners]);
 
   const handleIndicatorClick = (index: number) => {
     setCurrentSlide(index);
   };
 
+  if (isLoading) {
+    return <Box sx={{ height: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Typography color="#fff">Carregando banners...</Typography></Box>;
+  }
+  if (isError || !banners) {
+    return <Box sx={{ height: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Typography color="#fff">Erro ao carregar banners.</Typography></Box>;
+  }
+
   return (
     <HeroSection>
-      {images.map((image, index) => (
+      {banners.map((banner, index) => (
         <BackgroundImage
-          key={index}
+          key={banner.id}
           $active={index === currentSlide}
           sx={{
-            backgroundImage: `url(${image})`,
+            backgroundImage: banner.image?.url ? `url(${import.meta.env.VITE_API_URL}${banner.image.url})` : undefined,
+            backgroundColor: !banner.image?.url ? '#222' : undefined,
           }}
         />
       ))}
-
+{/* 
       <ContentWrapper maxWidth="xl">
         <Box sx={{ maxWidth: isMobile ? '100%' : '60%' }}>
-          <Typography
-            variant="h1"
-            className="animate-fadeInUp"
-            sx={{
-              fontFamily: '"Playfair Display", serif',
-              fontSize: { xs: '2.5rem', md: '4rem', lg: '5rem' },
-              fontWeight: 700,
-              color: '#fff',
-              textAlign: 'center',
-              marginBottom: theme.spacing(3),
-              textShadow: '0 4px 8px rgba(0,0,0,0.3)',
-              zIndex: 2,
-              position: 'relative',
-            }}
-          >
-            Journey to Your Dream Destination!
-          </Typography>
-
-          <Typography
-            variant="h5"
-            className="animate-fadeInUp"
-            style={{ animationDelay: '0.2s' }}
-            sx={{
-              color: '#fff',
-              textAlign: 'center',
-              maxWidth: 600,
-              margin: '0 auto',
-              marginBottom: theme.spacing(4),
-              opacity: 0.9,
-              textShadow: '0 2px 4px rgba(0,0,0,0.3)',
-              zIndex: 2,
-              position: 'relative',
-            }}
-          >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod velit tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim esse veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip commodo.
-          </Typography>
+      
 
           <Button
             variant="contained"
@@ -270,8 +265,8 @@ const HeroBanner: React.FC = () => {
             Discover More
           </Button>
         </Box>
-      </ContentWrapper>
-
+      </ContentWrapper> */}
+{/* 
       <SocialSection>
         <Typography variant="body2" sx={{ mb: 1, opacity: 0.8 }}>
           Follow us on our social media:
@@ -290,10 +285,10 @@ const HeroBanner: React.FC = () => {
             <LinkedIn />
           </SocialIcon>
         </Box>
-      </SocialSection>
+      </SocialSection> */}
 
       <SlideIndicator>
-        {images.map((_, index) => (
+        {banners.map((_, index) => (
           <Indicator
             key={index}
             $active={index === currentSlide}

@@ -113,6 +113,15 @@ const menuItems = [
       { text: 'Restaurantes', href: '/#restaurants' },
     ],
   },
+  {
+    text: 'Fornecedores',
+    href: '/#provedores',
+    children: [
+      { text: 'Condutores', href: '/#drivers' },
+      { text: 'Guia de Viagem', href: '/#guides' },
+      { text: 'Agência de Viagem', href: '/#agencies' },
+    ],
+  },
 ];
 
 const Header: React.FC = () => {
@@ -155,6 +164,10 @@ const Header: React.FC = () => {
   const renderMenuItem = (item: any, parent?: boolean, idx?: number, arr?: any[]) => {
     const hasChildren = item.children && item.children.length > 0;
 
+    // Identificar se este é o item 'Provedores' e se o anterior é 'Promoções'
+    const isProvedores = item.text === 'Provedores';
+    const isAfterPromocoes = arr && idx !== undefined && idx > 0 && arr[idx - 1]?.text === 'Promoções';
+
     if (!hasChildren) {
       const isAnchor = item.href.startsWith('#') || item.href.startsWith('/#');
       return (
@@ -195,7 +208,7 @@ const Header: React.FC = () => {
         key={item.text}
         sx={{
           position: 'relative',
-          mx: parent ? 0 : 1,
+          mx: parent ? 0 : isProvedores && isAfterPromocoes ? '-0.5rem' : 1, // Margem negativa para colar ainda mais
           display: 'inline-block',
           '&:hover > .dropdown-menu, &:focus-within > .dropdown-menu': {
             display: 'block',
@@ -210,7 +223,7 @@ const Header: React.FC = () => {
             display: 'flex',
             alignItems: 'center',
             cursor: 'pointer',
-            minWidth: 200,
+            minWidth: item.text === 'Promoções' && !parent ? 145 : parent ? 200 : undefined, // minWidth 145px para Promoções
             px: 2.5,
             py: 1.1,
             fontSize: parent ? '1rem' : '1.08rem',
