@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 let Provider = class Provider {
 };
 __decorate([
@@ -30,6 +30,42 @@ __decorate([
     UpdateDateColumn(),
     __metadata("design:type", Date)
 ], Provider.prototype, "updatedAt", void 0);
+__decorate([
+    OneToMany('User', 'provider', { lazy: true }),
+    __metadata("design:type", Array)
+], Provider.prototype, "users", void 0);
+__decorate([
+    OneToMany('Banner', 'provider', { lazy: true }),
+    __metadata("design:type", Array)
+], Provider.prototype, "banners", void 0);
+__decorate([
+    OneToMany('Category', 'provider', { lazy: true }),
+    __metadata("design:type", Array)
+], Provider.prototype, "categories", void 0);
+__decorate([
+    OneToMany('Content', 'provider', { lazy: true }),
+    __metadata("design:type", Array)
+], Provider.prototype, "content", void 0);
+__decorate([
+    OneToMany('Experience', 'provider', { lazy: true }),
+    __metadata("design:type", Array)
+], Provider.prototype, "experiences", void 0);
+__decorate([
+    OneToMany('File', 'provider', { lazy: true }),
+    __metadata("design:type", Array)
+], Provider.prototype, "files", void 0);
+__decorate([
+    OneToMany('Menu', 'provider', { lazy: true }),
+    __metadata("design:type", Array)
+], Provider.prototype, "menu", void 0);
+__decorate([
+    OneToMany('Segment', 'provider', { lazy: true }),
+    __metadata("design:type", Array)
+], Provider.prototype, "segments", void 0);
+__decorate([
+    OneToMany('Setting', 'provider', { lazy: true }),
+    __metadata("design:type", Array)
+], Provider.prototype, "settings", void 0);
 Provider = __decorate([
     Entity('providers')
 ], Provider);

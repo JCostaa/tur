@@ -32,6 +32,10 @@ __decorate([
     __metadata("design:type", Number)
 ], Experience.prototype, "imageId", void 0);
 __decorate([
+    Column(),
+    __metadata("design:type", Number)
+], Experience.prototype, "provider_id", void 0);
+__decorate([
     CreateDateColumn(),
     __metadata("design:type", Date)
 ], Experience.prototype, "createdAt", void 0);
@@ -44,6 +48,11 @@ __decorate([
     JoinColumn({ name: 'imageId' }),
     __metadata("design:type", Object)
 ], Experience.prototype, "image", void 0);
+__decorate([
+    ManyToOne('Provider', 'experiences', { lazy: true }),
+    JoinColumn({ name: 'provider_id' }),
+    __metadata("design:type", Object)
+], Experience.prototype, "provider", void 0);
 __decorate([
     ManyToMany(() => Category, category => category.experiences, { lazy: true }),
     JoinTable({

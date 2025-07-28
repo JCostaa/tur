@@ -6,8 +6,10 @@ export declare class Banner {
     orderIndex: number;
     isActive: boolean;
     imageId?: number;
+    provider_id: number;
     createdAt: Date;
     updatedAt: Date;
     image?: any;
+    provider?: any;
 }
 //# sourceMappingURL=Banner.d.ts.map

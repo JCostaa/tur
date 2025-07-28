@@ -23,12 +23,19 @@ export class File {
   @Column({ nullable: true })
   uploadedById?: number;
 
+  @Column()
+  provider_id!: number;
+
   @CreateDateColumn()
   createdAt!: Date;
 
   @ManyToOne('User', 'files', { lazy: true })
   @JoinColumn({ name: 'uploadedById' })
   uploadedBy?: any;
+
+  @ManyToOne('Provider', 'files', { lazy: true })
+  @JoinColumn({ name: 'provider_id' })
+  provider?: any;
 
   @OneToMany('Banner', 'image', { lazy: true })
   banners?: any[];

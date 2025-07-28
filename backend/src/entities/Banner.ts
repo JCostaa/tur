@@ -23,6 +23,9 @@ export class Banner {
   @Column({ nullable: true })
   imageId?: number;
 
+  @Column()
+  provider_id!: number;
+
   @CreateDateColumn()
   createdAt!: Date;
 
@@ -32,4 +35,8 @@ export class Banner {
   @ManyToOne('File', 'banners', { lazy: true })
   @JoinColumn({ name: 'imageId' })
   image?: any;
+
+  @ManyToOne('Provider', 'banners', { lazy: true })
+  @JoinColumn({ name: 'provider_id' })
+  provider?: any;
 } 

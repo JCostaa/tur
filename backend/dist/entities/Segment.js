@@ -39,6 +39,10 @@ __decorate([
     __metadata("design:type", Number)
 ], Segment.prototype, "imageId", void 0);
 __decorate([
+    Column(),
+    __metadata("design:type", Number)
+], Segment.prototype, "provider_id", void 0);
+__decorate([
     CreateDateColumn(),
     __metadata("design:type", Date)
 ], Segment.prototype, "createdAt", void 0);
@@ -51,6 +55,11 @@ __decorate([
     JoinColumn({ name: 'imageId' }),
     __metadata("design:type", Object)
 ], Segment.prototype, "image", void 0);
+__decorate([
+    ManyToOne('Provider', 'segments', { lazy: true }),
+    JoinColumn({ name: 'provider_id' }),
+    __metadata("design:type", Object)
+], Segment.prototype, "provider", void 0);
 Segment = __decorate([
     Entity('segments')
 ], Segment);

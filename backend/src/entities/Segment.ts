@@ -23,6 +23,9 @@ export class Segment {
   @Column({ nullable: true })
   imageId?: number;
 
+  @Column()
+  provider_id!: number;
+
   @CreateDateColumn()
   createdAt!: Date;
 
@@ -32,4 +35,8 @@ export class Segment {
   @ManyToOne('File', 'segments', { lazy: true })
   @JoinColumn({ name: 'imageId' })
   image?: any;
+
+  @ManyToOne('Provider', 'segments', { lazy: true })
+  @JoinColumn({ name: 'provider_id' })
+  provider?: any;
 } 

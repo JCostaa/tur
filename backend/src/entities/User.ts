@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -17,6 +17,9 @@ export class User {
   @Column({ default: 'admin' })
   role!: string;
 
+  @Column()
+  provider_id!: number;
+
   @CreateDateColumn()
   createdAt!: Date;
 
@@ -25,4 +28,8 @@ export class User {
 
   @OneToMany('File', 'uploadedBy', { lazy: true })
   files?: any[];
+
+  @ManyToOne('Provider', 'users', { lazy: true })
+  @JoinColumn({ name: 'provider_id' })
+  provider?: any;
 } 

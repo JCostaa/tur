@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 let Content = class Content {
 };
 __decorate([
@@ -35,6 +35,10 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Content.prototype, "isActive", void 0);
 __decorate([
+    Column(),
+    __metadata("design:type", Number)
+], Content.prototype, "provider_id", void 0);
+__decorate([
     CreateDateColumn(),
     __metadata("design:type", Date)
 ], Content.prototype, "createdAt", void 0);
@@ -42,6 +46,11 @@ __decorate([
     UpdateDateColumn(),
     __metadata("design:type", Date)
 ], Content.prototype, "updatedAt", void 0);
+__decorate([
+    ManyToOne('Provider', 'content', { lazy: true }),
+    JoinColumn({ name: 'provider_id' }),
+    __metadata("design:type", Object)
+], Content.prototype, "provider", void 0);
 Content = __decorate([
     Entity('content')
 ], Content);

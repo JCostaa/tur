@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity('content')
 export class Content {
@@ -20,9 +20,16 @@ export class Content {
   @Column({ default: true })
   isActive!: boolean;
 
+  @Column()
+  provider_id!: number;
+
   @CreateDateColumn()
   createdAt!: Date;
 
   @UpdateDateColumn()
   updatedAt!: Date;
+
+  @ManyToOne('Provider', 'content', { lazy: true })
+  @JoinColumn({ name: 'provider_id' })
+  provider?: any;
 } 

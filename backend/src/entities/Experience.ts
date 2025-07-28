@@ -18,6 +18,9 @@ export class Experience {
   @Column({ nullable: true })
   imageId?: number;
 
+  @Column()
+  provider_id!: number;
+
   @CreateDateColumn()
   createdAt!: Date;
 
@@ -27,6 +30,10 @@ export class Experience {
   @ManyToOne('File', { lazy: true })
   @JoinColumn({ name: 'imageId' })
   image?: any;
+
+  @ManyToOne('Provider', 'experiences', { lazy: true })
+  @JoinColumn({ name: 'provider_id' })
+  provider?: any;
 
   @ManyToMany(() => Category, category => category.experiences, { lazy: true })
   @JoinTable({

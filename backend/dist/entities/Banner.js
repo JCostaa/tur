@@ -39,6 +39,10 @@ __decorate([
     __metadata("design:type", Number)
 ], Banner.prototype, "imageId", void 0);
 __decorate([
+    Column(),
+    __metadata("design:type", Number)
+], Banner.prototype, "provider_id", void 0);
+__decorate([
     CreateDateColumn(),
     __metadata("design:type", Date)
 ], Banner.prototype, "createdAt", void 0);
@@ -51,6 +55,11 @@ __decorate([
     JoinColumn({ name: 'imageId' }),
     __metadata("design:type", Object)
 ], Banner.prototype, "image", void 0);
+__decorate([
+    ManyToOne('Provider', 'banners', { lazy: true }),
+    JoinColumn({ name: 'provider_id' }),
+    __metadata("design:type", Object)
+], Banner.prototype, "provider", void 0);
 Banner = __decorate([
     Entity('banners')
 ], Banner);

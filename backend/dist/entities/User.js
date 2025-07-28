@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 let User = class User {
 };
 __decorate([
@@ -31,6 +31,10 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([
+    Column(),
+    __metadata("design:type", Number)
+], User.prototype, "provider_id", void 0);
+__decorate([
     CreateDateColumn(),
     __metadata("design:type", Date)
 ], User.prototype, "createdAt", void 0);
@@ -42,6 +46,11 @@ __decorate([
     OneToMany('File', 'uploadedBy', { lazy: true }),
     __metadata("design:type", Array)
 ], User.prototype, "files", void 0);
+__decorate([
+    ManyToOne('Provider', 'users', { lazy: true }),
+    JoinColumn({ name: 'provider_id' }),
+    __metadata("design:type", Object)
+], User.prototype, "provider", void 0);
 User = __decorate([
     Entity('users')
 ], User);

@@ -39,6 +39,10 @@ __decorate([
     __metadata("design:type", Number)
 ], File.prototype, "uploadedById", void 0);
 __decorate([
+    Column(),
+    __metadata("design:type", Number)
+], File.prototype, "provider_id", void 0);
+__decorate([
     CreateDateColumn(),
     __metadata("design:type", Date)
 ], File.prototype, "createdAt", void 0);
@@ -47,6 +51,11 @@ __decorate([
     JoinColumn({ name: 'uploadedById' }),
     __metadata("design:type", Object)
 ], File.prototype, "uploadedBy", void 0);
+__decorate([
+    ManyToOne('Provider', 'files', { lazy: true }),
+    JoinColumn({ name: 'provider_id' }),
+    __metadata("design:type", Object)
+], File.prototype, "provider", void 0);
 __decorate([
     OneToMany('Banner', 'image', { lazy: true }),
     __metadata("design:type", Array)

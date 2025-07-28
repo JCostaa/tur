@@ -20,6 +20,9 @@ export class Menu {
   @Column({ nullable: true })
   parentId?: number;
 
+  @Column()
+  provider_id!: number;
+
   @CreateDateColumn()
   createdAt!: Date;
 
@@ -32,4 +35,8 @@ export class Menu {
 
   @OneToMany(() => Menu, menu => menu.parent)
   children?: Menu[];
+
+  @ManyToOne('Provider', 'menu', { lazy: true })
+  @JoinColumn({ name: 'provider_id' })
+  provider?: any;
 } 

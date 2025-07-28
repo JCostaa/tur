@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity('settings')
 export class Setting {
@@ -14,9 +14,16 @@ export class Setting {
   @Column({ default: 'string' })
   type!: string;
 
+  @Column()
+  provider_id!: number;
+
   @CreateDateColumn()
   createdAt!: Date;
 
   @UpdateDateColumn()
   updatedAt!: Date;
+
+  @ManyToOne('Provider', 'settings', { lazy: true })
+  @JoinColumn({ name: 'provider_id' })
+  provider?: any;
 } 

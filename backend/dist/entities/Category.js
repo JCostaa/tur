@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { Experience } from './Experience.js';
 let Category = class Category {
 };
@@ -20,6 +20,10 @@ __decorate([
     __metadata("design:type", String)
 ], Category.prototype, "name", void 0);
 __decorate([
+    Column(),
+    __metadata("design:type", Number)
+], Category.prototype, "provider_id", void 0);
+__decorate([
     CreateDateColumn(),
     __metadata("design:type", Date)
 ], Category.prototype, "createdAt", void 0);
@@ -31,6 +35,11 @@ __decorate([
     ManyToMany(() => Experience, experience => experience.categories, { lazy: true }),
     __metadata("design:type", Array)
 ], Category.prototype, "experiences", void 0);
+__decorate([
+    ManyToOne('Provider', 'categories', { lazy: true }),
+    JoinColumn({ name: 'provider_id' }),
+    __metadata("design:type", Object)
+], Category.prototype, "provider", void 0);
 Category = __decorate([
     Entity('categories')
 ], Category);

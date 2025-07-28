@@ -35,6 +35,10 @@ __decorate([
     __metadata("design:type", Number)
 ], Menu.prototype, "parentId", void 0);
 __decorate([
+    Column(),
+    __metadata("design:type", Number)
+], Menu.prototype, "provider_id", void 0);
+__decorate([
     CreateDateColumn(),
     __metadata("design:type", Date)
 ], Menu.prototype, "createdAt", void 0);
@@ -51,6 +55,11 @@ __decorate([
     OneToMany(() => Menu, menu => menu.parent),
     __metadata("design:type", Array)
 ], Menu.prototype, "children", void 0);
+__decorate([
+    ManyToOne('Provider', 'menu', { lazy: true }),
+    JoinColumn({ name: 'provider_id' }),
+    __metadata("design:type", Object)
+], Menu.prototype, "provider", void 0);
 Menu = __decorate([
     Entity('menu')
 ], Menu);
