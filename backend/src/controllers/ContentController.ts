@@ -60,7 +60,18 @@ export class ContentController {
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const content = await this.contentService.createContent(req.body);
+      // Get the authenticated user
+      const user = (req as any).user;
+      if (!user) {
+        return res.status(401).json({ error: 'User not authenticated' });
+      }
+
+      const contentData = {
+        ...req.body,
+        provider_id: user.provider_id
+      };
+
+      const content = await this.contentService.createContent(contentData);
       res.status(201).json(content);
     } catch (error) {
       console.error('Create content error:', error);

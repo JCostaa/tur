@@ -10,6 +10,12 @@ export class ExperienceController {
       const { title, subtitle, description, categoryIds } = req.body;
       let imageId: number | undefined = undefined;
 
+      // Get the authenticated user
+      const user = (req as any).user;
+      if (!user) {
+        return res.status(401).json({ error: 'User not authenticated' });
+      }
+
       // Se houver upload de imagem, salvar arquivo e criar registro em File
       if (req.file) {
         const fileRepo = AppDataSource.getRepository(File);
@@ -19,6 +25,7 @@ export class ExperienceController {
           mimeType: req.file.mimetype,
           size: req.file.size,
           path: req.file.path,
+          provider_id: user.provider_id
         });
         const savedFile = await fileRepo.save(file);
         imageId = savedFile.id;
@@ -39,6 +46,7 @@ export class ExperienceController {
         description,
         imageId,
         categories,
+        provider_id: user.provider_id
       });
       const savedExperience = await experienceRepo.save(experience);
       res.status(201).json(savedExperience);

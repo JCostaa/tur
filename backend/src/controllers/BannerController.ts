@@ -49,7 +49,18 @@ export class BannerController {
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const banner = await this.bannerService.createBanner(req.body);
+      // Get the authenticated user
+      const user = (req as any).user;
+      if (!user) {
+        return res.status(401).json({ error: 'User not authenticated' });
+      }
+
+      const bannerData = {
+        ...req.body,
+        provider_id: user.provider_id
+      };
+
+      const banner = await this.bannerService.createBanner(bannerData);
       res.status(201).json(banner);
     } catch (error) {
       console.error('Create banner error:', error);

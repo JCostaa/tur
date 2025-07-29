@@ -59,7 +59,18 @@ export class MenuController {
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const menuItem = await this.menuService.createMenuItem(req.body);
+      // Get the authenticated user
+      const user = (req as any).user;
+      if (!user) {
+        return res.status(401).json({ error: 'User not authenticated' });
+      }
+
+      const menuData = {
+        ...req.body,
+        provider_id: user.provider_id
+      };
+
+      const menuItem = await this.menuService.createMenuItem(menuData);
       res.status(201).json(menuItem);
     } catch (error) {
       console.error('Create menu item error:', error);

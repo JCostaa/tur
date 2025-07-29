@@ -76,7 +76,18 @@ export class SettingController {
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const setting = await this.settingService.createSetting(req.body);
+      // Get the authenticated user
+      const user = (req as any).user;
+      if (!user) {
+        return res.status(401).json({ error: 'User not authenticated' });
+      }
+
+      const settingData = {
+        ...req.body,
+        provider_id: user.provider_id
+      };
+
+      const setting = await this.settingService.createSetting(settingData);
       res.status(201).json(setting);
     } catch (error) {
       console.error('Create setting error:', error);

@@ -17,6 +17,7 @@ import bannerRoutes from './routes/banner.js';
 import segmentRoutes from './routes/segment.js';
 import experienceRoutes from './routes/experience.js';
 import categoryRoutes from './routes/category.js';
+import providerRoutes from './routes/provider.js';
 
 // Import database configuration
 import { initializeDatabase } from './config/database.js';
@@ -80,6 +81,7 @@ app.use('/api/banners', authMiddleware, bannerRoutes);
 app.use('/api/segments', authMiddleware, segmentRoutes);
 app.use('/api/experiences', authMiddleware, experienceRoutes);
 app.use('/api/categories', authMiddleware, categoryRoutes);
+app.use('/api/providers', authMiddleware, providerRoutes);
 
 // Admin routes (admin role required)
 app.use('/api/admin', authMiddleware, adminMiddleware, (req, res) => {

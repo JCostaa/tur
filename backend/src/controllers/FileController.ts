@@ -65,13 +65,20 @@ export class FileController {
         return res.status(400).json({ error: 'No file uploaded' });
       }
 
+      // Get the authenticated user
+      const user = (req as any).user;
+      if (!user) {
+        return res.status(401).json({ error: 'User not authenticated' });
+      }
+
       const fileData = {
         filename: req.file.filename,
         originalName: req.file.originalname,
         mimeType: req.file.mimetype,
         size: req.file.size,
         path: req.file.path,
-        uploadedById: (req as any).user?.id
+        uploadedById: user.id,
+        provider_id: user.provider_id
       };
 
       const file = await this.fileService.createFile(fileData);

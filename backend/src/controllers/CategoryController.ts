@@ -32,8 +32,18 @@ export class CategoryController {
   async createCategory(req: Request, res: Response) {
     try {
       const { name } = req.body;
+      
+      // Get the authenticated user
+      const user = (req as any).user;
+      if (!user) {
+        return res.status(401).json({ error: 'User not authenticated' });
+      }
+
       const categoryRepo = AppDataSource.getRepository(Category);
-      const category = categoryRepo.create({ name });
+      const category = categoryRepo.create({ 
+        name, 
+        provider_id: user.provider_id 
+      });
       const savedCategory = await categoryRepo.save(category);
       res.status(201).json(savedCategory);
     } catch (error) {

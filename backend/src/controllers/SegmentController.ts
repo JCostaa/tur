@@ -49,7 +49,18 @@ export class SegmentController {
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const segment = await this.segmentService.createSegment(req.body);
+      // Get the authenticated user
+      const user = (req as any).user;
+      if (!user) {
+        return res.status(401).json({ error: 'User not authenticated' });
+      }
+
+      const segmentData = {
+        ...req.body,
+        provider_id: user.provider_id
+      };
+
+      const segment = await this.segmentService.createSegment(segmentData);
       res.status(201).json(segment);
     } catch (error) {
       console.error('Create segment error:', error);

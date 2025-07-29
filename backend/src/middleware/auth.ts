@@ -17,7 +17,7 @@ export const authMiddleware = async (req: AuthenticatedRequest, res: Response, n
 
     // Verifica se é o token fixo
     if (token === FIXED_AUTH_TOKEN) {
-      req.user = { id: 'fixed-admin', role: 'admin', name: 'Fixed Admin' };
+      req.user = { id: 1, role: 'admin', name: 'Fixed Admin', provider_id: 1 };
       return next();
     }
 
