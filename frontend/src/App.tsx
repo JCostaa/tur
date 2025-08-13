@@ -19,6 +19,10 @@ import GuideDetail from './pages/guides/GuideDetails';
 import AllGuides from './pages/guides/AllGuides';
 import AllAgencies from './pages/agencie/AllAgencies';
 import AgencyDetail from './pages/agencie/AgencieDetails';
+import { Events, AllEvents, EventDetail } from './pages/events';
+import News from './pages/news/News';
+import NewsDetail from './pages/news/NewsDetail';
+import { Testimonials, TestimonialDetail } from './pages/testimonials';
 
 // Componente utilitário para zerar o scroll ao trocar de rota
 function ScrollToTop() {
@@ -64,6 +68,13 @@ function App() {
             <Route path="/all-guides" element={<AllGuides />} />
             <Route path="/all-agencies" element={<AllAgencies />} />
             <Route path="/agency/:id" element={<AgencyDetail />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/all-events" element={<AllEvents />} />
+            <Route path="/event/:id" element={<EventDetail />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/news/:id" element={<NewsDetail />} />
+            <Route path="/testimonials" element={<Testimonials />} />
+            <Route path="/testimonials/:id" element={<TestimonialDetail />} />
           </Routes>
         </Router>
       </ThemeProvider>

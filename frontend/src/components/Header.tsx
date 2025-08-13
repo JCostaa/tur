@@ -104,6 +104,8 @@ const menuItems = [
   { text: 'Início', href: '/' },
   { text: 'Serviços', href: '/#servicos' },
   { text: 'Experiências', href: '/#experiencias' },
+  { text: 'Eventos', href: '/#eventos' },
+  { text: 'Notícias', href: '/news' },
   {
     text: 'Promoções',
     href: '/#promocoes',

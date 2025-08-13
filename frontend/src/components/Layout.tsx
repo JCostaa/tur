@@ -3,6 +3,7 @@ import { Box, Container, CssBaseline } from '@mui/material';
 import Header from './Header';
 import { FaArrowUp } from 'react-icons/fa';
 import Footer from './Footer';
+import GifSection from './GifSection';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,7 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <CssBaseline />
       <Header />
-      <Box component="main" sx={{ flexGrow: 1, py: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1 }}>
         {children}
       </Box>
       {/* Botão de voltar ao topo */}
@@ -45,6 +46,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       >
         <FaArrowUp size={22} />
       </button>
+      <GifSection />
       <Footer />
     </Box>
   );

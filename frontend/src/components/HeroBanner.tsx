@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Box,
   Container,
@@ -18,7 +18,7 @@ import {
   LinkedIn
 } from '@mui/icons-material';
 import { useQuery } from '@tanstack/react-query';
-import { getBanners } from '../services/banners';
+import { getTours } from '../services/tours';
 
 const HeroSection = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -27,6 +27,15 @@ const HeroSection = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   overflow: 'hidden',
+  // Mobile: ajustes de altura
+  [theme.breakpoints.down('md')]: {
+    height: '80vh',
+    minHeight: 500,
+  },
+  [theme.breakpoints.down('sm')]: {
+    height: '70vh',
+    minHeight: 450,
+  },
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -46,11 +55,18 @@ const BackgroundImage = styled(Box)<{ $active: boolean }>(({ theme, $active }) =
   right: 0,
   bottom: 0,
   backgroundSize: 'cover',
-  backgroundPosition: 'center',
+  backgroundPosition: 'center center',
   backgroundRepeat: 'no-repeat',
   opacity: $active ? 1 : 0,
   transform: $active ? 'scale(1.05)' : 'scale(1)',
   transition: 'opacity 1s ease-in-out, transform 8s ease-in-out',
+  // Mobile: ajuste para não cortar a imagem
+  [theme.breakpoints.down('md')]: {
+    backgroundSize: 'cover',
+    backgroundPosition: 'center center',
+    height: '100%',
+    width: '100%',
+  },
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -148,13 +164,13 @@ const SocialIcon = styled(IconButton)(({ theme }) => ({
 const SlideIndicator = styled(Box)(({ theme }) => ({
   position: 'absolute',
   bottom: 40,
-  right: 40,
+  left: '50%',
+  transform: 'translateX(-50%)',
   display: 'flex',
   gap: theme.spacing(1),
   zIndex: 3,
   [theme.breakpoints.down('md')]: {
     bottom: 20,
-    right: 20,
   },
 }));
 
@@ -170,65 +186,112 @@ const Indicator = styled(Box)<{ $active: boolean }>(({ theme, $active }) => ({
   },
 }));
 
-// Banner type (ajuste conforme necessário)
-type Banner = {
+// Tour type para integração com skoobtur
+type Tour = {
   id: number;
   title: string;
-  description?: string;
-  link?: string;
-  orderIndex: number;
-  isActive: boolean;
-  imageId?: number;
-  image?: {
-    id: number;
-    filename: string;
-    originalName: string;
-    url: string;
-  };
-  createdAt: string;
-  updatedAt: string;
+  name?: string;
+  banner?: string;
+  image?: string;
+  gallery?: Array<{ large?: string; [key: string]: any }>;
+  [key: string]: any;
 };
 
 const HeroBanner: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [tourSlides, setTourSlides] = useState<Array<{ id: string; title: string; imageUrl: string; source: 'tour' }>>([]);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  // Query banners
-  const { data: banners, isLoading, isError } = useQuery<Banner[]>({
-    queryKey: ['banners'],
-    queryFn: getBanners,
+  // Query tours para obter imagens
+  const { data: toursData, isLoading, isError } = useQuery({
+    queryKey: ['tours'],
+    queryFn: getTours,
+    staleTime: 1000 * 60 * 5, // 5 minutos
   });
 
-  // Atualizar slide para banners dinâmicos
+  // Extrair tours da resposta da API
+  const tours = useMemo(() => {
+    if (!toursData) return [];
+    // A API retorna dados aninhados: data.data.tours
+    return Array.isArray(toursData?.data?.tours) ? toursData.data.tours : [];
+  }, [toursData]);
+
+  // Processar tours para criar slides
   useEffect(() => {
-    if (!banners || banners.length === 0) return;
+    const slides: Array<{ id: string; title: string; imageUrl: string; source: 'tour' }> = [];
+    
+    if (tours && tours.length > 0) {
+      // Embaralhar tours para variedade
+      const shuffledTours = [...tours].sort(() => Math.random() - 0.5);
+      
+      shuffledTours.forEach(tour => {
+        let imageUrl = '';
+        
+        // Priorizar banner do tour
+        if (tour.banner) {
+          imageUrl = tour.banner;
+        }
+        // Senão, usar image
+        else if (tour.image) {
+          imageUrl = tour.image;
+        }
+        // Tentar gallery se disponível
+        else if (tour.gallery && Array.isArray(tour.gallery) && tour.gallery.length > 0) {
+          const firstGalleryItem = tour.gallery[0];
+          if (firstGalleryItem && firstGalleryItem.large) {
+            imageUrl = firstGalleryItem.large;
+          }
+        }
+        
+        if (imageUrl) {
+          slides.push({
+            id: `tour-${tour.id}`,
+            title: tour.title || tour.name || 'Tour Experience',
+            imageUrl,
+            source: 'tour'
+          });
+        }
+      });
+    }
+    
+    setTourSlides(slides);
+  }, [tours]);
+
+  // Atualizar slide automaticamente
+  useEffect(() => {
+    if (!tourSlides || tourSlides.length === 0) return;
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % banners.length);
+      setCurrentSlide((prev) => (prev + 1) % tourSlides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, [banners]);
+  }, [tourSlides]);
 
   const handleIndicatorClick = (index: number) => {
     setCurrentSlide(index);
   };
 
   if (isLoading) {
-    return <Box sx={{ height: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Typography color="#fff">Carregando banners...</Typography></Box>;
+    return <Box sx={{ height: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Typography color="#fff">Carregando tours...</Typography></Box>;
   }
-  if (isError || !banners) {
-    return <Box sx={{ height: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Typography color="#fff">Erro ao carregar banners.</Typography></Box>;
+  
+  if (isError) {
+    return <Box sx={{ height: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Typography color="#fff">Erro ao carregar tours.</Typography></Box>;
+  }
+
+  if (tourSlides.length === 0) {
+    return <Box sx={{ height: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Typography color="#fff">Nenhum tour disponível.</Typography></Box>;
   }
 
   return (
     <HeroSection>
-      {banners.map((banner, index) => (
+      {tourSlides.map((slide, index) => (
         <BackgroundImage
-          key={banner.id}
+          key={slide.id}
           $active={index === currentSlide}
           sx={{
-            backgroundImage: banner.image?.url ? `url(${import.meta.env.VITE_API_URL}${banner.image.url})` : undefined,
-            backgroundColor: !banner.image?.url ? '#222' : undefined,
+            backgroundImage: `url(${slide.imageUrl})`,
+            backgroundColor: '#222', // Fallback color
           }}
         />
       ))}
@@ -288,7 +351,7 @@ const HeroBanner: React.FC = () => {
       </SocialSection> */}
 
       <SlideIndicator>
-        {banners.map((_, index) => (
+        {tourSlides.map((_, index) => (
           <Indicator
             key={index}
             $active={index === currentSlide}

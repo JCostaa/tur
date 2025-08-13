@@ -19,6 +19,10 @@ import { useNavigate } from 'react-router-dom';
 const SectionWrapper = styled(Box)(({ theme }) => ({
   padding: theme.spacing(8, 0),
   backgroundColor: '#f5f5f5',
+  // Mobile: ajustes de padding
+  [theme.breakpoints.down('md')]: {
+    padding: theme.spacing(4, 0),
+  },
 }));
 
 const SectionTitle = styled(Typography)(({ theme }) => ({
@@ -41,6 +45,14 @@ const PackagesGrid = styled(Box)<{ cardsPerView: number; showArrows?: boolean }>
   gap: theme.spacing(4),
   marginTop: theme.spacing(4),
   justifyContent: 'center',
+  // Mobile: ajustes específicos
+  [theme.breakpoints.down('md')]: {
+    gridTemplateColumns: showArrows
+      ? `repeat(${cardsPerView}, minmax(280px, 1fr))`
+      : 'repeat(auto-fit, minmax(280px, 1fr))',
+    gap: theme.spacing(2),
+    marginTop: theme.spacing(2),
+  },
 }));
 
 const PackageCard = styled(Card)(({ theme }) => ({
@@ -54,6 +66,11 @@ const PackageCard = styled(Card)(({ theme }) => ({
   height: '100%', // garantir altura igual
   display: 'flex',
   flexDirection: 'column',
+  // Mobile: ajustes específicos
+  [theme.breakpoints.down('md')]: {
+    maxWidth: '100%',
+    margin: '0 auto',
+  },
   '&:hover': {
     transform: 'translateY(-8px)',
     boxShadow: '0 12px 40px rgba(0,0,0,0.15)',
@@ -77,6 +94,10 @@ const ImageContainer = styled(Box)(({ theme }) => ({
   borderTopRightRadius: 16,
   borderBottomLeftRadius: 0,
   borderBottomRightRadius: 0,
+  // Mobile: altura ajustada
+  [theme.breakpoints.down('md')]: {
+    height: 200,
+  },
 }));
 
 const PackageImage = styled('img')({
@@ -110,6 +131,12 @@ const BadgeBase = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   gap: theme.spacing(0.5),
   boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+  // Mobile: badges menores
+  [theme.breakpoints.down('md')]: {
+    padding: theme.spacing(0.4, 1.2),
+    fontSize: 12,
+    borderRadius: 16,
+  },
 }));
 
 const RatingBadge = styled(BadgeBase)(({ theme }) => ({
@@ -119,6 +146,11 @@ const RatingBadge = styled(BadgeBase)(({ theme }) => ({
   color: '#222',
   background: alpha('#fff', 0.98),
   zIndex: 3,
+  // Mobile: posicionamento ajustado
+  [theme.breakpoints.down('md')]: {
+    top: 12,
+    left: 12,
+  },
 }));
 
 const DurationBadge = styled(BadgeBase)(({ theme }) => ({
@@ -128,6 +160,11 @@ const DurationBadge = styled(BadgeBase)(({ theme }) => ({
   color: '#fff',
   background: 'rgba(33, 150, 243, 0.85)', // azul translúcido
   zIndex: 3,
+  // Mobile: posicionamento ajustado
+  [theme.breakpoints.down('md')]: {
+    top: 12,
+    right: 12,
+  },
 }));
 
 const PeopleBadge = styled(BadgeBase)(({ theme }) => ({
@@ -137,6 +174,11 @@ const PeopleBadge = styled(BadgeBase)(({ theme }) => ({
   color: '#222',
   background: alpha('#fff', 0.92),
   zIndex: 3,
+  // Mobile: posicionamento ajustado
+  [theme.breakpoints.down('md')]: {
+    bottom: 12,
+    left: 12,
+  },
 }));
 
 const CardContentStyled = styled(CardContent)(({ theme }) => ({
@@ -145,8 +187,15 @@ const CardContentStyled = styled(CardContent)(({ theme }) => ({
   flexDirection: 'column',
   height: '100%', // garantir que ocupe toda a altura
   justifyContent: 'space-between', // empurra preço/botões para baixo
+  // Mobile: padding reduzido
+  [theme.breakpoints.down('md')]: {
+    padding: theme.spacing(2.5, 2.5, 2, 2.5),
+  },
   '&:last-child': {
     paddingBottom: theme.spacing(3),
+    [theme.breakpoints.down('md')]: {
+      paddingBottom: theme.spacing(2.5),
+    },
   },
 }));
 
@@ -157,6 +206,11 @@ const PackageTitle = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(0.5),
   fontFamily: '"Playfair Display", serif',
   letterSpacing: 0.1,
+  // Mobile: tipografia ajustada
+  [theme.breakpoints.down('md')]: {
+    fontSize: '1.1rem',
+    lineHeight: 1.3,
+  },
 }));
 
 const PackageLocation = styled(Typography)(({ theme }) => ({
@@ -224,6 +278,25 @@ const StarIconStyled = styled(StarIcon)(({ theme }) => ({
 const LocationIconStyled = styled(LocationIcon)(({ theme }) => ({
   color: '#666',
   fontSize: 16,
+}));
+
+// Container para setinhas mobile - acima dos cards
+const MobileArrowsContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: theme.spacing(2),
+  paddingLeft: theme.spacing(2),
+  paddingRight: theme.spacing(2),
+  [theme.breakpoints.up('md')]: {
+    display: 'none', // Esconde no desktop
+  },
+}));
+
+const ArrowCounter = styled(Typography)(({ theme }) => ({
+  fontSize: '0.9rem',
+  color: '#666',
+  fontWeight: 500,
 }));
 
 // Adicionar tipos para as props
@@ -304,6 +377,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
   const handlePrev = () => {
     if (canGoBack) setStartIndex(startIndex - cardsPerView);
   };
+  
   const handleNext = () => {
     if (canGoForward) setStartIndex(startIndex + cardsPerView);
   };
@@ -320,8 +394,8 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
     }
   };
 
-  // Estilos para as setas
-  const arrowStyle = {
+  // Estilos para as setas - desktop: lateral, mobile: acima
+  const arrowStyleDesktop = {
     position: 'absolute' as const,
     top: '50%',
     transform: 'translateY(-50%)',
@@ -339,7 +413,31 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
     fontSize: 24,
     color: theme.palette.primary.main,
     opacity: 0.95,
-    transition: 'background 0.2s',
+    transition: 'all 0.2s ease',
+    '&:hover': {
+      transform: 'translateY(-50%) scale(1.1)',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
+    },
+  };
+
+  const arrowStyleMobile = {
+    background: '#fff',
+    border: 'none',
+    borderRadius: '50%',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+    width: 48,
+    height: 48,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    fontSize: 28,
+    color: theme.palette.primary.main,
+    transition: 'all 0.2s ease',
+    '&:hover': {
+      transform: 'scale(1.05)',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
+    },
   };
 
   return (
@@ -369,21 +467,46 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
           </>
         )}
 
-        {/* Setas de navegação */}
-        {showArrows && canGoBack && (
+        {/* Setas de navegação Mobile - acima dos cards */}
+        {showArrows && isMobile && (
+          <MobileArrowsContainer>
+            <button
+              aria-label="Voltar"
+              style={arrowStyleMobile}
+              onClick={handlePrev}
+              disabled={!canGoBack}
+            >
+              &#8592;
+            </button>
+            <ArrowCounter>
+              {startIndex + 1} de {packages.length}
+            </ArrowCounter>
+            <button
+              aria-label="Avançar"
+              style={arrowStyleMobile}
+              onClick={handleNext}
+              disabled={!canGoForward}
+            >
+              &#8594;
+            </button>
+          </MobileArrowsContainer>
+        )}
+
+        {/* Setas de navegação Desktop - laterais */}
+        {showArrows && !isMobile && canGoBack && (
           <button
             aria-label="Voltar"
-            style={{ ...arrowStyle, left: -20 }}
+            style={{ ...arrowStyleDesktop, left: 100 }}
             onClick={handlePrev}
             disabled={!canGoBack}
           >
             &#8592;
           </button>
         )}
-        {showArrows && canGoForward && (
+        {showArrows && !isMobile && canGoForward && (
           <button
             aria-label="Avançar"
-            style={{ ...arrowStyle, right: -20 }}
+            style={{ ...arrowStyleDesktop, right: 100 }}
             onClick={handleNext}
             disabled={!canGoForward}
           >
@@ -391,7 +514,15 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
           </button>
         )}
 
-        <PackagesGrid cardsPerView={cardsPerView} showArrows={showArrows} style={{ position: 'relative', overflow: 'hidden', minHeight: 350 }}>
+        <PackagesGrid 
+          cardsPerView={cardsPerView} 
+          showArrows={showArrows}
+          style={{ 
+            position: 'relative', 
+            overflow: 'hidden', 
+            minHeight: isMobile ? 420 : 350 
+          }}
+        >
           {(
             showArrows
               ? packages.slice(startIndex, startIndex + cardsPerView)
