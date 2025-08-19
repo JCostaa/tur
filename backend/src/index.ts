@@ -47,7 +47,7 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use(cors({
-  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:5173','https://turismo-bb8mt4953-julio-costas-projects.vercel.app','https://turismo-ne1i453rh-julio-costas-projects.vercel.app','https://turismo-kudkcq52r-julio-costas-projects.vercel.app'],
+  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['https://turismo-otumerlzm-julio-costas-projects.vercel.app','http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:5173','https://turismo-bb8mt4953-julio-costas-projects.vercel.app','https://turismo-ne1i453rh-julio-costas-projects.vercel.app','https://turismo-kudkcq52r-julio-costas-projects.vercel.app'],
   credentials: true
 }));
 app.use(morgan('combined'));
