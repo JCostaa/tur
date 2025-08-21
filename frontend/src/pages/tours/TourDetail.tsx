@@ -465,7 +465,7 @@ const TourDetail: React.FC = () => {
             </ProviderBox>
           )}
           <ReserveButton sx={{ mt: 2 }} onClick={() => {
-            window.open(`https://wa.me/${provider.social.whatsapp}`, '_blank');
+            window.open(`https://www.skoobtur.com/tour/${tour.slug}`, '_blank');
           }}>Reservar Agora</ReserveButton>
         </InfoCard>
       </Container>

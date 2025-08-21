@@ -53,7 +53,7 @@ const NavLink = styled(RouterLink)(({ theme }) => ({
   transition: 'all 0.3s ease',
   position: 'relative',
   '&:hover': {
-    color: brandColors.primary.orange,
+    color: '#fff', // Manter branco no hover
     backgroundColor: alpha(brandColors.primary.orange, 0.1),
     transform: 'translateY(-2px)',
   },
@@ -193,7 +193,7 @@ const Header: React.FC = () => {
             alignItems: 'center',
             borderBottom: arr && idx !== arr.length - 1 && parent ? '1px solid #f0f0f0' : 'none',
             '&:hover': {
-              color: brandColors.primary.orange,
+              color: parent ? brandColors.primary.orange : '#fff', // Laranja nos submenus, branco no menu principal
               backgroundColor: parent ? alpha(brandColors.primary.orange, 0.13) : alpha(brandColors.primary.orange, 0.1),
               fontWeight: 500,
             },
@@ -238,7 +238,7 @@ const Header: React.FC = () => {
             boxShadow: 'none',
             borderBottom: arr && idx !== arr.length - 1 && parent ? '1px solid #f0f0f0' : 'none',
             '&:hover': {
-              color: '#fff',
+              color: parent ? '#333' : '#fff', // Escuro nos submenus, branco no menu principal
               backgroundColor: parent ? '#f7f7f7' : alpha(brandColors.primary.orange, 0.1),
               fontWeight: 500,
             },
@@ -274,7 +274,7 @@ const Header: React.FC = () => {
   const drawer = (
     <Box sx={{ width: 280, pt: 2 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 2, mb: 2 }}>
-          <Logo height={40} />
+          <Logo height={65} width={65} variant="default" />
           <IconButton onClick={handleDrawerToggle}>
             <CloseIcon />
           </IconButton>
@@ -322,7 +322,7 @@ const Header: React.FC = () => {
         <Container maxWidth="xl">
           <Toolbar sx={{ justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Logo height={50} />
+              <Logo height={110} width={110} variant="header" />
             </Box>
 
             {!isMobile && (
@@ -361,16 +361,16 @@ const Header: React.FC = () => {
         sx={{
           '& .MuiDrawer-paper': {
             width: 280,
-            background: `rgba(${brandColors.primary.teal}, 0.98)`,
+            background: '#fff', // Fundo branco para o drawer
             backdropFilter: 'blur(10px)',
-            color: '#fff',
+            color: '#333', // Texto escuro
           },
         }}
       >
         <Box sx={{ p: 2 }}>
           <IconButton
             onClick={handleDrawerToggle}
-            sx={{ color: '#fff', alignSelf: 'flex-end' }}
+            sx={{ color: '#333', alignSelf: 'flex-end' }} // Ícone escuro
           >
             <CloseIcon />
           </IconButton>
@@ -383,7 +383,7 @@ const Header: React.FC = () => {
                     display: 'block',
                     py: 1,
                     px: 2,
-                    color: '#fff',
+                    color: '#333', // Texto preto no mobile
                     textDecoration: 'none',
                     fontWeight: 500,
                     borderRadius: 1,

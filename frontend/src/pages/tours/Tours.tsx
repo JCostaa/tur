@@ -73,8 +73,7 @@ const Tours: React.FC = () => {
   return (
     <div style={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
-        <h3 style={{ color: theme.palette.primary.main, fontWeight: 600, letterSpacing: 2 }}>TOURS</h3>
-        <h1 style={{ fontSize: 36, fontWeight: 700, margin: '8px 0 0 0', color: theme.palette.text.primary }}>no município</h1>
+        <h3 style={{ color: theme.palette.primary.main, fontWeight: 600, letterSpacing: 2 }}>ATRATIVOS</h3>
       </div>
       {isLoading ? (
         <div style={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>Carregando tours...</div>

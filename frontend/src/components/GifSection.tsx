@@ -2,177 +2,359 @@ import React from 'react';
 import { Box, Container, Typography } from '@mui/material';
 import { brandColors } from '../config/colors';
 
-interface GifItem {
+interface BannerItem {
   src: string;
   alt: string;
   title: string;
+  description: string;
 }
 
 const GifSection: React.FC = () => {
-  const gifs: GifItem[] = [
+  const banners: BannerItem[] = [
     {
       src: '/images/banners/GIF Biz (1).gif',
-      alt: 'GIF Biz',
-      title: 'Negócios Locais'
+      alt: 'Planejamento Estratégico',
+      title: 'Planejamento estratégico, capacitação e conexão.',
+      description: 'O turismo comunitário fortalecido na prática!'
     },
     {
-      src: '/images/banners/GIF TBC (1).gif',
-      alt: 'GIF TBC',
-      title: 'Turismo Sustentável'
+      src: '/images/banners/GIF TBC (1).gif', 
+      alt: 'Plataforma VAR',
+      title: 'VAR PLATAFORMA DE INTELIGÊNCIA TURÍSTICA',
+      description: 'Transforme o turismo com tecnologia, inovação e estratégia em um só lugar!'
     },
-    {
-      src: '/images/banners/GIF VAR (1).gif',
-      alt: 'GIF VAR',
-      title: 'Variedade de Opções'
-    }
+    
   ];
 
   return (
     <Box
       sx={{
-        background: brandColors.gradients.secondary,
-        py: 6,
-        position: 'relative',
-        overflow: 'hidden'
+        backgroundColor: '#f8f9fa',
+        py: { xs: 4, md: 6 },
+        position: 'relative'
       }}
     >
-      {/* Overlay com padrão */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(44, 95, 45, 0.1)',
-          backgroundImage: `
-            radial-gradient(circle at 25% 25%, rgba(255, 107, 53, 0.1) 0%, transparent 70%),
-            radial-gradient(circle at 75% 75%, rgba(0, 128, 128, 0.1) 0%, transparent 70%)
-          `,
-          zIndex: 1
-        }}
-      />
-      
-      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
-        {/* Título da seção */}
-        <Box textAlign="center" mb={5}>
-          <Typography
-            variant="h3"
-            component="h2"
-            sx={{
-              fontWeight: 'bold',
-              color: brandColors.neutral.white,
-              mb: 2,
-              textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
-            }}
-          >
-            Descubra Barra do Bugres
-          </Typography>
-          <Typography
-            variant="h6"
-            sx={{
-              color: brandColors.neutral.white,
-              opacity: 0.9,
-              maxWidth: 600,
-              mx: 'auto',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
-            }}
-          >
-            Explore as belezas naturais e a rica cultura da nossa região
-          </Typography>
-        </Box>
-
-        {/* Layout de GIFs responsivo */}
+      <Container maxWidth="lg">
+        {/* Banner superior - Verde */}
         <Box
           sx={{
-            display: 'grid',
-            gridTemplateColumns: {
-              xs: '1fr',                    // 1 coluna no mobile
-              sm: 'repeat(2, 1fr)',         // 2 colunas no tablet
-              md: 'repeat(3, 1fr)'          // 3 colunas no desktop
-            },
-            gap: 3,
-            justifyItems: 'center',
-            maxWidth: '1200px',
-            margin: '0 auto',
-            padding: { xs: 2, sm: 0 }       // Padding no mobile
+            position: 'relative',
+            borderRadius: 3,
+            overflow: 'hidden',
+            mb: 3,
+            background: 'linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.15)'
           }}
         >
-          {gifs.map((gif, index) => (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              minHeight: { xs: 200, md: 280 },
+              position: 'relative'
+            }}
+          >
+            {/* Conteúdo do lado esquerdo */}
             <Box
-              key={index}
               sx={{
-                position: 'relative',
-                borderRadius: 3,
-                overflow: 'hidden',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-                transition: 'all 0.3s ease',
-                width: '100%',
-                maxWidth: { xs: '100%', sm: 350, md: 320 },
-                aspectRatio: '16/9',              // Proporção fixa para o container
-                backgroundColor: 'rgba(0,0,0,0.1)', // Fundo caso a imagem não preencha
-                '&:hover': {
-                  transform: 'translateY(-8px)',
-                  boxShadow: '0 16px 48px rgba(0,0,0,0.4)',
-                }
+                flex: { xs: 1, md: '0 0 60%' },
+                p: { xs: 3, md: 4 },
+                color: 'white',
+                zIndex: 2
               }}
             >
-              {/* GIF */}
+              <Typography
+                variant="overline"
+                sx={{
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  letterSpacing: 1.5,
+                  color: 'rgba(255,255,255,0.8)',
+                  mb: 1
+                }}
+              >
+                PUBLICIDADE
+              </Typography>
+              
+              <Typography
+                variant="h4"
+                component="h2"
+                sx={{
+                  fontWeight: 'bold',
+                  fontSize: { xs: '1.5rem', md: '2rem' },
+                  lineHeight: 1.2,
+                  mb: 2,
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+                }}
+              >
+                Planejamento estratégico,<br />
+                capacitação e conexão.{' '}
+                <Box component="span" sx={{ color: '#81C784' }}>
+                  O turismo<br />
+                  comunitário fortalecido na prática!
+                </Box>
+              </Typography>
+
+              {/* Tags/Badges */}
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mt: 3 }}>
+                <Box sx={{ 
+                  backgroundColor: '#4CAF50', 
+                  color: 'white', 
+                  px: 2, 
+                  py: 0.5, 
+                  borderRadius: 20,
+                  fontSize: '0.75rem',
+                  fontWeight: 600
+                }}>
+                  SAIBA MAIS
+                </Box>
+                <Box sx={{ 
+                  backgroundColor: 'rgba(255,255,255,0.2)', 
+                  color: 'white', 
+                  px: 2, 
+                  py: 0.5, 
+                  borderRadius: 20,
+                  fontSize: '0.75rem',
+                  border: '1px solid rgba(255,255,255,0.3)'
+                }}>
+                  💻 WWW.TUR.BR
+                </Box>
+                <Box sx={{ 
+                  backgroundColor: 'rgba(255,255,255,0.2)', 
+                  color: 'white', 
+                  px: 2, 
+                  py: 0.5, 
+                  borderRadius: 20,
+                  fontSize: '0.75rem',
+                  border: '1px solid rgba(255,255,255,0.3)'
+                }}>
+                  📞 (65) 99202 0 TURMA)
+                </Box>
+                <Box sx={{ 
+                  backgroundColor: 'rgba(255,255,255,0.2)', 
+                  color: 'white', 
+                  px: 2, 
+                  py: 0.5, 
+                  borderRadius: 20,
+                  fontSize: '0.75rem',
+                  border: '1px solid rgba(255,255,255,0.3)'
+                }}>
+                  🎯 TURISMO DE BASE COMUNITÁRIA
+                </Box>
+              </Box>
+            </Box>
+
+            {/* Imagem do lado direito */}
+            <Box
+              sx={{
+                display: { xs: 'none', md: 'block' },
+                flex: '0 0 40%',
+                height: 280,
+                position: 'relative'
+              }}
+            >
               <Box
                 component="img"
-                src={gif.src}
-                alt={gif.alt}
+                src="/images/banners/GIF Biz (1).gif"
+                alt="Turismo Comunitário"
                 sx={{
                   width: '100%',
-                  height: '100%',                 // Altura total do container
-                  objectFit: 'contain',           // Não corta a imagem
-                  objectPosition: 'center',
-                  display: 'block'
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'center'
                 }}
               />
-              
-              {/* Overlay com título */}
+            </Box>
+
+            {/* Elemento decorativo verde no canto */}
+            <Box
+              sx={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                width: 0,
+                height: 0,
+                borderStyle: 'solid',
+                borderWidth: '0 120px 120px 0',
+                borderColor: 'transparent #81C784 transparent transparent'
+              }}
+            />
+          </Box>
+        </Box>
+
+        {/* Banner inferior - Azul */}
+        <Box
+          sx={{
+            position: 'relative',
+            borderRadius: 3,
+            overflow: 'hidden',
+            background: 'linear-gradient(135deg, #1565C0 0%, #42A5F5 100%)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.15)'
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              minHeight: { xs: 200, md: 280 },
+              position: 'relative'
+            }}
+          >
+            {/* Conteúdo do lado esquerdo */}
+            <Box
+              sx={{
+                flex: { xs: 1, md: '0 0 60%' },
+                p: { xs: 3, md: 4 },
+                color: 'white',
+                zIndex: 2
+              }}
+            >
+              <Typography
+                variant="h4"
+                component="h2"
+                sx={{
+                  fontWeight: 'bold',
+                  fontSize: { xs: '1.5rem', md: '2.2rem' },
+                  lineHeight: 1.2,
+                  mb: 2,
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+                }}
+              >
+                <Box component="span" sx={{ color: '#FFD54F' }}>VAR</Box><br />
+                PLATAFORMA DE INTELIGÊNCIA<br />
+                TURÍSTICA
+              </Typography>
+
+              <Typography
+                variant="h6"
+                sx={{
+                  fontSize: { xs: '0.9rem', md: '1rem' },
+                  fontWeight: 500,
+                  mb: 3,
+                  color: '#E1F5FE'
+                }}
+              >
+                var.tur.br
+              </Typography>
+
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: { xs: '0.85rem', md: '0.95rem' },
+                  mb: 3,
+                  color: 'rgba(255,255,255,0.9)',
+                  lineHeight: 1.4
+                }}
+              >
+                Transforme o turismo com tecnologia,<br />
+                inovação e estratégia em um só lugar!
+              </Typography>
+
+              {/* Tags/Badges */}
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                <Box sx={{ 
+                  backgroundColor: '#FFD54F', 
+                  color: '#1565C0', 
+                  px: 2, 
+                  py: 0.5, 
+                  borderRadius: 20,
+                  fontSize: '0.75rem',
+                  fontWeight: 600
+                }}>
+                  📱 (65) 9 9642-2740
+                </Box>
+                <Box sx={{ 
+                  backgroundColor: '#FF9800', 
+                  color: 'white', 
+                  px: 2, 
+                  py: 0.5, 
+                  borderRadius: 20,
+                  fontSize: '0.75rem',
+                  fontWeight: 600
+                }}>
+                  📧 CONTATO@VAR.TUR.BR
+                </Box>
+              </Box>
+            </Box>
+
+            {/* Logo/Imagem do lado direito */}
+            <Box
+              sx={{
+                display: { xs: 'none', md: 'flex' },
+                flex: '0 0 40%',
+                height: 280,
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative'
+              }}
+            >
+              {/* Logo VAR circulado */}
               <Box
                 sx={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  background: 'linear-gradient(transparent, rgba(0,0,0,0.8))',
-                  color: brandColors.neutral.white,
-                  p: 2,
-                  textAlign: 'center'
+                  width: 120,
+                  height: 120,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #FF9800 0%, #FFD54F 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+                  position: 'relative',
+                  zIndex: 2
                 }}
               >
                 <Typography
-                  variant="h6"
-                  component="h3"
+                  variant="h3"
                   sx={{
                     fontWeight: 'bold',
-                    fontSize: '1.1rem',
-                    textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+                    color: 'white',
+                    textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
                   }}
                 >
-                  {gif.title}
+                  VAR
                 </Typography>
               </Box>
-            </Box>
-          ))}
-        </Box>
 
-        {/* Call to action */}
-        <Box textAlign="center" mt={5}>
-          <Typography
-            variant="body1"
-            sx={{
-              color: brandColors.neutral.white,
-              opacity: 0.9,
-              fontSize: '1.1rem',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
-            }}
-          >
-            Venha viver momentos inesquecíveis em Barra do Bugres!
-          </Typography>
+              {/* Elementos decorativos circulares */}
+              <Box
+                sx={{
+                  position: 'absolute',
+                  width: 200,
+                  height: 200,
+                  borderRadius: '50%',
+                  border: '2px solid rgba(255,255,255,0.2)',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)'
+                }}
+              />
+              <Box
+                sx={{
+                  position: 'absolute',
+                  width: 280,
+                  height: 280,
+                  borderRadius: '50%',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)'
+                }}
+              />
+            </Box>
+
+            {/* Elementos decorativos de conectividade */}
+            <Box
+              sx={{
+                position: 'absolute',
+                top: 20,
+                right: 20,
+                color: 'rgba(255,255,255,0.3)',
+                fontSize: '24px'
+              }}
+            >
+              ⚡ 📊 🔗 💡
+            </Box>
+          </Box>
         </Box>
       </Container>
     </Box>

@@ -373,7 +373,20 @@ const RestaurantDetail: React.FC = () => {
           )}
           {/* Preço */}
           {restaurant.price && <Price>Preço médio: {restaurant.price}</Price>}
-          <ReserveButton>Entrar em contato</ReserveButton>
+          <ReserveButton onClick={() => {
+            const phone = restaurant?.provider?.phone_number || provider.phone
+     
+            if (phone) {
+              // Remove any non-numeric characters except +
+              const cleanPhone = phone.replace(/[^\d+]/g, '');
+              // Create WhatsApp URL with pre-filled message
+              const message = encodeURIComponent(`Olá! Tenho interesse no restaurante "${restaurant.title}". Gostaria de mais informações.`);
+              const whatsappUrl = `https://wa.me/${cleanPhone}?text=${message}`;
+              window.open(whatsappUrl, '_blank');
+            } else {
+              alert('Número de telefone não disponível para este restaurante.');
+            }
+          }}>Entrar em contato</ReserveButton>
         </InfoCard>
         {/* Mapa Google Maps */}
         {locationString && (

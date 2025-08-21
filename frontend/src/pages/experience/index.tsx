@@ -29,7 +29,7 @@ const Experiences: React.FC = () => {
   // Mapeamento dos dados da API para o formato esperado pelo ExperienceCard
   const experiences = Array.isArray(data)
     ? data.map((exp: any) => ({
-        image: exp.image || '/images/browse-1.jpg',
+        image: exp.image ? { path: exp.image.url || exp.image.path } : { path: '/images/browse-1.jpg' },
         title: exp.title || 'Experiência',
         subtitle: exp.subtitle || '',
         type: exp.type || 'Cultural',
@@ -43,8 +43,7 @@ const Experiences: React.FC = () => {
   return (
     <div style={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
-        <h3 style={{ color: theme.palette.primary.main, fontWeight: 600, letterSpacing: 2 }}>EXPERIÊNCIAS</h3>
-        <h1 style={{ fontSize: 36, fontWeight: 700, margin: '8px 0 0 0', color: theme.palette.text.primary }}>no município</h1>
+        <h3 style={{ color: theme.palette.primary.main, fontWeight: 600, letterSpacing: 2 }}>CATEGORIAS</h3>
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 16, marginBottom: 32 }}>
         <button
@@ -106,4 +105,4 @@ const Experiences: React.FC = () => {
   );
 };
 
-export default Experiences; 
+export default Experiences;

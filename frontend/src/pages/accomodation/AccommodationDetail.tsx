@@ -372,9 +372,23 @@ const AccommodationDetail: React.FC = () => {
             </Box>
           )}
 
+          {console.log('provider', accommodation?.provider)}
           {/* Preço */}
           {accommodation.price && <Price>Valor: {accommodation.price}</Price>}
-          <ReserveButton>Reservar Agora</ReserveButton>
+          <ReserveButton onClick={() => {
+            const phone = accommodation?.provider?.phone_number || provider.phone
+     
+            if (phone) {
+              // Remove any non-numeric characters except +
+              const cleanPhone = phone.replace(/[^\d+]/g, '');
+              // Create WhatsApp URL with pre-filled message
+              const message = encodeURIComponent(`Olá! Tenho interesse na hospedagem "${accommodation.title}". Gostaria de mais informações.`);
+              const whatsappUrl = `https://wa.me/${cleanPhone}?text=${message}`;
+              window.open(whatsappUrl, '_blank');
+            } else {
+              alert('Número de telefone não disponível para esta hospedagem.');
+            }
+          }}>Entrar em contato</ReserveButton>
         </InfoCard>
 
         {/* Mapa Google Maps */}

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Card, CardContent, CardMedia, Typography, Button, Skeleton } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Card, CardContent, CardMedia, Typography, Skeleton, useTheme, useMediaQuery } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { ArrowForward, TrendingUp, CalendarToday, Person } from '@mui/icons-material';
 import { theme } from '../theme/theme';
@@ -93,6 +93,48 @@ const MetadataItem = styled(Box)({
   color: theme.palette.text.secondary,
 });
 
+const NewsGrid = styled(Box)<{ cardsPerView: number }>(({ theme, cardsPerView }) => ({
+  display: 'grid',
+  gridTemplateColumns: `repeat(${cardsPerView}, 350px)`,
+  gap: theme.spacing(3),
+  justifyContent: 'center',
+  overflow: 'hidden',
+  [theme.breakpoints.down('md')]: {
+    gridTemplateColumns: `repeat(${cardsPerView}, minmax(280px, 1fr))`,
+    gap: theme.spacing(2),
+  },
+}));
+
+const CarouselContainer = styled(Box)({
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '0 80px',
+  [theme.breakpoints.down('md')]: {
+    padding: '0 20px',
+  },
+});
+
+const MobileArrowsContainer = styled(Box)({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: 16,
+  marginBottom: 24,
+  [theme.breakpoints.up('md')]: {
+    display: 'none',
+  },
+});
+
+const ArrowCounter = styled(Typography)({
+  fontSize: '0.9rem',
+  fontWeight: 600,
+  color: theme.palette.text.secondary,
+  minWidth: 80,
+  textAlign: 'center',
+});
+
 const LoadingSkeleton: React.FC = () => (
   <div style={{ 
     display: 'grid',
@@ -125,6 +167,23 @@ const NewsSectionHome: React.FC<NewsSectionHomeProps> = ({
   onNewsClick,
   onViewAllClick
 }) => {
+  const muiTheme = useTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
+  
+  // Carrossel: estado do índice inicial
+  const [startIndex, setStartIndex] = useState(0);
+  const cardsPerView = isMobile ? 1 : 3;
+  const canGoBack = startIndex > 0;
+  const canGoForward = startIndex + cardsPerView < news.length;
+
+  const handlePrev = () => {
+    if (canGoBack) setStartIndex(startIndex - cardsPerView);
+  };
+  
+  const handleNext = () => {
+    if (canGoForward) setStartIndex(startIndex + cardsPerView);
+  };
+
   const handleNewsClick = (newsItem: NewsItem) => {
     if (onNewsClick) {
       onNewsClick(newsItem.id);
@@ -132,9 +191,10 @@ const NewsSectionHome: React.FC<NewsSectionHomeProps> = ({
   };
 
   const handleViewAllClick = () => {
-    if (onViewAllClick) {
-      onViewAllClick();
-    }
+    // if (onViewAllClick) {
+    //   onViewAllClick();
+    // }
+    window.open('https://blog.var.tur.br/', '_blank');
   };
 
   const formatDate = (dateString: string) => {
@@ -145,8 +205,58 @@ const NewsSectionHome: React.FC<NewsSectionHomeProps> = ({
     });
   };
 
-  // Mostrar apenas 3 notícias na home
-  const displayNews = news.slice(0, 3);
+  // Mostrar notícias com base no carrossel
+  const displayNews = news.slice(startIndex, startIndex + cardsPerView);
+
+  // Estilos para as setas - desktop: lateral, mobile: acima
+  const arrowStyleDesktop = {
+    position: 'absolute' as const,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    zIndex: 10,
+    background: '#fff',
+    border: 'none',
+    borderRadius: '50%',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+    width: 40,
+    height: 40,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    fontSize: 24,
+    color: muiTheme.palette.primary.main,
+    opacity: 0.95,
+    transition: 'all 0.2s ease',
+    '&:hover': {
+      transform: 'translateY(-50%) scale(1.1)',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
+    },
+    '&:disabled': {
+      opacity: 0.3,
+      cursor: 'not-allowed',
+    },
+  };
+
+  const arrowStyleMobile = {
+    background: '#fff',
+    border: 'none',
+    borderRadius: '50%',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+    width: 40,
+    height: 40,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    fontSize: 20,
+    color: muiTheme.palette.primary.main,
+    transition: 'all 0.2s ease',
+    '&:disabled': {
+      opacity: 0.3,
+      cursor: 'not-allowed',
+    },
+  };
 
   if (!news.length && !isLoading) {
     return null;
@@ -167,14 +277,6 @@ const NewsSectionHome: React.FC<NewsSectionHomeProps> = ({
           <TrendingUp style={{ fontSize: 18 }} />
           NOTÍCIAS
         </h3>
-        <h1 style={{ 
-          fontSize: 36, 
-          fontWeight: 700, 
-          margin: '8px 0 0 0', 
-          color: theme.palette.text.primary 
-        }}>
-          do município
-        </h1>
       </div>
 
       {isLoading ? (
@@ -182,43 +284,101 @@ const NewsSectionHome: React.FC<NewsSectionHomeProps> = ({
           <LoadingSkeleton />
         </div>
       ) : (
-        <div style={{ 
-          padding: '0 20px',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '24px',
-          maxWidth: '1200px',
-          margin: '0 auto'
-        }}>
-          {displayNews.map((newsItem) => (
-            <NewsCard key={newsItem.id} onClick={() => handleNewsClick(newsItem)}>
-              <NewsCardMedia
-                image={newsItem.image || '/images/placeholder-news.jpg'}
-                title={newsItem.title}
-              />
-              <NewsCardContent>
-                <NewsTitle>
-                  {newsItem.title}
-                </NewsTitle>
-                <NewsSummary>
-                  {newsItem.summary || newsItem.content?.substring(0, 150) + '...'}
-                </NewsSummary>
-                <NewsMetadata>
-                  <MetadataItem>
-                    <CalendarToday style={{ fontSize: 16 }} />
-                    <span>{formatDate(newsItem.publishedAt)}</span>
-                  </MetadataItem>
-                  {newsItem.author && (
-                    <MetadataItem>
-                      <Person style={{ fontSize: 16 }} />
-                      <span>{newsItem.author}</span>
-                    </MetadataItem>
-                  )}
-                </NewsMetadata>
-              </NewsCardContent>
-            </NewsCard>
-          ))}
-        </div>
+        <>
+          {/* Setas de navegação Mobile - acima dos cards */}
+          {isMobile && news.length > cardsPerView && (
+            <MobileArrowsContainer>
+              <button
+                aria-label="Voltar"
+                style={{
+                  ...arrowStyleMobile,
+                  opacity: canGoBack ? 1 : 0.3
+                }}
+                onClick={handlePrev}
+                disabled={!canGoBack}
+              >
+                &#8592;
+              </button>
+              <ArrowCounter>
+                {startIndex + 1} de {news.length}
+              </ArrowCounter>
+              <button
+                aria-label="Avançar"
+                style={{
+                  ...arrowStyleMobile,
+                  opacity: canGoForward ? 1 : 0.3
+                }}
+                onClick={handleNext}
+                disabled={!canGoForward}
+              >
+                &#8594;
+              </button>
+            </MobileArrowsContainer>
+          )}
+
+          <CarouselContainer>
+            {/* Setas de navegação Desktop - laterais */}
+            {!isMobile && news.length > cardsPerView && (
+              <>
+                <button
+                  aria-label="Voltar"
+                  style={{ 
+                    ...arrowStyleDesktop, 
+                    left: 100,
+                    opacity: canGoBack ? 0.95 : 0.3
+                  }}
+                  onClick={handlePrev}
+                  disabled={!canGoBack}
+                >
+                  &#8592;
+                </button>
+                <button
+                  aria-label="Avançar"
+                  style={{ 
+                    ...arrowStyleDesktop, 
+                    right: 100,
+                    opacity: canGoForward ? 0.95 : 0.3
+                  }}
+                  onClick={handleNext}
+                  disabled={!canGoForward}
+                >
+                  &#8594;
+                </button>
+              </>
+            )}
+
+            <NewsGrid cardsPerView={cardsPerView}>
+              {displayNews.map((newsItem) => (
+                <NewsCard key={newsItem.id} onClick={() => handleNewsClick(newsItem)}>
+                  <NewsCardMedia
+                    image={newsItem.image || '/images/placeholder-news.jpg'}
+                    title={newsItem.title}
+                  />
+                  <NewsCardContent>
+                    <NewsTitle>
+                      {newsItem.title}
+                    </NewsTitle>
+                    <NewsSummary>
+                      {newsItem.summary || newsItem.content?.substring(0, 150) + '...'}
+                    </NewsSummary>
+                    <NewsMetadata>
+                      <MetadataItem>
+                        <CalendarToday style={{ fontSize: 16 }} />
+                        <span>{formatDate(newsItem.publishedAt)}</span>
+                      </MetadataItem>
+                      {newsItem.author && (
+                        <MetadataItem>
+                          <Person style={{ fontSize: 16 }} />
+                          <span>{newsItem.author}</span>
+                        </MetadataItem>
+                      )}
+                    </NewsMetadata>
+                  </NewsCardContent>
+                </NewsCard>
+              ))}
+            </NewsGrid>
+          </CarouselContainer>
+        </>
       )}
 
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>

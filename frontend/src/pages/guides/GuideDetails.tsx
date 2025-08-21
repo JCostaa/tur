@@ -269,7 +269,20 @@ const GuideDetails: React.FC = () => {
                 <Typography variant="h5" sx={{ fontWeight: 700, color: '#FF5722', mb: 2 }}>
                   {guide.price || 'R$ 0'}
                 </Typography>
-                <ContactButton variant="contained" color="primary" startIcon={<Phone />}>
+                <ContactButton variant="contained" color="primary" startIcon={<Phone />} onClick={() => {
+                  const phone = guide?.provider?.phone_number || guide.phone || guide.social_media?.whatsapp
+           
+                  if (phone) {
+                    // Remove any non-numeric characters except +
+                    const cleanPhone = phone.replace(/[^\d+]/g, '');
+                    // Create WhatsApp URL with pre-filled message
+                    const message = encodeURIComponent(`Olá! Tenho interesse nos serviços de guia "${guide.title || guide.name}". Gostaria de mais informações.`);
+                    const whatsappUrl = `https://wa.me/${cleanPhone}?text=${message}`;
+                    window.open(whatsappUrl, '_blank');
+                  } else {
+                    alert('Número de telefone não disponível para este guia.');
+                  }
+                }}>
                   Contatar
                 </ContactButton>
               </Box>

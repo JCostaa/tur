@@ -1,21 +1,7 @@
-import api from '../api';
+import { fetchVarBlogPosts, fetchVarBlogPostById, searchVarBlogPosts, mapVarBlogPostToNewsItem, type NewsItem } from '../varBlog';
 
-export interface NewsItem {
-  id: number;
-  title: string;
-  summary: string;
-  content: string;
-  image?: string;
-  author?: string;
-  publishedAt: string;
-  category?: string;
-  readTime?: string;
-  featured?: boolean;
-  slug?: string;
-  tags?: string[];
-  views?: number;
-  status?: 'published' | 'draft' | 'archived';
-}
+// Re-exportar NewsItem para compatibilidade
+export type { NewsItem };
 
 export interface NewsResponse {
   data: NewsItem[];
@@ -144,6 +130,98 @@ const mockNews: NewsItem[] = [
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const getNews = async (filters: NewsFilters = {}): Promise<NewsResponse> => {
+  const {
+    page = 1,
+    limit = 10,
+    category,
+    search,
+    featured,
+    sortBy = 'publishedAt',
+    sortOrder = 'desc'
+  } = filters;
+
+  try {
+    console.log('🚀 News Service: Iniciando busca de notícias, filtros:', filters);
+    
+    // Buscar notícias do VAR Blog
+    let varBlogData;
+    
+    if (search) {
+      console.log('🔍 News Service: Buscando com termo:', search);
+      // Se há busca, usar a função de search
+      varBlogData = await searchVarBlogPosts(search, page, limit);
+    } else {
+      console.log('📰 News Service: Buscando notícias normais');
+      // Busca normal
+      varBlogData = await fetchVarBlogPosts(page, limit);
+    }
+
+    // Mapear posts do VAR Blog para NewsItem
+    console.log('🔄 News Service: Mapeando', varBlogData.posts.length, 'posts do VAR Blog');
+    let newsItems = varBlogData.posts.map(mapVarBlogPostToNewsItem);
+    console.log('✅ News Service: Notícias mapeadas:', newsItems.length);
+
+    // Aplicar filtros locais
+    if (category && category !== 'all') {
+      newsItems = newsItems.filter(item => 
+        item.category?.toLowerCase().includes(category.toLowerCase())
+      );
+    }
+
+    if (featured !== undefined) {
+      newsItems = newsItems.filter(item => item.featured === featured);
+    }
+
+    // Ordenar se necessário (os posts já vêm ordenados por data do WordPress)
+    if (sortBy === 'views' || sortBy === 'title' || sortOrder === 'asc') {
+      newsItems.sort((a, b) => {
+        let aValue: string | number | Date, bValue: string | number | Date;
+        
+        switch (sortBy) {
+          case 'publishedAt':
+            aValue = new Date(a.publishedAt);
+            bValue = new Date(b.publishedAt);
+            break;
+          case 'views':
+            aValue = a.views || 0;
+            bValue = b.views || 0;
+            break;
+          case 'title':
+            aValue = a.title.toLowerCase();
+            bValue = b.title.toLowerCase();
+            break;
+          default:
+            aValue = new Date(a.publishedAt);
+            bValue = new Date(b.publishedAt);
+        }
+
+        if (sortOrder === 'asc') {
+          return aValue > bValue ? 1 : -1;
+        } else {
+          return aValue < bValue ? 1 : -1;
+        }
+      });
+    }
+
+    return {
+      data: newsItems,
+      meta: {
+        total: varBlogData.total,
+        page,
+        limit,
+        totalPages: varBlogData.totalPages
+      }
+    };
+  } catch (error) {
+    console.error('Erro ao buscar notícias do VAR Blog, usando dados mock:', error);
+    
+    // Fallback para dados mock em caso de erro
+    return getNewsMock(filters);
+  }
+};
+
+// Função auxiliar para dados mock (fallback)
+const getNewsMock = async (filters: NewsFilters = {}): Promise<NewsResponse> => {
   await delay(800); // Simular delay da API
   
   const {
@@ -184,7 +262,7 @@ export const getNews = async (filters: NewsFilters = {}): Promise<NewsResponse> 
 
   // Ordenar
   filteredNews.sort((a, b) => {
-    let aValue: any, bValue: any;
+    let aValue: string | number | Date, bValue: string | number | Date;
     
     switch (sortBy) {
       case 'publishedAt':
@@ -229,16 +307,37 @@ export const getNews = async (filters: NewsFilters = {}): Promise<NewsResponse> 
 };
 
 export const getNewsById = async (id: number): Promise<NewsItem | null> => {
-  await delay(500);
-  
-  const newsItem = mockNews.find(item => item.id === id);
-  
-  if (newsItem) {
-    // Incrementar views (simulado)
-    newsItem.views = (newsItem.views || 0) + 1;
+  try {
+    // Primeiro tentar buscar do VAR Blog
+    const varBlogPost = await fetchVarBlogPostById(id);
+    
+    if (varBlogPost) {
+      return mapVarBlogPostToNewsItem(varBlogPost);
+    }
+    
+    // Fallback para dados mock
+    await delay(500);
+    const newsItem = mockNews.find(item => item.id === id);
+    
+    if (newsItem) {
+      // Incrementar views (simulado)
+      newsItem.views = (newsItem.views || 0) + 1;
+    }
+    
+    return newsItem || null;
+  } catch (error) {
+    console.error('Erro ao buscar notícia por ID, usando dados mock:', error);
+    
+    // Fallback para dados mock
+    await delay(500);
+    const newsItem = mockNews.find(item => item.id === id);
+    
+    if (newsItem) {
+      newsItem.views = (newsItem.views || 0) + 1;
+    }
+    
+    return newsItem || null;
   }
-  
-  return newsItem || null;
 };
 
 export const getNewsBySlug = async (slug: string): Promise<NewsItem | null> => {
@@ -282,10 +381,25 @@ export const getRelatedNews = async (id: number, limit = 4): Promise<NewsItem[]>
 };
 
 export const getNewsCategories = async (): Promise<string[]> => {
-  await delay(200);
-  
-  const categories = [...new Set(mockNews.map(item => item.category).filter(Boolean))];
-  return categories as string[];
+  try {
+    // Buscar algumas notícias do VAR Blog para extrair categorias
+    const varBlogData = await fetchVarBlogPosts(1, 50); // Buscar mais posts para ter mais categorias
+    const varBlogNews = varBlogData.posts.map(mapVarBlogPostToNewsItem);
+    const varCategories = [...new Set(varBlogNews.map(item => item.category).filter(Boolean))];
+    
+    // Combinar com categorias mock
+    const mockCategories = [...new Set(mockNews.map(item => item.category).filter(Boolean))];
+    const allCategories = [...new Set([...varCategories, ...mockCategories])];
+    
+    return allCategories as string[];
+  } catch (error) {
+    console.error('Erro ao buscar categorias do VAR Blog, usando dados mock:', error);
+    
+    // Fallback para dados mock
+    await delay(200);
+    const categories = [...new Set(mockNews.map(item => item.category).filter(Boolean))];
+    return categories as string[];
+  }
 };
 
 // Funções para desenvolvimento com API real (comentadas para usar mock)

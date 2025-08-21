@@ -95,28 +95,28 @@ const CategoryChip = styled(Chip)({
   zIndex: 2,
 });
 
-const Title = styled(Typography)<{ variant?: string }>(({ variant }) => ({
+const Title = styled(Typography)<{ newsvariant?: string }>(({ newsvariant }) => ({
   fontWeight: 700,
-  fontSize: variant === 'featured' ? 24 : variant === 'compact' ? 16 : 20,
+  fontSize: newsvariant === 'featured' ? 24 : newsvariant === 'compact' ? 16 : 20,
   lineHeight: 1.3,
   color: theme.palette.text.primary,
-  marginBottom: variant === 'compact' ? 4 : 8,
+  marginBottom: newsvariant === 'compact' ? 4 : 8,
   display: '-webkit-box',
-  WebkitLineClamp: variant === 'compact' ? 2 : 3,
+  WebkitLineClamp: newsvariant === 'compact' ? 2 : 3,
   WebkitBoxOrient: 'vertical',
   overflow: 'hidden',
   transition: 'color 0.3s ease',
 }));
 
-const Summary = styled(Typography)<{ variant?: string }>(({ variant }) => ({
-  fontSize: variant === 'compact' ? 12 : 14,
+const Summary = styled(Typography)<{ newsvariant?: string }>(({ newsvariant }) => ({
+  fontSize: newsvariant === 'compact' ? 12 : 14,
   lineHeight: 1.5,
   color: theme.palette.text.secondary,
   display: '-webkit-box',
-  WebkitLineClamp: variant === 'featured' ? 4 : variant === 'compact' ? 2 : 3,
+  WebkitLineClamp: newsvariant === 'featured' ? 4 : newsvariant === 'compact' ? 2 : 3,
   WebkitBoxOrient: 'vertical',
   overflow: 'hidden',
-  marginBottom: variant === 'compact' ? 8 : 16,
+  marginBottom: newsvariant === 'compact' ? 8 : 16,
   flex: 1,
 }));
 
@@ -192,8 +192,8 @@ const NewsCard: React.FC<NewsCardProps> = ({
       
       <Content variant={variant}>
         <Box>
-          <Title variant={variant}>{title}</Title>
-          <Summary variant={variant}>{summary}</Summary>
+          <Title newsvariant={variant}>{title}</Title>
+          <Summary newsvariant={variant}>{summary}</Summary>
         </Box>
         
         <MetaInfo variant={variant}>

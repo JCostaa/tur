@@ -76,14 +76,21 @@ const Subtitle = styled('p')({
   animation: `${fadeInUp} 0.7s cubic-bezier(.4,2,.6,1)`,
 });
 
-const ExperienceCard: React.FC<ExperienceCardProps> = ({ image, title, subtitle }) => (
-  <Card>
-    <Image src={`${import.meta.env.VITE_API_URL}/${image.path}`} alt={title} />
-    <Overlay>
-      <Title>{title}</Title>
-      <Subtitle>{subtitle}</Subtitle>
-    </Overlay>
-  </Card>
-);
+const ExperienceCard: React.FC<ExperienceCardProps> = ({ image, title, subtitle }) => {
+  // Handle both local images (starting with /) and API images
+  const imageSrc = image.path.startsWith('/') 
+    ? image.path 
+    : `${import.meta.env.VITE_API_URL}/${image.path}`;
+  
+  return (
+    <Card>
+      <Image src={imageSrc} alt={title} />
+      <Overlay>
+        <Title>{title}</Title>
+        <Subtitle>{subtitle}</Subtitle>
+      </Overlay>
+    </Card>
+  );
+};
 
 export default ExperienceCard; 

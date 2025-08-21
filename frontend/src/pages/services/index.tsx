@@ -88,8 +88,8 @@ const Services: React.FC = () => {
                 <Typography variant="h5" sx={{ fontWeight: 700, mb: 1, color: brandColors.neutral.darkGray }}>
                   {segment.title}
                 </Typography>
-                <Typography variant="body1" sx={{ color: brandColors.neutral.gray }}>
-                  {segment.description}
+                <Typography variant="body1" sx={{ fontSize: 14, color: brandColors.neutral.darkGray }}>
+                  {segment.title == 'O que fazer' ? 'Descubra experiências autênticas, passeios e atrativos que revelam a essência do destino, conectando você ao que há de melhor no turismo local' : segment.title == 'Onde dormir' ? 'Encontre opções de hospedagem aconchegantes e variadas, do simples ao sofisticado, sempre com a hospitalidade local pronta para receber você.' : segment.title == 'Onde comer' ? 'Saboreie a culinária regional em restaurantes, bares e lanchonetes que traduzem a cultura e os sabores do destino em cada prato.' : segment.title == 'Onde comprar' ? 'Apoie o comércio local com artesanatos, produtos típicos e lojas variadas, além de agências receptivas, guias e condutores prontos para atender você.' : ''}
                 </Typography>
               </CardContent>
             </Card>

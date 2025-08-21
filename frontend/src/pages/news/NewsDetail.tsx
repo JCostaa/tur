@@ -6,19 +6,18 @@ import {
   Container,
   Typography,
   Chip,
-  Avatar,
   Breadcrumbs,
   Link,
-  Grid,
   CircularProgress,
   Alert,
-  Divider,
   Paper,
   IconButton,
   Fade,
-  Zoom
+  Zoom,
+  Button
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import NewsCard from '../../components/NewsCard';
 import {
   AccessTime,
   Person,
@@ -28,7 +27,8 @@ import {
   Twitter,
   WhatsApp,
   ArrowBack,
-  NavigateNext
+  NavigateNext,
+  OpenInNew
 } from '@mui/icons-material';
 import Layout from '../../components/Layout';
 import { getNewsById, getRelatedNews } from '../../services/news';
@@ -361,11 +361,42 @@ const NewsDetail: React.FC = () => {
 
                 <ArticleBody>
                   {newsItem.content.split('\n').map((paragraph, index) => (
-                    <Typography key={index} paragraph>
-                      {paragraph}
-                    </Typography>
+                    <Typography 
+                      key={index} 
+                      paragraph
+                      dangerouslySetInnerHTML={{ __html: paragraph }}
+                    />
                   ))}
                 </ArticleBody>
+
+                {/* Botão para ver artigo completo no VAR Blog (se for notícia do VAR) */}
+                {newsItem.id > 1000 && (
+                  <Box sx={{ 
+                    display: 'flex', 
+                    justifyContent: 'center', 
+                    my: 4,
+                    p: 3,
+                    backgroundColor: '#f8f9fa',
+                    borderRadius: 2,
+                    border: '1px solid #e9ecef'
+                  }}>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      startIcon={<OpenInNew />}
+                      onClick={() => window.open(`https://blog.var.tur.br/?p=${newsItem.id}`, '_blank')}
+                      sx={{
+                        background: 'linear-gradient(45deg, #FF6B35 30%, #F7931E 90%)',
+                        boxShadow: '0 3px 5px 2px rgba(255, 107, 53, .3)',
+                        '&:hover': {
+                          background: 'linear-gradient(45deg, #FF5722 30%, #FF8F00 90%)',
+                        },
+                      }}
+                    >
+                      Ver artigo completo no VAR Turismo
+                    </Button>
+                  </Box>
+                )}
 
                 <ShareContainer>
                   <Typography variant="h6" sx={{ mr: 2 }}>
@@ -409,20 +440,19 @@ const NewsDetail: React.FC = () => {
           {relatedNews && relatedNews.length > 0 && (
             <RelatedNewsSection>
               <SectionTitle>Notícias Relacionadas</SectionTitle>
-              <Grid container spacing={4}>
+              <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 4 }}>
                 {relatedNews.map((related) => (
-                  <Grid item xs={12} sm={6} md={3} key={related.id}>
-                    <Fade in timeout={1000}>
-                      <Box>
-                        <NewsCard
-                          {...related}
-                          onClick={handleRelatedNewsClick}
-                        />
-                      </Box>
-                    </Fade>
-                  </Grid>
+                  <Fade in timeout={1000} key={related.id}>
+                    <Box>
+                      <NewsCard
+                        {...related}
+                        date={related.publishedAt}
+                        onClick={handleRelatedNewsClick}
+                      />
+                    </Box>
+                  </Fade>
                 ))}
-              </Grid>
+              </Box>
             </RelatedNewsSection>
           )}
         </Container>

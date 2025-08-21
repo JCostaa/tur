@@ -11,10 +11,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Experiences from './experience';
 import { Drivers } from './drivers';
 import Guides from './guides/Guides';
-import Agencies from './agencie/Agencies';
+import Agencies from './agencie/Agencies'; // Não utilizado
 import { Events } from './events';
 import NewsSectionHome from '../components/NewsSectionHome';
 import TestimonialsSectionHome from '../components/TestimonialsSectionHome';
+import Preloader from '../components/Preloader';
+import SectionDivider from '../components/SectionDivider';
 import { useQuery } from '@tanstack/react-query';
 import { getNews } from '../services/news';
 import { getTestimonials } from '../services/testimonials';
@@ -22,11 +24,12 @@ import { getTestimonials } from '../services/testimonials';
 const Home: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [showPreloader, setShowPreloader] = React.useState(true);
 
-  // Query para buscar notícias na home - apenas 3 notícias para não poluir
+  // Query para buscar notícias na home - buscando mais notícias para permitir navegação
   const { data: newsData, isLoading: newsLoading } = useQuery({
     queryKey: ['homeNews'],
-    queryFn: () => getNews({ limit: 3 }), // 1 featured + 2 compactas para home limpa
+    queryFn: () => getNews({ limit: 9 }), // Mais notícias para permitir navegação com setinhas
   });
 
   // Query para buscar depoimentos na home - apenas 3 depoimentos
@@ -34,9 +37,23 @@ const Home: React.FC = () => {
     queryKey: ['homeTestimonials'],
     queryFn: () => getTestimonials({ limit: 3, featured: true }), // Apenas depoimentos em destaque
   });
+
+  // Controle do preloader
+  const isLoading = newsLoading || testimonialsLoading;
+
   React.useEffect(() => {
-    if (location.state && (location.state as any).anchor) {
-      const anchor = (location.state as any).anchor;
+    if (!isLoading && newsData && testimonialsData) {
+      // Pequeno delay para uma transição mais suave
+      const timer = setTimeout(() => {
+        setShowPreloader(false);
+      }, 800);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading, newsData, testimonialsData]);
+  React.useEffect(() => {
+    if (location.state && (location.state as { anchor?: string }).anchor) {
+      const anchor = (location.state as { anchor: string }).anchor;
       const section = document.getElementById(anchor);
       if (section) {
         section.scrollIntoView({ behavior: 'smooth' });
@@ -44,7 +61,7 @@ const Home: React.FC = () => {
       // Limpa o state para evitar scroll repetido
       navigate(location.pathname, { replace: true, state: {} });
     }
-    if (location.state && (location.state as any).scrollToTop) {
+    if (location.state && (location.state as { scrollToTop?: boolean }).scrollToTop) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       navigate(location.pathname, { replace: true, state: {} });
     }
@@ -67,39 +84,60 @@ const Home: React.FC = () => {
   };
 
   return (
-    <Layout>
-      <Box sx={{ minHeight: '100vh' }}>
-        <Header />
-        <Box id="inicio">
-          <HeroBanner />
-        </Box>
+    <>
+      <Preloader isLoading={showPreloader} />
+      
+      <Layout>
+        <Box sx={{ minHeight: '100vh' }}>
+          <Header />
+          <Box id="inicio">
+            <HeroBanner />
+          </Box>
         <Box id="servicos">
           <Services />
         </Box>
+        <SectionDivider sectionIndex={1} />
+        
         <Box id="experiencias">
           <Experiences />
         </Box>
+        <SectionDivider sectionIndex={2} />
+        
         <Box id="tours">
           <Tours />
         </Box>
-        <Box id="accommodations">
-          <Accommodation />
-        </Box>
-        <Box id="restaurants">
-          <Restaurants />
-        </Box>
-        <Box id="agencies" sx={{ minHeight: 300 }}>
-          <Agencies />
-        </Box>
-        <Box id="guides" sx={{ minHeight: 300 }}>
-          <Guides />
-        </Box>
-        <Box id="drivers" sx={{ minHeight: 300 }}>
-          <Drivers />
-        </Box>
+        <SectionDivider sectionIndex={3} />
+        
         <Box id="eventos">
           <Events />
         </Box>
+        <SectionDivider sectionIndex={4} />
+        
+        <Box id="accommodations">
+          <Accommodation />
+        </Box>
+        <SectionDivider sectionIndex={5} />
+        
+        <Box id="restaurants">
+          <Restaurants />
+        </Box>
+        <SectionDivider sectionIndex={6} />
+        
+        <Box id="agencies">
+          <Agencies />
+        </Box>
+        <SectionDivider sectionIndex={7} />
+        
+        <Box id="guides" sx={{ minHeight: 300 }}>
+          <Guides />
+        </Box>
+        <SectionDivider sectionIndex={8} />
+        
+        <Box id="drivers" sx={{ minHeight: 300 }}>
+          <Drivers />
+        </Box>
+        <SectionDivider sectionIndex={9} />
+        
         <Box id="noticias">
           <NewsSectionHome 
             news={newsData?.data || []}
@@ -108,6 +146,8 @@ const Home: React.FC = () => {
             onViewAllClick={handleViewAllNews}
           />
         </Box>
+        <SectionDivider sectionIndex={10} />
+        
         <Box id="depoimentos">
           <TestimonialsSectionHome 
             testimonials={testimonialsData?.data || []}
@@ -122,6 +162,7 @@ const Home: React.FC = () => {
         <VideoSection /> */}
       </Box>
     </Layout>
+    </>
   );
 };
 

@@ -106,7 +106,6 @@ const AllEvents: React.FC = () => {
             customPackages={allEvents} 
             hideTitle 
             onCardClick={handleEventCardClick}
-            showAll={true}
           />
         )}
       </Box>

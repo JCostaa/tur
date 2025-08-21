@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Button, Container, Grid, Skeleton } from '@mui/material';
+import { Box, Typography, Button, Container, Skeleton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { ArrowForward, TrendingUp } from '@mui/icons-material';
 import NewsCard from './NewsCard';
@@ -105,7 +105,10 @@ const FeaturedNewsContainer = styled(Box)({
   zIndex: 1,
 });
 
-const RegularNewsGrid = styled(Grid)({
+const RegularNewsGrid = styled(Box)({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+  gap: '32px',
   marginBottom: 48,
   position: 'relative',
   zIndex: 1,
@@ -150,24 +153,22 @@ const TrendingIcon = styled(TrendingUp)({
 });
 
 const LoadingSkeleton: React.FC = () => (
-  <Box>
-    <Grid container spacing={4}>
-      <Grid item xs={12} md={8}>
-        <Skeleton variant="rectangular" height={280} sx={{ borderRadius: 2, mb: 2 }} />
-        <Skeleton variant="text" height={32} width="80%" sx={{ mb: 1 }} />
-        <Skeleton variant="text" height={20} width="60%" sx={{ mb: 2 }} />
-        <Skeleton variant="text" height={16} width="40%" />
-      </Grid>
-      <Grid item xs={12} md={4}>
-        {[1, 2, 3].map((item) => (
-          <Box key={item} sx={{ mb: 3 }}>
-            <Skeleton variant="rectangular" height={120} sx={{ borderRadius: 2, mb: 1 }} />
-            <Skeleton variant="text" height={20} width="90%" sx={{ mb: 1 }} />
-            <Skeleton variant="text" height={16} width="70%" />
-          </Box>
-        ))}
-      </Grid>
-    </Grid>
+  <Box sx={{ display: 'flex', gap: 4, flexDirection: { xs: 'column', md: 'row' } }}>
+    <Box sx={{ flex: { md: 2 } }}>
+      <Skeleton variant="rectangular" height={280} sx={{ borderRadius: 2, mb: 2 }} />
+      <Skeleton variant="text" height={32} width="80%" sx={{ mb: 1 }} />
+      <Skeleton variant="text" height={20} width="60%" sx={{ mb: 2 }} />
+      <Skeleton variant="text" height={16} width="40%" />
+    </Box>
+    <Box sx={{ flex: { md: 1 } }}>
+      {[1, 2, 3].map((item) => (
+        <Box key={item} sx={{ mb: 3 }}>
+          <Skeleton variant="rectangular" height={120} sx={{ borderRadius: 2, mb: 1 }} />
+          <Skeleton variant="text" height={20} width="90%" sx={{ mb: 1 }} />
+          <Skeleton variant="text" height={16} width="70%" />
+        </Box>
+      ))}
+    </Box>
   </Box>
 );
 
@@ -215,41 +216,43 @@ const NewsSection: React.FC<NewsSectionProps> = ({
           <>
             {featuredNews && (
               <FeaturedNewsContainer>
-                <Grid container spacing={4}>
-                  <Grid item xs={12} md={8}>
+                <Box sx={{ display: 'flex', gap: 4, flexDirection: { xs: 'column', md: 'row' } }}>
+                  <Box sx={{ flex: { md: 2 } }}>
                     <NewsCard
                       {...featuredNews}
+                      date={featuredNews.publishedAt}
                       variant="featured"
                       onClick={handleNewsClick}
                     />
-                  </Grid>
-                  <Grid item xs={12} md={4}>
+                  </Box>
+                  <Box sx={{ flex: { md: 1 } }}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                       {regularNews.slice(0, Math.min(3, regularNews.length)).map((newsItem) => (
                         <NewsCard
                           key={newsItem.id}
                           {...newsItem}
+                          date={newsItem.publishedAt}
                           variant="compact"
                           onClick={handleNewsClick}
                         />
                       ))}
                     </Box>
-                  </Grid>
-                </Grid>
+                  </Box>
+                </Box>
               </FeaturedNewsContainer>
             )}
 
             {/* Para a home, não mostrar mais notícias além das já exibidas */}
             {news.length > 4 && (
-              <RegularNewsGrid container spacing={4}>
+              <RegularNewsGrid>
                 {regularNews.slice(3).map((newsItem) => (
-                  <Grid item xs={12} sm={6} md={4} key={newsItem.id}>
-                    <NewsCard
-                      {...newsItem}
-                      variant="standard"
-                      onClick={handleNewsClick}
-                    />
-                  </Grid>
+                  <NewsCard
+                    key={newsItem.id}
+                    {...newsItem}
+                    date={newsItem.publishedAt}
+                    variant="standard"
+                    onClick={handleNewsClick}
+                  />
                 ))}
               </RegularNewsGrid>
             )}
