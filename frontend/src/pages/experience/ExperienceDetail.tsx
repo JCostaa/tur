@@ -127,7 +127,6 @@ const ExperienceDetail: React.FC = () => {
   }
 
   // Mapeamento dos campos para exibição
-  const categories = experience?.categories || [];
   const descriptionHtml = experience?.description || '';
   const location = 'Barra do Bugres - MT'; // Valor padrão
   const duration = '2-4 horas'; // Valor padrão
@@ -157,25 +156,6 @@ const ExperienceDetail: React.FC = () => {
             <Chip icon={<Group />} label={`${people} pessoas`} />
           </ChipsRow>
           
-          {/* Categorias */}
-          {categories.length > 0 && (
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
-                Categorias:
-              </Typography>
-              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                {categories.map((category, idx: number) => (
-                  <Chip 
-                    key={idx} 
-                    label={category.name} 
-                    variant="outlined" 
-                    color="primary"
-                    size="small"
-                  />
-                ))}
-              </Box>
-            </Box>
-          )}
 
           {/* Galeria de imagens */}
           {gallery.length > 0 && (

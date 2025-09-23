@@ -90,9 +90,6 @@ class ExperienceService {
         formData.append('description', data.description);
       }
       
-      if (data.categoryIds && data.categoryIds.length > 0) {
-        formData.append('categoryIds', JSON.stringify(data.categoryIds));
-      }
       
       if (data.image) {
         formData.append('image', data.image);
@@ -133,9 +130,6 @@ class ExperienceService {
         formData.append('description', data.description);
       }
       
-      if (data.categoryIds && data.categoryIds.length > 0) {
-        formData.append('categoryIds', JSON.stringify(data.categoryIds));
-      }
       
       if (data.image) {
         formData.append('image', data.image);
