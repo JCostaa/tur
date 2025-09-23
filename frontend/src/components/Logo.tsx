@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import icon from '../../public/images/teste.png';
+import { Typography, Box } from '@mui/material';
 
 interface LogoProps {
   height?: number;
@@ -37,21 +37,63 @@ const StyledLogo = styled('img')<LogoProps>(({ height = 80, width=80, variant })
   },
 }));
 
+const LogoText = styled(Typography)<{ customvariant?: string }>(({ theme, customvariant }) => ({
+  fontFamily: '"Playfair Display", serif',
+  fontWeight: 700,
+  fontSize: '24px',
+  letterSpacing: '0.5px',
+  color: customvariant === 'white' ? '#fff' : 
+         customvariant === 'dark' ? '#333' : 
+         theme.palette.primary.main,
+  textDecoration: 'none',
+  '&:hover': {
+    opacity: 0.8,
+  },
+}));
+
 const Logo: React.FC<LogoProps> = ({ 
   height = 80, 
   width, 
   variant = 'default',
   className 
 }) => {
+  // Buscar configurações do .env (mesmo sistema do CustomLogo)
+  const logoUrl = import.meta.env.VITE_CUSTOM_LOGO_URL;
+  const businessName = import.meta.env.VITE_BUSINESS_NAME || 'Sistema de Turismo';
+  
+  console.log('🏷️ Logo (antigo) - Configurações:', {
+    logoUrl,
+    businessName,
+    hasLogo: !!logoUrl,
+    variant
+  });
+
+  // Se tem logo, mostrar imagem
+  if (logoUrl) {
+    return (
+      <StyledLogo
+        src={logoUrl}
+        alt={businessName}
+        height={height}
+        width={width}
+        variant={variant}
+        className={className}
+        onError={(e) => {
+          console.error('❌ Erro ao carregar logo:', logoUrl);
+          // Se erro, ocultar imagem e o React vai renderizar o fallback de texto
+          e.currentTarget.style.display = 'none';
+        }}
+      />
+    );
+  }
+
+  // Se não tem logo, mostrar apenas o nome
   return (
-    <StyledLogo
-      src={icon}
-      alt="Viva Barra do Bugres"
-      height={height}
-      width={width}
-      variant={variant}
-      className={className}
-    />
+    <Box className={className}>
+      <LogoText customvariant={variant}>
+        {businessName}
+      </LogoText>
+    </Box>
   );
 };
 

@@ -28,7 +28,7 @@ import {
 } from '@mui/icons-material';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { brandColors } from '../config/colors';
-import Logo from './Logo';
+import CustomLogo from './CustomLogo';
 
 interface MenuItem {
   text: string;
@@ -283,8 +283,12 @@ const Header: React.FC = () => {
       <HeaderContainer>
         <Container maxWidth="xl">
           <Toolbar sx={{ justifyContent: 'space-between', py: 1, minHeight: '64px !important' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Logo height={70} width={70} variant="header" />
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              ml: 2  // Margem esquerda para não ficar grudado na borda
+            }}>
+              <CustomLogo height={50} variant="header" />
             </Box>
 
             {!isMobile && (
@@ -331,7 +335,7 @@ const Header: React.FC = () => {
       >
         <Box sx={{ width: 280, pt: 2 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 2, mb: 2 }}>
-            <Logo height={50} width={50} variant="default" />
+            <CustomLogo height={50} variant="default" />
             <IconButton onClick={handleDrawerToggle}>
               <CloseIcon />
             </IconButton>

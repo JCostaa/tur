@@ -19,7 +19,6 @@ export interface Experience {
     createdAt: string;
     updatedAt: string;
   };
-  categories?: Category[];
   provider?: {
     id: number;
     name: string;
@@ -30,19 +29,11 @@ export interface Experience {
   };
 }
 
-export interface Category {
-  id: number;
-  name: string;
-  description?: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
 export interface CreateExperienceData {
   title: string;
   subtitle?: string;
   description?: string;
-  categoryIds?: number[];
   image?: File;
 }
 

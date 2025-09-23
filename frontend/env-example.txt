@@ -1,0 +1,36 @@
+# ===============================================
+# ARQUIVO .env PARA PERSONALIZAÇÃO DA LOGO
+# ===============================================
+# 
+# Copie este conteúdo para um arquivo chamado ".env"
+# na pasta packages/frontend/
+#
+
+# ===== CONFIGURAÇÕES DE LOGO CUSTOMIZADA =====
+
+# Logo atual (que você já está vendo)
+VITE_CUSTOM_LOGO_URL=/images/teste.png
+
+# Nome do seu negócio/empresa
+VITE_BUSINESS_NAME=Viva Barra do Bugres
+
+# Mostrar nome junto com a logo? (true/false)
+VITE_SHOW_BUSINESS_NAME=false
+
+# ===============================================
+# EXEMPLOS DE USO:
+# ===============================================
+
+# 1. Para usar sua própria logo online:
+# VITE_CUSTOM_LOGO_URL=https://seusite.com/logo.png
+# VITE_BUSINESS_NAME=Sua Empresa
+# VITE_SHOW_BUSINESS_NAME=true
+
+# 2. Para mostrar apenas texto (sem logo):
+# (Não definir VITE_CUSTOM_LOGO_URL)
+# VITE_BUSINESS_NAME=Minha Empresa
+
+# 3. Para usar logo local diferente:
+# VITE_CUSTOM_LOGO_URL=/images/nova-logo.png
+# VITE_BUSINESS_NAME=Minha Empresa
+# VITE_SHOW_BUSINESS_NAME=false

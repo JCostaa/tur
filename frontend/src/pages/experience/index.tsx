@@ -102,35 +102,7 @@ const Experiences: React.FC = () => {
         )}
       </div>
       {/* Filtros por badges - funcionam localmente sem atualizar URL */}
-      <div style={{ 
-        display: 'flex', 
-        flexWrap: 'wrap', 
-        justifyContent: 'center', 
-        gap: 16, 
-        marginBottom: 32,
-        padding: '0 20px'
-      }}>
-        {dynamicCategories.map((categoryName: string) => (
-          <button
-            key={categoryName}
-            onClick={() => handleLocalCategorySelect(categoryName)}
-            style={{
-              padding: '10px 28px',
-              borderRadius: 24,
-              border: selected === categoryName ? 'none' : `1.5px solid ${theme.palette.primary.main}`,
-              background: selected === categoryName ? theme.palette.primary.main : 'transparent',
-              color: selected === categoryName ? theme.palette.primary.contrastText : theme.palette.primary.main,
-              fontWeight: 500,
-              fontSize: 18,
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              boxShadow: selected === categoryName ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
-            }}
-          >
-            {categoryName}
-          </button>
-        ))}
-      </div>
+     
       {isLoading ? (
         <div style={{ textAlign: 'center', padding: '40px' }}>Carregando experiências...</div>
       ) : isError ? (

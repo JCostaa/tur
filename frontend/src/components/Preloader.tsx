@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography, LinearProgress } from '@mui/material';
 import { styled, keyframes } from '@mui/material/styles';
 import { theme } from '../theme/theme';
-import Logo from './Logo';
+import CustomLogo from './CustomLogo';
 
 interface PreloaderProps {
   isLoading: boolean;
@@ -95,24 +95,25 @@ const LogoContainer = styled(Box)({
 });
 
 const LogoIcon = styled(Box)({
-  width: 140,
-  height: 140,
+  width: 160,
+  height: 160,
   background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
   borderRadius: '50%',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   boxShadow: `
-    0 25px 80px rgba(0,0,0,0.25),
-    0 12px 40px rgba(0,0,0,0.15),
-    inset 0 3px 6px rgba(255,255,255,0.9),
-    0 0 0 1px rgba(255,255,255,0.8)
+    0 30px 100px rgba(0,0,0,0.3),
+    0 15px 50px rgba(0,0,0,0.2),
+    inset 0 4px 8px rgba(255,255,255,0.9),
+    0 0 0 2px rgba(255,255,255,0.9),
+    0 0 40px rgba(255,255,255,0.3)
   `,
   fontSize: '4rem',
   color: theme.palette.primary.main,
   fontWeight: 'bold',
   animation: `${pulse} 2s ease-in-out infinite`,
-  border: '6px solid rgba(255,255,255,0.95)',
+  border: '8px solid rgba(255,255,255,0.95)',
   position: 'relative',
   overflow: 'hidden',
   
@@ -261,10 +262,9 @@ const Preloader: React.FC<PreloaderProps> = ({ isLoading }) => {
     <PreloaderContainer isVisible={isLoading}>
       <LogoContainer>
         <LogoIcon>
-          <Logo 
+          <CustomLogo 
             height={80} 
-            width={80} 
-            variant="default"
+            variant="preloader" 
           />
         </LogoIcon>
       </LogoContainer>

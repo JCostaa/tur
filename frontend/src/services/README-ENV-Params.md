@@ -42,6 +42,17 @@ VITE_DEFAULT_STATUS=active
 # Configurações de paginação
 VITE_DEFAULT_LIMIT=20
 VITE_DEFAULT_PAGE_SIZE=10
+
+# ===== CONFIGURAÇÕES DE LOGO CUSTOMIZADA =====
+
+# URL da logo customizada (se não definida, usa logo padrão /images/teste.png)
+VITE_CUSTOM_LOGO_URL=/images/teste.png
+
+# Nome do negócio/empresa
+VITE_BUSINESS_NAME=Viva Barra do Bugres
+
+# Mostrar nome junto com a logo (true/false)
+VITE_SHOW_BUSINESS_NAME=true
 ```
 
 ### 2. Mapeamento de Variáveis
@@ -65,6 +76,9 @@ As variáveis de ambiente são mapeadas para parâmetros de query conforme defin
 | `VITE_DEFAULT_STATUS` | `status` | string | Status padrão |
 | `VITE_DEFAULT_LIMIT` | `limit` | number | Limite padrão |
 | `VITE_DEFAULT_PAGE_SIZE` | `page_size` | number | Tamanho da página |
+| `VITE_CUSTOM_LOGO_URL` | - | string | URL da logo customizada |
+| `VITE_BUSINESS_NAME` | - | string | Nome do negócio |
+| `VITE_SHOW_BUSINESS_NAME` | - | boolean | Mostrar nome junto com logo |
 
 ## Comportamento
 
