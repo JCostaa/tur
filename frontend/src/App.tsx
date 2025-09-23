@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -23,6 +23,7 @@ import { Events, AllEvents, EventDetail } from './pages/events';
 import News from './pages/news/News';
 import NewsDetail from './pages/news/NewsDetail';
 import { Testimonials, TestimonialDetail } from './pages/testimonials';
+import ExperienceDetail from './pages/experience/ExperienceDetail';
 
 // Componente utilitário para zerar o scroll ao trocar de rota
 function ScrollToTop() {
@@ -75,6 +76,8 @@ function App() {
             <Route path="/news/:id" element={<NewsDetail />} />
             <Route path="/testimonials" element={<Testimonials />} />
             <Route path="/testimonials/:id" element={<TestimonialDetail />} />
+            <Route path="/experience" element={<Navigate to="/" replace />} />
+            <Route path="/experience/:id" element={<ExperienceDetail />} />
           </Routes>
         </Router>
       </ThemeProvider>

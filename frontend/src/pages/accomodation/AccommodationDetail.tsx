@@ -60,18 +60,29 @@ const InfoCard = styled(Card)(({ theme }) => ({
 const Title = styled(Typography)(({ theme }) => ({
   fontFamily: 'Playfair Display, serif',
   fontWeight: 800,
-  fontSize: '2.5rem',
+  fontSize: '2.8rem',
   color: theme.palette.primary.main,
   marginBottom: theme.spacing(1),
+  lineHeight: 1.2,
+  [theme.breakpoints.down('md')]: {
+    fontSize: '2.2rem',
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1.9rem',
+  },
 }));
 
 const Subtitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
-  fontSize: '1.2rem',
+  fontSize: '1.35rem',
   marginBottom: theme.spacing(2),
   display: 'flex',
   alignItems: 'center',
   gap: 1,
+  fontWeight: 500,
+  [theme.breakpoints.down('md')]: {
+    fontSize: '1.2rem',
+  },
 }));
 
 const ChipsRow = styled(Box)(({ theme }) => ({
@@ -82,10 +93,19 @@ const ChipsRow = styled(Box)(({ theme }) => ({
 }));
 
 const Description = styled(Typography)(({ theme }) => ({
-  color: '#444',
-  fontSize: '1.15rem',
-  lineHeight: 1.7,
+  color: '#333',
+  fontSize: '1.25rem',
+  lineHeight: 1.8,
   marginBottom: theme.spacing(3),
+  fontWeight: 400,
+  textAlign: 'justify',
+  '& p': {
+    marginBottom: theme.spacing(1.5),
+  },
+  '& strong, & b': {
+    fontWeight: 600,
+    color: '#1976d2'
+  },
 }));
 
 const Price = styled(Typography)(({ theme }) => ({
@@ -192,16 +212,54 @@ const AccommodationDetail: React.FC = () => {
             {accommodation.rating && <Chip icon={<Star sx={{ color: '#FFD700' }} />} label={`${accommodation.rating} estrelas`} />}
             {accommodation.people && <Chip icon={<Group />} label={`${accommodation.people} pessoas`} />}
             {accommodation.phone && <Chip icon={<LocalPhone />} label={accommodation.phone} />}
-            {tags && tags.length > 0 && tags.map((tag: string, idx: number) => (
-              <Chip key={idx} label={tag} />
-            ))}
           </ChipsRow>
-          <Description dangerouslySetInnerHTML={{ __html: accommodation.content || accommodation.description }} />
+          {tags && tags.length > 0 && (
+            <Box sx={{ 
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 1.5, 
+              mt: 2, 
+              mb: 2,
+              alignItems: 'center'
+            }}>
+              {tags.slice(0, 8).map((tag: string, idx: number) => (
+                <Chip 
+                  key={idx} 
+                  label={tag?.replace(/[\u00A0\u200B-\u200D\uFEFF]/g, ' ')?.trim() || tag} 
+                  sx={{
+                    fontSize: '0.85rem',
+                    fontWeight: 500,
+                    height: 'auto',
+                    minHeight: 32,
+                    padding: '6px 12px',
+                    whiteSpace: 'normal',
+                    wordWrap: 'break-word',
+                    textAlign: 'center',
+                    backgroundColor: '#f0f7ff',
+                    color: '#1976d2',
+                    border: '1px solid #e3f2fd',
+                    '&:hover': {
+                      backgroundColor: '#e3f2fd'
+                    }
+                  }}
+                />
+              ))}
+            </Box>
+          )}
+          <Description 
+            dangerouslySetInnerHTML={{ 
+              __html: (accommodation.content || accommodation.description || '')
+                .replace(/[\u00A0]/g, ' ')  // substitui espaços não-quebráveis
+                .replace(/[\u200B-\u200D\uFEFF]/g, '')  // remove caracteres de controle invisíveis
+                .replace(/&nbsp;/g, ' ')  // substitui &nbsp; por espaço normal
+                .trim()
+            }} 
+          />
 
           {/* Galeria de imagens */}
           {gallery.length > 0 && (
             <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>Galeria de Imagens</Typography>
+              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, fontSize: '1.3rem', color: '#1976d2' }}>Galeria de Imagens</Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
                 {gallery.map((img, idx) => (
                   <GalleryImage
@@ -349,12 +407,14 @@ const AccommodationDetail: React.FC = () => {
           {/* Comodidades */}
           {amenities.length > 0 && (
             <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, fontSize: '1.3rem', color: '#1976d2' }}>
                 Comodidades:
               </Typography>
-              <Box component="ul" sx={{ pl: 3, color: '#555', fontSize: '1.05rem' }}>
+              <Box component="ul" sx={{ pl: 3, color: '#444', fontSize: '1.15rem', lineHeight: 1.6 }}>
                 {amenities.map((item: string, idx: number) => (
-                  <li key={idx}>{item}</li>
+                  <li key={idx} style={{ marginBottom: '8px' }}>
+                    {item?.replace(/[\u00A0\u200B-\u200D\uFEFF]/g, ' ')?.trim() || item}
+                  </li>
                 ))}
               </Box>
             </Box>
@@ -363,10 +423,12 @@ const AccommodationDetail: React.FC = () => {
           {/* Provider/Responsável */}
           {provider && providerFields.some(f => f.value) && (
             <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>Responsável</Typography>
-              <Box sx={{ color: '#555', fontSize: '1.05rem' }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, fontSize: '1.3rem', color: '#1976d2' }}>Responsável</Typography>
+              <Box sx={{ color: '#444', fontSize: '1.15rem', lineHeight: 1.6 }}>
                 {providerFields.map((f, idx) => f.value && (
-                  <div key={idx}><b>{f.label}:</b> {f.value}</div>
+                  <div key={idx} style={{ marginBottom: '6px' }}>
+                    <b>{f.label}:</b> {f.value?.toString().replace(/[\u00A0\u200B-\u200D\uFEFF]/g, ' ')?.trim() || f.value}
+                  </div>
                 ))}
               </Box>
             </Box>
@@ -397,7 +459,7 @@ const AccommodationDetail: React.FC = () => {
             <Box sx={{ maxWidth: 900, width: '100%' }}>
               <Card sx={{ borderRadius: 3, boxShadow: 2, p: 0 }}>
                 <Box sx={{ p: 3 }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>Localização</Typography>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, fontSize: '1.3rem', color: '#1976d2' }}>Localização</Typography>
                   <Box sx={{ width: '100%', height: 320, borderRadius: 2, overflow: 'hidden', boxShadow: 1 }}>
                     <iframe
                       title="Mapa da hospedagem"

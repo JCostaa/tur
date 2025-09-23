@@ -79,6 +79,13 @@ const Drivers: React.FC = () => {
         <div style={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>Carregando condutores...</div>
       ) : isError ? (
         <div style={{ textAlign: 'center', margin: '40px 0', color: 'red' }}>Erro ao carregar condutores.</div>
+      ) : allDrivers.length === 0 ? (
+        <div style={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>
+          <div style={{ fontSize: '18px', fontWeight: 500 }}>Nenhum condutor encontrado</div>
+          <div style={{ fontSize: '14px', marginTop: '8px', opacity: 0.7 }}>
+            Não há condutores disponíveis no momento.
+          </div>
+        </div>
       ) : (
         <TravelPackages customPackages={allDrivers} hideTitle onCardClick={handleDriverCardClick} showReserveButton={false}  hidePeopleAndPrice/>
       )}

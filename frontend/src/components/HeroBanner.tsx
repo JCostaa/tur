@@ -48,7 +48,9 @@ const HeroSection = styled(Box)(({ theme }) => ({
   },
 }));
 
-const BackgroundImage = styled(Box)<{ $active: boolean }>(({ theme, $active }) => ({
+const BackgroundImage = styled(Box, {
+  shouldForwardProp: (prop) => prop !== '$active',
+})<{ $active: boolean }>(({ theme, $active }) => ({
   position: 'absolute',
   top: 0,
   left: 0,
@@ -174,7 +176,9 @@ const SlideIndicator = styled(Box)(({ theme }) => ({
   },
 }));
 
-const Indicator = styled(Box)<{ $active: boolean }>(({ theme, $active }) => ({
+const Indicator = styled(Box, {
+  shouldForwardProp: (prop) => prop !== '$active',
+})<{ $active: boolean }>(({ theme, $active }) => ({
   width: 12,
   height: 12,
   borderRadius: '50%',

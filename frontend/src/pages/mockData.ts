@@ -8,7 +8,7 @@ export const MOCK_TOURS = [
     rating: 4.8,
     duration: '3h',
     price: 'R$ 120',
-    image: '/images/browse-1.jpg',
+    image: '',
     people: 10,
     description: 'Explore as belezas naturais da lagoa com guia local e paradas para banho.'
   },
@@ -63,7 +63,7 @@ export const MOCK_TOURS = [
     rating: 5.0,
     duration: '3 dias',
     price: 'R$ 549,00',
-    image: '/images/browse-1.jpg',
+    image: '',
     people: 2,
     description: 'Tour guiado para observação de aves raras na floresta amazônica.'
   },

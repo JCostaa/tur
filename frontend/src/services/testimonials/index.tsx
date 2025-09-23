@@ -53,7 +53,7 @@ const mockTestimonials: TestimonialItem[] = [
     rating: 5,
     title: "Experiência Inesquecível no Pantanal",
     content: "Minha viagem para Barra do Bugres superou todas as expectativas! A diversidade de aves que consegui fotografar foi impressionante. Os guias locais são extremamente conhecedores da região e me levaram aos melhores pontos para observação da fauna. Recomendo para todos os amantes da natureza!",
-    image: "/images/browse-1.jpg",
+    image: "",
     avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b776?w=150&h=150&fit=crop&crop=face",
     visitDate: "2024-01-10T00:00:00Z",
     experience: "tours",

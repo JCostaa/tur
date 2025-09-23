@@ -1,12 +1,10 @@
 import React from 'react';
 import { styled, keyframes } from '@mui/material/styles';
+import type { Experience } from '../types/experience';
 
 interface ExperienceCardProps {
-  image: {
-    path: string;
-  };
-  title: string;
-  subtitle: string;
+  experience: Experience;
+  onClick?: () => void;
 }
 
 const fadeInUp = keyframes`
@@ -46,7 +44,7 @@ const Image = styled('img')({
   transition: 'transform 0.4s cubic-bezier(.4,2,.6,1)',
 });
 
-const Overlay = styled('div')(({ theme }) => ({
+const Overlay = styled('div')(() => ({
   position: 'absolute',
   inset: 0,
   background: 'rgba(10, 32, 80, 0.72)',
@@ -76,18 +74,29 @@ const Subtitle = styled('p')({
   animation: `${fadeInUp} 0.7s cubic-bezier(.4,2,.6,1)`,
 });
 
-const ExperienceCard: React.FC<ExperienceCardProps> = ({ image, title, subtitle }) => {
-  // Handle both local images (starting with /) and API images
-  const imageSrc = image.path.startsWith('/') 
-    ? image.path 
-    : `${import.meta.env.VITE_API_URL}/${image.path}`;
+const ExperienceCard: React.FC<ExperienceCardProps> = ({ experience, onClick }) => {
+  // Usar a imagem do backend ou uma imagem padrão
+  let imageSrc = experience.image?.url || experience.image?.path || '';
+  
+  // Se não há imagem, usar uma imagem padrão
+  if (!imageSrc) {
+    imageSrc = '/images/browse-3.jpg'; // Imagem padrão para experiências
+  }
+  
+  console.log('🖼️ ExperienceCard - Processando imagem do backend:', {
+    experienceId: experience.id,
+    originalImageData: experience.image,
+    finalSrc: imageSrc,
+    hasImage: !!experience.image,
+    willShow: !!imageSrc
+  });
   
   return (
-    <Card>
-      <Image src={imageSrc} alt={title} />
+    <Card onClick={onClick}>
+      <Image src={imageSrc} alt={experience.title} />
       <Overlay>
-        <Title>{title}</Title>
-        <Subtitle>{subtitle}</Subtitle>
+        <Title>{experience.title}</Title>
+        <Subtitle>{experience.subtitle || experience.description?.substring(0, 100) + '...' || 'Experiência única'}</Subtitle>
       </Overlay>
     </Card>
   );

@@ -41,7 +41,9 @@ const AccordionContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-const AccordionItem = styled(Box)<{ $active: boolean; $image: string }>(({ theme, $active, $image }) => ({
+const AccordionItem = styled(Box, {
+  shouldForwardProp: (prop) => !['$active', '$image'].includes(prop as string),
+})<{ $active: boolean; $image: string }>(({ theme, $active, $image }) => ({
   position: 'relative',
   backgroundImage: `url(${$image})`,
   backgroundSize: 'cover',
@@ -75,7 +77,9 @@ const AccordionItem = styled(Box)<{ $active: boolean; $image: string }>(({ theme
   },
 }));
 
-const AccordionContent = styled(Box)<{ $active: boolean }>(({ theme, $active }) => ({
+const AccordionContent = styled(Box, {
+  shouldForwardProp: (prop) => prop !== '$active',
+})<{ $active: boolean }>(({ theme, $active }) => ({
   position: 'absolute',
   bottom: 0,
   left: 0,
@@ -168,7 +172,7 @@ const destinations = [
     id: 4,
     title: 'Indonesia',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.',
-    image: '/images/browse-1.jpg',
+    image: '',
   },
   {
     id: 5,

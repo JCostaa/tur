@@ -157,7 +157,7 @@ const destinations = [
     id: 3,
     title: 'Panorama',
     subtitle: 'INDONESIA',
-    image: '/images/browse-1.jpg',
+    image: '',
   },
   {
     id: 4,
@@ -224,11 +224,13 @@ const FeaturedDestinations: React.FC = () => {
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <ImageContainer>
-                <DestinationImage
-                  src={destination.image}
-                  alt={destination.title}
-                  className="destination-image"
-                />
+                {destination.image && (
+                  <DestinationImage
+                    src={destination.image}
+                    alt={destination.title}
+                    className="destination-image"
+                  />
+                )}
                 <IconContainer className="arrow-icon">
                   <ArrowIconStyled />
                 </IconContainer>

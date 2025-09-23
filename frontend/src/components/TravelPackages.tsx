@@ -331,7 +331,7 @@ const defaultPackages = [
     rating: 5,
     duration: '3 dias',
     price: 'R$549,00',
-    image: '/images/browse-1.jpg',
+    image: '',
     people: 2,
     description: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt nemo quia quae illum aperiam fugiat voluptatem repellat',
     tags: ['Aves', 'Natureza', 'Fotografia'],
@@ -535,11 +535,13 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
               onClick={() => handleCardClick(pkg)}
             >
               <ImageContainer>
-                <PackageImage
-                  src={pkg.image}
-                  alt={pkg.title}
-                  className="package-image"
-                />
+                {pkg.image && (
+                  <PackageImage
+                    src={pkg.image}
+                    alt={pkg.title}
+                    className="package-image"
+                  />
+                )}
                 <ImageGradient />
                 <RatingBadge className="rating-badge">
                   <StarIconStyled style={{ color: '#FFD700', fontSize: 15, marginRight: 3 }} />
@@ -570,8 +572,13 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
                 </PackageLocation>
                 {/* Tags como chips/badges */}
                 {pkg.tags && Array.isArray(pkg.tags) && pkg.tags.length > 0 && (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 1 }}>
-                    {pkg.tags.map((tag: string, idx: number) => (
+                  <Box sx={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: '1fr 1fr', 
+                    gap: 0.5, 
+                    mb: 1 
+                  }}>
+                    {pkg.tags.slice(0, 5).map((tag: string, idx: number) => (
                       <Box key={idx} sx={{
                         background: '#e0e0e0',
                         color: '#333',
@@ -580,9 +587,11 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
                         py: 0.2,
                         fontSize: 12,
                         fontWeight: 500,
-                        mr: 0.5,
-                        mb: 0.5,
                         display: 'inline-block',
+                        textAlign: 'center',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
                       }}>{tag}</Box>
                     ))}
                   </Box>

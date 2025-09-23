@@ -1,17 +1,21 @@
 import React from 'react';
-import { Box, Container, Typography, Card, styled, Button, Chip, Divider, Grid, Dialog, IconButton, Slide } from '@mui/material';
-import { ArrowBack, Star, LocationOn, RestaurantMenu, LocalPhone } from '@mui/icons-material';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { experienceService } from '../../services/experienceService';
+import type { Experience } from '../../types/experience';
+import { Box, Container, Typography, Card, styled, Button, Chip, Divider } from '@mui/material';
+import { ArrowBack, Star, LocationOn, AccessTime, Group } from '@mui/icons-material';
+import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { getRestaurants } from '../../services/restaurants';
+import Slide from '@mui/material/Slide';
 
-const BackgroundImage = styled(Box)(({ theme }) => ({
+const BackgroundImage = styled(Box)(() => ({
   width: '100%',
   height: 380,
-  background: `url('/images/category-2.jpg') center/cover no-repeat`,
+  background: `url('/images/browse-3.jpg') center/cover no-repeat`,
   position: 'relative',
   borderRadius: '0 0 32px 32px',
   boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
@@ -90,29 +94,6 @@ const Description = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(3),
 }));
 
-const Price = styled(Typography)(({ theme }) => ({
-  fontSize: '2rem',
-  fontWeight: 700,
-  color: '#FF5722',
-  marginBottom: theme.spacing(2),
-}));
-
-const ReserveButton = styled(Button)(({ theme }) => ({
-  background: '#FF5722',
-  color: '#fff',
-  fontWeight: 700,
-  fontSize: 18,
-  borderRadius: 24,
-  padding: '14px 40px',
-  boxShadow: '0 2px 8px rgba(255,87,34,0.10)',
-  letterSpacing: 0.5,
-  '&:hover': {
-    background: '#e64a19',
-    transform: 'translateY(-2px) scale(1.04)',
-    boxShadow: '0 6px 18px rgba(255,87,34,0.18)',
-  },
-}));
-
 const GalleryImage = styled('img')({
   width: 120,
   height: 80,
@@ -123,76 +104,42 @@ const GalleryImage = styled('img')({
   border: '2px solid #eee',
 });
 
-const RestaurantDetail: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { id } = useParams();
-  let restaurant = location.state?.restaurant;
 
-  // Fallback: buscar restaurante pelo id se não vier via state
-  const { data } = useQuery({
-    queryKey: ['restaurants'],
-    queryFn: getRestaurants,
-    enabled: !restaurant,
+const ExperienceDetail: React.FC = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const { data: experience, isLoading, isError } = useQuery<Experience>({
+    queryKey: ['experience', id],
+    queryFn: () => experienceService.getById(Number(id)),
+    enabled: !!id,
   });
-  if (!restaurant && data?.data?.restaurants) {
-    restaurant = data.data.restaurants.find((r: any) => String(r.id) === String(id));
-  }
-  console.log('gallery', restaurant);
+  
+  // experience já vem diretamente da query
+
   const [lightboxOpen, setLightboxOpen] = React.useState(false);
   const [lightboxIndex, setLightboxIndex] = React.useState(0);
-  if (!restaurant) {
-    React.useEffect(() => {
-      navigate('/all-restaurants');
-    }, [navigate]);
-    return null;
-  }
-  // Galeria: array de objetos {large, thumb} ou string
-  let gallery: { large: string; thumb: string }[] = [];
-  if (Array.isArray(restaurant.gallery) && restaurant.gallery.length > 0) {
-    gallery = restaurant.gallery
-      .filter((img: any) => img && typeof img === 'object' && img.large && img.thumb && img.large !== false && img.thumb !== false);
-  } else if (restaurant.images && Array.isArray(restaurant.images) && restaurant.images.length > 0) {
-    gallery = restaurant.images
-      .filter((img: any) => img && typeof img === 'object' && img.large && img.thumb && img.large !== false && img.thumb !== false);
-  } else if (restaurant.image) {
-    gallery = [{ large: restaurant.image, thumb: restaurant.image }];
-  }
-  // Provider (responsável, contato, etc)
-  const provider = restaurant.provider || {};
-  const providerFields = [
-    { label: 'Nome', value: provider.name },
-    { label: 'Contato', value: provider.contact },
-    { label: 'Telefone', value: provider.phone },
-    { label: 'Email', value: provider.email },
-    { label: 'Site', value: provider.website || provider.site },
-    { label: 'Endereço', value: provider.address },
-  ];
-  // Tags/attributes
-  const tags = restaurant.tags || (Array.isArray(restaurant.attributes)
-    ? restaurant.attributes.flatMap((attr: any) => Array.isArray(attr.items) ? attr.items : [attr.name || attr])
-    : []);
 
-  // Garantir que location seja string para renderização e Google Maps
-  let locationString = '';
-  if (restaurant && restaurant.location) {
-    if (typeof restaurant.location === 'string') {
-      locationString = restaurant.location;
-    } else if (
-      restaurant.location.address || restaurant.location.city || restaurant.location.state
-    ) {
-      locationString = [
-        restaurant.location.address,
-        restaurant.location.city,
-        restaurant.location.state,
-        restaurant.location.country,
-      ].filter(Boolean).join(', ');
-    }
+  if (isLoading) {
+    return <Typography align="center" sx={{ mt: 8 }}>Carregando experiência...</Typography>;
   }
+  if (isError || !experience) {
+    return <Typography align="center" sx={{ mt: 8, color: 'error.main' }}>Experiência não encontrada.</Typography>;
+  }
+
+  // Mapeamento dos campos para exibição
+  const categories = experience?.categories || [];
+  const descriptionHtml = experience?.description || '';
+  const location = 'Barra do Bugres - MT'; // Valor padrão
+  const duration = '2-4 horas'; // Valor padrão
+  const rating = 5;
+  const people = 2;
+  // Para galeria, usar apenas a imagem principal por enquanto
+  const gallery = experience?.image ? [{ large: experience.image.url, thumb: experience.image.url }] : [];
+  const banner = experience?.image?.url || '';
 
   return (
     <Box sx={{ background: '#f8f9fa', minHeight: '100vh', pb: 8 }}>
-      <BackgroundImage style={gallery[0] ? { backgroundImage: `url('${gallery[0].large}')` } : {}}>
+      <BackgroundImage style={banner ? { backgroundImage: `url('${banner}')` } : {}}>
         <GradientOverlay />
         <BackButton startIcon={<ArrowBack />} onClick={() => navigate(-1)}>
           Voltar
@@ -200,48 +147,46 @@ const RestaurantDetail: React.FC = () => {
       </BackgroundImage>
       <Container maxWidth="lg">
         <InfoCard>
-          <Title>{restaurant.title}</Title>
+          <Title>{experience?.title}</Title>
           <Subtitle>
-            <LocationOn sx={{ mr: 1, fontSize: 22 }} /> {locationString}
+            <LocationOn sx={{ mr: 1, fontSize: 22 }} /> {location}
           </Subtitle>
           <ChipsRow>
-            {restaurant.rating && <Chip icon={<Star sx={{ color: '#FFD700' }} />} label={`${restaurant.rating} estrelas`} />}
-            {restaurant.cuisine && <Chip icon={<RestaurantMenu />} label={restaurant.cuisine} />}
-            {restaurant.phone && <Chip icon={<LocalPhone />} label={restaurant.phone} />}
+            <Chip icon={<Star sx={{ color: '#FFD700' }} />} label={`${rating} estrelas`} />
+            <Chip icon={<AccessTime />} label={duration} />
+            <Chip icon={<Group />} label={`${people} pessoas`} />
           </ChipsRow>
-          {tags && tags.length > 0 && (
-            <Box sx={{ 
-              display: 'grid', 
-              gridTemplateColumns: '1fr 1fr', 
-              gap: 1, 
-              mt: 2, 
-              mb: 2 
-            }}>
-              {tags.slice(0, 5).map((tag: string, idx: number) => (
-                <Chip 
-                  key={idx} 
-                  label={tag} 
-                  sx={{
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    justifyContent: 'center'
-                  }}
-                />
-              ))}
+          
+          {/* Categorias */}
+          {categories.length > 0 && (
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
+                Categorias:
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                {categories.map((category, idx: number) => (
+                  <Chip 
+                    key={idx} 
+                    label={category.name} 
+                    variant="outlined" 
+                    color="primary"
+                    size="small"
+                  />
+                ))}
+              </Box>
             </Box>
           )}
-          <Description dangerouslySetInnerHTML={{ __html: restaurant.content || restaurant.description }} />
+
           {/* Galeria de imagens */}
           {gallery.length > 0 && (
             <Box sx={{ mb: 2 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>Galeria de Imagens</Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                {gallery.map((img, idx) => (
+                {gallery.map((img, idx: number) => (
                   <GalleryImage
                     key={idx}
-                    src={img.thumb || img.large}
-                    alt={restaurant.title}
+                    src={img.large}
+                    alt={experience?.title || 'Experiência'}
                     onClick={() => {
                       setLightboxIndex(idx);
                       setLightboxOpen(true);
@@ -341,8 +286,8 @@ const RestaurantDetail: React.FC = () => {
                     }}
                   >
                     <img
-                      src={gallery[lightboxIndex].large}
-                      alt={restaurant.title}
+                    src={gallery[lightboxIndex]?.large}
+                    alt={experience?.title || 'Experiência'}
                       style={{
                         width: 'auto',
                         height: 'auto',
@@ -379,61 +324,99 @@ const RestaurantDetail: React.FC = () => {
               </Dialog>
             </Box>
           )}
-          {/* Provider/Responsável */}
-          {provider && providerFields.some(f => f.value) && (
+
+          {/* Descrição */}
+          {descriptionHtml && (
+            <Description 
+              dangerouslySetInnerHTML={{ 
+                __html: descriptionHtml
+                  .replace(/[\u00A0]/g, ' ')  // substitui espaços não-quebráveis
+                  .replace(/[\u200B-\u200D\uFEFF]/g, '')  // remove caracteres de controle invisíveis
+                  .replace(/&nbsp;/g, ' ')  // substitui &nbsp; por espaço normal
+                  .trim()
+              }} 
+            />
+          )}
+
+          <Divider sx={{ my: 2 }} />
+
+          {/* Informações do Provider */}
+          {experience?.provider && (
             <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>Responsável</Typography>
-              <Box sx={{ color: '#555', fontSize: '1.05rem' }}>
-                {providerFields.map((f, idx) => f.value && (
-                  <div key={idx}><b>{f.label}:</b> {f.value}</div>
-                ))}
+              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, fontSize: '1.3rem', color: '#1976d2' }}>
+                Responsável:
+              </Typography>
+              <Box sx={{ color: '#444', fontSize: '1.15rem', lineHeight: 1.6 }}>
+                {experience.provider.name && (
+                  <div style={{ marginBottom: '6px' }}>
+                    <b>Nome:</b> {experience.provider.name}
+                  </div>
+                )}
+                {experience.provider.email && (
+                  <div style={{ marginBottom: '6px' }}>
+                    <b>Email:</b> {experience.provider.email}
+                  </div>
+                )}
+                {experience.provider.phone && (
+                  <div style={{ marginBottom: '6px' }}>
+                    <b>Telefone:</b> {experience.provider.phone}
+                  </div>
+                )}
               </Box>
             </Box>
           )}
-          {/* Preço */}
-          {restaurant.price && <Price>Preço médio: {restaurant.price}</Price>}
-          <ReserveButton onClick={() => {
-            const phone = restaurant?.provider?.phone_number || provider.phone
-     
-            if (phone) {
-              // Remove any non-numeric characters except +
-              const cleanPhone = phone.replace(/[^\d+]/g, '');
-              // Create WhatsApp URL with pre-filled message
-              const message = encodeURIComponent(`Olá! Tenho interesse no restaurante "${restaurant.title}". Gostaria de mais informações.`);
-              const whatsappUrl = `https://wa.me/${cleanPhone}?text=${message}`;
-              window.open(whatsappUrl, '_blank');
-            } else {
-              alert('Número de telefone não disponível para este restaurante.');
-            }
-          }}>Entrar em contato</ReserveButton>
+
+          {/* Informações adicionais */}
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, fontSize: '1.3rem', color: '#1976d2' }}>
+              Sobre esta experiência:
+            </Typography>
+            <Typography sx={{ color: '#555', mb: 1, fontSize: '1.15rem', lineHeight: 1.6 }}>
+              {experience?.subtitle || 'Uma experiência única que combina aventura, cultura e natureza em Barra do Bugres e região.'}
+            </Typography>
+          </Box>
+
+          {/* Botão de ação */}
+          <Button
+            variant="contained"
+            size="large"
+            sx={{
+              mt: 2,
+              background: '#FF5722',
+              color: '#fff',
+              fontWeight: 700,
+              fontSize: 18,
+              borderRadius: 24,
+              padding: '14px 40px',
+              boxShadow: '0 2px 8px rgba(255,87,34,0.10)',
+              letterSpacing: 0.5,
+              '&:hover': {
+                background: '#e64a19',
+                transform: 'translateY(-2px) scale(1.04)',
+                boxShadow: '0 6px 18px rgba(255,87,34,0.18)',
+              },
+            }}
+            onClick={() => {
+              const phone = experience?.provider?.phone;
+              
+              if (phone) {
+                // Remove any non-numeric characters except +
+                const cleanPhone = phone.replace(/[^\d+]/g, '');
+                // Create WhatsApp URL with pre-filled message
+                const message = encodeURIComponent(`Olá! Tenho interesse na experiência "${experience?.title}". Gostaria de mais informações.`);
+                const whatsappUrl = `https://wa.me/${cleanPhone}?text=${message}`;
+                window.open(whatsappUrl, '_blank');
+              } else {
+                alert('Número de telefone não disponível para esta experiência.');
+              }
+            }}
+          >
+            Reservar Experiência
+          </Button>
         </InfoCard>
-        {/* Mapa Google Maps */}
-        {locationString && (
-          <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2, mb: 4 }}>
-            <Box sx={{ maxWidth: 900, width: '100%' }}>
-              <Card sx={{ borderRadius: 3, boxShadow: 2, p: 0 }}>
-                <Box sx={{ p: 3 }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>Localização</Typography>
-                  <Box sx={{ width: '100%', height: 320, borderRadius: 2, overflow: 'hidden', boxShadow: 1 }}>
-                    <iframe
-                      title="Mapa do restaurante"
-                      width="100%"
-                      height="320"
-                      style={{ border: 0 }}
-                      loading="lazy"
-                      allowFullScreen
-                      referrerPolicy="no-referrer-when-downgrade"
-                      src={`https://www.google.com/maps?q=${encodeURIComponent(locationString)}&output=embed`}
-                    />
-                  </Box>
-                </Box>
-              </Card>
-            </Box>
-          </Container>
-        )}
       </Container>
     </Box>
   );
 };
 
-export default RestaurantDetail; 
+export default ExperienceDetail;

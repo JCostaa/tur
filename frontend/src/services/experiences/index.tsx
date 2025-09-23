@@ -1,4 +1,4 @@
-import api from '../api';
+import api from '../skoobtur';
 
 // Mock experiences data with images and categories
 const MOCK_EXPERIENCES = [
@@ -10,9 +10,9 @@ const MOCK_EXPERIENCES = [
     imageId: 1,
     image: {
       id: 1,
-      filename: 'browse-1.jpg',
-      url: '/images/browse-1.jpg',
-      path: '/images/browse-1.jpg'
+      filename: '',
+      url: '',
+      path: ''
     },
     categories: [
       { id: 1, name: 'Aventura' },
@@ -215,14 +215,33 @@ const MOCK_EXPERIENCES = [
 ];
 
 export const getExperiences = async (): Promise<any[]> => {
-  // Return mock data instead of API call for now
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(MOCK_EXPERIENCES);
-    }, 800); // Simulate API delay
+  // Use tours API endpoint for experiences data
+  console.log('🌐 Chamando API Skoobtur /tours para experiências...');
+  const response = await api.get('/tours');
+  console.log('✅ Resposta completa da API:', response);
+  console.log('✅ Resposta data da API:', response.data);
+  console.log('✅ Estrutura da resposta:', {
+    hasData: !!response.data,
+    dataType: typeof response.data,
+    isArray: Array.isArray(response.data),
+    hasDataProperty: !!response.data?.data,
+    hasToursInData: !!response.data?.data?.tours,
+    toursLength: response.data?.data?.tours?.length || 0,
+    success: response.data?.success
   });
   
-  // Original API call (commented out for now)
-  // const response = await api.get('/experiences');
-  // return response.data;
+  // A estrutura correta é response.data.data.tours
+  const tours = response.data?.data?.tours || [];
+  console.log('📊 Tours extraídos:', tours);
+  console.log('📊 Total de tours recebidos:', tours?.length || 0);
+  console.log('🖼️ Primeira imagem da API:', tours?.[0]?.image);
+  
+  return Array.isArray(tours) ? tours : [];
+  
+  // Mock data (commented out - now using real API)
+  // return new Promise((resolve) => {
+  //   setTimeout(() => {
+  //     resolve(MOCK_EXPERIENCES);
+  //   }, 800); // Simulate API delay
+  // });
 };

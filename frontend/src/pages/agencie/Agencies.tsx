@@ -81,9 +81,16 @@ const Agencies: React.FC = () => {
         <h3 style={{ color: theme.palette.primary.main, fontWeight: 600, letterSpacing: 2 }}>AGÊNCIA DE TURISMO</h3>
       </div>
       {isLoading ? (
-        <div style={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>Carregando guias de viagem...</div>
+        <div style={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>Carregando agências...</div>
       ) : isError ? (
-        <div style={{ textAlign: 'center', margin: '40px 0', color: 'red' }}>Erro ao carregar guias de viagem.</div>
+        <div style={{ textAlign: 'center', margin: '40px 0', color: 'red' }}>Erro ao carregar agências.</div>
+      ) : allAgencies.length === 0 ? (
+        <div style={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>
+          <div style={{ fontSize: '18px', fontWeight: 500 }}>Nenhuma agência encontrada</div>
+          <div style={{ fontSize: '14px', marginTop: '8px', opacity: 0.7 }}>
+            Não há agências disponíveis no momento.
+          </div>
+        </div>
       ) : (
         <TravelPackages customPackages={allAgencies} hideTitle onCardClick={handleAgencyCardClick} showReserveButton={false}  hidePeopleAndPrice/>
       )}

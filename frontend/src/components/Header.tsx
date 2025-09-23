@@ -30,7 +30,13 @@ import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { brandColors } from '../config/colors';
 import Logo from './Logo';
 
-const HeaderContainer = styled(AppBar)(({ theme }) => ({
+interface MenuItem {
+  text: string;
+  href: string;
+  children?: MenuItem[];
+}
+
+const HeaderContainer = styled(AppBar)(() => ({
   background: `rgba(${brandColors.primary.teal}, 0.95)`,
   backdropFilter: 'blur(10px)',
   boxShadow: '0 2px 20px rgba(0,0,0,0.2)',
@@ -90,7 +96,7 @@ const ContactButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const SocialIcon = styled(IconButton)(({ theme }) => ({
+const SocialIcon = styled(IconButton)(() => ({
   color: '#fff',
   transition: 'all 0.3s ease',
   '&:hover': {
@@ -163,7 +169,7 @@ const Header: React.FC = () => {
   };
 
   // Função recursiva para renderizar submenus (CSS para hover, com posicionamento horizontal para submenus)
-  const renderMenuItem = (item: any, parent?: boolean, idx?: number, arr?: any[]) => {
+  const renderMenuItem = (item: MenuItem, parent?: boolean, idx?: number, arr?: MenuItem[]) => {
     const hasChildren = item.children && item.children.length > 0;
 
     // Identificar se este é o item 'Provedores' e se o anterior é 'Promoções'
@@ -265,64 +271,20 @@ const Header: React.FC = () => {
             transition: 'all 0.18s',
           }}
         >
-          {item.children && item.children.map((child: any, i: number) => renderMenuItem(child, true, i, item.children))}
+          {item.children && item.children.map((child: MenuItem, i: number) => renderMenuItem(child, true, i, item.children))}
         </Box>
       </Box>
     );
   };
 
-  const drawer = (
-    <Box sx={{ width: 280, pt: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 2, mb: 2 }}>
-          <Logo height={65} width={65} variant="default" />
-          <IconButton onClick={handleDrawerToggle}>
-            <CloseIcon />
-          </IconButton>
-        </Box>
-      <List>
-        {menuItems.map((item) => (
-          <ListItem key={item.text} sx={{ py: 1 }}>
-            <ListItemText 
-              primary={item.text}
-              sx={{
-                '& .MuiListItemText-primary': {
-                  fontSize: '1.1rem',
-                  fontWeight: 500,
-                }
-              }}
-            />
-          </ListItem>
-        ))}
-      </List>
-      <Box sx={{ px: 2, mt: 2 }}>
-        <Typography variant="body2" sx={{ mb: 1, color: 'text.secondary' }}>
-          Siga-nos
-        </Typography>
-        <Box>
-          <SocialIcon size="small">
-            <Facebook />
-          </SocialIcon>
-          <SocialIcon size="small">
-            <Twitter />
-          </SocialIcon>
-          <SocialIcon size="small">
-            <Instagram />
-          </SocialIcon>
-          <SocialIcon size="small">
-            <LinkedIn />
-          </SocialIcon>
-        </Box>
-      </Box>
-    </Box>
-  );
 
   return (
     <>
       <HeaderContainer>
         <Container maxWidth="xl">
-          <Toolbar sx={{ justifyContent: 'space-between' }}>
+          <Toolbar sx={{ justifyContent: 'space-between', py: 1, minHeight: '64px !important' }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Logo height={110} width={110} variant="header" />
+              <Logo height={70} width={70} variant="header" />
             </Box>
 
             {!isMobile && (
@@ -367,38 +329,46 @@ const Header: React.FC = () => {
           },
         }}
       >
-        <Box sx={{ p: 2 }}>
-          <IconButton
-            onClick={handleDrawerToggle}
-            sx={{ color: '#333', alignSelf: 'flex-end' }} // Ícone escuro
-          >
-            <CloseIcon />
-          </IconButton>
-          <Box sx={{ mt: 2 }}>
-            {menuItems.map((item) => {
-              return (
-                <NavLink
-                  to={item.href}
+        <Box sx={{ width: 280, pt: 2 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 2, mb: 2 }}>
+            <Logo height={50} width={50} variant="default" />
+            <IconButton onClick={handleDrawerToggle}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <List>
+            {menuItems.map((item) => (
+              <ListItem key={item.text} sx={{ py: 1 }}>
+                <ListItemText 
+                  primary={item.text}
                   sx={{
-                    display: 'block',
-                    py: 1,
-                    px: 2,
-                    color: '#333', // Texto preto no mobile
-                    textDecoration: 'none',
-                    fontWeight: 500,
-                    borderRadius: 1,
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      color: brandColors.primary.orange,
-                      backgroundColor: alpha(brandColors.primary.orange, 0.1),
-                    },
+                    '& .MuiListItemText-primary': {
+                      fontSize: '1.1rem',
+                      fontWeight: 500,
+                    }
                   }}
-                  onClick={handleMenuClick(item.href)}
-                >
-                  {item.text}
-                </NavLink>
-              );
-            })}
+                />
+              </ListItem>
+            ))}
+          </List>
+          <Box sx={{ px: 2, mt: 2 }}>
+            <Typography variant="body2" sx={{ mb: 1, color: 'text.secondary' }}>
+              Siga-nos
+            </Typography>
+            <Box>
+              <SocialIcon size="small">
+                <Facebook />
+              </SocialIcon>
+              <SocialIcon size="small">
+                <Twitter />
+              </SocialIcon>
+              <SocialIcon size="small">
+                <Instagram />
+              </SocialIcon>
+              <SocialIcon size="small">
+                <LinkedIn />
+              </SocialIcon>
+            </Box>
           </Box>
         </Box>
       </Drawer>

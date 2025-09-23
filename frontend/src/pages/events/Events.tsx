@@ -79,6 +79,13 @@ const Events: React.FC = () => {
         <div style={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>Carregando eventos...</div>
       ) : isError ? (
         <div style={{ textAlign: 'center', margin: '40px 0', color: 'red' }}>Erro ao carregar eventos.</div>
+      ) : allEvents.length === 0 ? (
+        <div style={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>
+          <div style={{ fontSize: '18px', fontWeight: 500 }}>Nenhum evento encontrado</div>
+          <div style={{ fontSize: '14px', marginTop: '8px', opacity: 0.7 }}>
+            Não há eventos disponíveis no momento.
+          </div>
+        </div>
       ) : (
         <TravelPackages customPackages={allEvents} hideTitle  onCardClick={handleEventCardClick}/>
       )}

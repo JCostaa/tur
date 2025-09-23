@@ -78,6 +78,13 @@ const Restaurants: React.FC = () => {
         <div style={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>Carregando restaurantes...</div>
       ) : isError ? (
         <div style={{ textAlign: 'center', margin: '40px 0', color: 'red' }}>Erro ao carregar restaurantes.</div>
+      ) : allRestaurants.length === 0 ? (
+        <div style={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>
+          <div style={{ fontSize: '18px', fontWeight: 500 }}>Nenhum restaurante encontrado</div>
+          <div style={{ fontSize: '14px', marginTop: '8px', opacity: 0.7 }}>
+            Não há restaurantes disponíveis no momento.
+          </div>
+        </div>
       ) : (
         <TravelPackages customPackages={allRestaurants} hideTitle detailRoute="restaurant" onCardClick={handleRestaurantCardClick} showReserveButton={false} />
       )}

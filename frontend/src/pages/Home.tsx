@@ -83,6 +83,7 @@ const Home: React.FC = () => {
     navigate('/testimonials');
   };
 
+
   return (
     <>
       <Preloader isLoading={showPreloader} />
@@ -102,6 +103,7 @@ const Home: React.FC = () => {
           <Experiences />
         </Box>
         <SectionDivider sectionIndex={2} />
+        
         
         <Box id="tours">
           <Tours />

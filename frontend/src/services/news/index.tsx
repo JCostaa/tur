@@ -31,7 +31,7 @@ const mockNews: NewsItem[] = [
     title: "Nova Trilha Ecológica Inaugurada no Parque Municipal",
     summary: "Uma nova trilha de 2km foi aberta ao público, oferecendo vistas deslumbrantes da fauna e flora local de Barra do Bugres.",
     content: "A Prefeitura de Barra do Bugres inaugurou ontem uma nova trilha ecológica no Parque Municipal, proporcionando aos visitantes uma experiência única em contato com a natureza. A trilha, com extensão de 2 quilômetros, foi projetada para ser acessível a visitantes de todas as idades...",
-    image: "/images/browse-1.jpg",
+    image: "",
     author: "Maria Silva",
     publishedAt: "2024-01-15T10:00:00Z",
     category: "Ecoturismo",
