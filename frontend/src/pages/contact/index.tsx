@@ -1,185 +1,499 @@
-import React from 'react';
-import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaArrowUp, FaComments } from 'react-icons/fa';
-import brandColors from '../../config/colors';
+import React, { useState } from 'react';
+import {
+  Box,
+  Container,
+  Typography,
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Paper,
+  Fab,
+  Divider,
+  useTheme,
+  useMediaQuery
+} from '@mui/material';
+import {
+  LocationOn,
+  Phone,
+  Email,
+  Send,
+  KeyboardArrowUp,
+  TravelExplore,
+  Support,
+  Schedule
+} from '@mui/icons-material';
+import { brandColors } from '../../config/colors';
 import Header from '../../components/Header';
-
-const primaryColor = brandColors.primary.teal; // Verde escuro do projeto
-const accentColor = brandColors.primary.orange; // Laranja principal
-const lightGray = brandColors.neutral.lightGray; // Fundo cinza claro
-const cardBg = brandColors.neutral.white;
-const textGray = brandColors.neutral.gray;
-
-// Hook para detectar se está em mobile
-const useIsMobile = () => {
-  const [isMobile, setIsMobile] = React.useState(
-    typeof window !== 'undefined' ? window.innerWidth < 768 : false
-  );
-  React.useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-  return isMobile;
-};
+import Footer from '../../components/Footer';
+import { getLocationParams } from '../../services/globalParams';
 
 const Contact: React.FC = () => {
-  const isMobile = useIsMobile();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  
+  // Obter parâmetros de localização do .env
+  const locationParams = getLocationParams();
+  const city = locationParams.city as string || 'Barra do Bugres';
+  const state = locationParams.state as string || 'MT';
+  
+  // Função para gerar URL do Google Maps
+  const generateMapUrl = (city: string, state: string) => {
+    const location = `${city}, ${state}, Brasil`;
+    const encodedLocation = encodeURIComponent(location);
+    return `https://www.google.com/maps?q=${encodedLocation}&output=embed`;
+  };
+  
   // Scroll to top handler
   const handleScrollTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Handle form input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Form submitted:', formData);
+    // Aqui você pode implementar o envio do formulário
+  };
+
+  // Contact info data
+  const contactInfo = [
+    {
+      icon: <LocationOn sx={{ fontSize: 40, color: '#fff' }} />,
+      title: 'Localização',
+      details: [
+        'Rua Voluntários da Pátria, 118 - Centro',
+        `${city} - ${state}, Brasil`
+      ],
+      gradient: 'linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%)'
+    },
+    {
+      icon: <Phone sx={{ fontSize: 40, color: '#fff' }} />,
+      title: 'Telefone',
+      details: [
+        '+55 (65) 3345-6789',
+        '+55 (65) 99999-9999'
+      ],
+      gradient: 'linear-gradient(135deg, #FF9800 0%, #F57C00 100%)'
+    },
+    {
+      icon: <Email sx={{ fontSize: 40, color: '#fff' }} />,
+      title: 'E-mail',
+      details: [
+        'contato@vivabarra.com.br',
+        'turismo@vivabarra.com.br'
+      ],
+      gradient: 'linear-gradient(135deg, #2196F3 0%, #1565C0 100%)'
+    }
+  ];
+
   return (
     <>
       <Header />
-      <div style={{ background: lightGray, minHeight: '100vh', paddingBottom: isMobile ? 20 : 40 }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: isMobile ? '20px 0' : '40px 0' }}>
-          <div style={{ textAlign: 'center', marginBottom: isMobile ? 16 : 24 }}>
-          
-            <h1 style={{ fontSize: isMobile ? 26 : 40, fontWeight: 700, margin: isMobile ? '12px 0 0 0' : '16px 0 0 0', color: brandColors.neutral.darkGray }}>
-              Contato para qualquer dúvida
-            </h1>
-          </div>
-          <div
-            style={{
+      <Box sx={{ 
+        background: `linear-gradient(135deg, ${brandColors.neutral.lightGray} 0%, #f8f9fa 100%)`,
+        minHeight: '100vh',
+        pt: { xs: 2, md: 4 },
+        pb: { xs: 4, md: 8 }
+      }}>
+        <Container maxWidth="xl">
+          {/* Hero Section */}
+          <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 8 } }}>
+            <Box sx={{ 
               display: 'flex',
-              flexDirection: isMobile ? 'column' : 'row',
-              gap: isMobile ? 16 : 32,
+              alignItems: 'center', 
               justifyContent: 'center',
-              alignItems: 'stretch',
-            }}
-          >
-            {/* Card lateral */}
-            <div
-              style={{
-                background: cardBg,
-                borderRadius: 16,
-                padding: isMobile ? 20 : 40,
-                minWidth: isMobile ? 'unset' : 340,
-                maxWidth: isMobile ? 'unset' : 380,
-                width: isMobile ? '100%' : undefined,
-                marginBottom: isMobile ? 16 : 0,
-                boxShadow: '0 2px 12px #0001',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
+              mb: 2
+            }}>
+              <TravelExplore sx={{ 
+                fontSize: { xs: 40, md: 56 }, 
+                color: brandColors.primary.teal,
+                mr: 2
+              }} />
+              <Typography
+                variant="h6"
+                sx={{
+                  color: brandColors.primary.teal,
+                  fontWeight: 700,
+                  letterSpacing: 2,
+                  textTransform: 'uppercase',
+                }}
+              >
+                Contato
+              </Typography>
+            </Box>
+            <Typography
+              variant="h2"
+              sx={{
+                fontWeight: 700,
+                mb: 2,
+                color: brandColors.neutral.darkGray,
+                fontSize: { xs: '2rem', md: '3.5rem' }
               }}
             >
-              <FaMapMarkerAlt size={isMobile ? 36 : 48} color={primaryColor} style={{ marginBottom: 16 }} />
-              <div style={{ color: textGray, textAlign: 'center', marginBottom: 32, fontSize: isMobile ? 14 : 16 }}>
-                Rua Voluntários da Pátria, 118 - Centro Norte<br />
-                Cuiabá - MT,<br />
-                78005-180
-              </div>
-              <FaPhoneAlt size={isMobile ? 28 : 40} color={primaryColor} style={{ marginBottom: 8 }} />
-              <div style={{ fontWeight: 600, color: primaryColor, fontSize: isMobile ? 16 : 22, marginBottom: 8 }}>Telefone</div>
-              <div style={{ color: textGray, marginBottom: 24, fontSize: isMobile ? 14 : 16 }}>
-                +012 345 67890<br />
-                +012 345 67890
-              </div>
-              <FaEnvelope size={isMobile ? 28 : 40} color={primaryColor} style={{ marginBottom: 8 }} />
-              <div style={{ fontWeight: 600, color: primaryColor, fontSize: isMobile ? 16 : 22, marginBottom: 8 }}>E-mail</div>
-              <div style={{ color: textGray, fontSize: isMobile ? 14 : 16 }}>
-                info@example.com<br />
-                info@example.com
-              </div>
-            </div>
-            {/* Formulário */}
-            <div
-              style={{
-                flex: 1,
-                background: cardBg,
-                borderRadius: 16,
-                padding: isMobile ? 20 : 40,
-                boxShadow: '0 2px 12px #0001',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                width: isMobile ? '100%' : undefined,
+              Fale Conosco
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                color: brandColors.neutral.gray,
+                fontWeight: 400,
+                maxWidth: 600,
+                mx: 'auto',
+                fontSize: { xs: '1rem', md: '1.25rem' }
               }}
             >
-              <div style={{ fontWeight: 700, fontSize: isMobile ? 20 : 28, marginBottom: 8, color: brandColors.neutral.darkGray }}>Escreva sua mensagem</div>
-              <div style={{ color: textGray, marginBottom: 4, fontSize: isMobile ? 13 : 16 }}>Iremos te responder o mais breve possível.</div>
-              <div style={{ color: textGray, marginBottom: 16, fontSize: isMobile ? 13 : 16 }}>
-                Se desejar, baixe nosso catálogo de experiências em Mato Grosso. <a href="#" style={{ color: primaryColor, textDecoration: 'underline', fontWeight: 500 }}>Download</a>.
-              </div>
-              <form style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 10 : 16 }}>
-                <div style={{ display: 'flex', gap: isMobile ? 8 : 16, flexDirection: isMobile ? 'column' : 'row' }}>
-                  <input type="text" placeholder="Seu Nome" style={{ flex: 1, padding: isMobile ? 10 : 14, borderRadius: 8, border: `1px solid ${brandColors.neutral.gray}`, fontSize: isMobile ? 14 : 16 }} />
-                  <input type="email" placeholder="Seu E-mail" style={{ flex: 1, padding: isMobile ? 10 : 14, borderRadius: 8, border: `1px solid ${brandColors.neutral.gray}`, fontSize: isMobile ? 14 : 16 }} />
-                </div>
-                <input type="text" placeholder="Assunto" style={{ padding: isMobile ? 10 : 14, borderRadius: 8, border: `1px solid ${brandColors.neutral.gray}`, fontSize: isMobile ? 14 : 16 }} />
-                <textarea placeholder="Mensagem" rows={5} style={{ padding: isMobile ? 10 : 14, borderRadius: 8, border: `1px solid ${brandColors.neutral.gray}`, fontSize: isMobile ? 14 : 16, resize: 'vertical' }} />
-                <button type="submit" style={{ background: primaryColor, color: brandColors.neutral.white, fontWeight: 700, fontSize: isMobile ? 16 : 20, border: 'none', borderRadius: 8, padding: isMobile ? '12px 0' : '16px 0', marginTop: 8, cursor: 'pointer', letterSpacing: 1 }}>
-                  ENVIAR
-                </button>
-              </form>
-            </div>
-          </div>
-          {/* Mapa Google */}
-          <div style={{ marginTop: isMobile ? 24 : 40, display: 'flex', justifyContent: 'center' }}>
-            <div style={{ width: '100%', maxWidth: isMobile ? 600 : 1300, borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 12px #0001' }}>
+              Estamos aqui para ajudar você a planejar sua experiência turística perfeita
+            </Typography>
+          </Box>
+
+          {/* Contact Info Cards */}
+          <Box sx={{ 
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+            gap: 4,
+            mb: { xs: 4, md: 8 }
+          }}>
+            {contactInfo.map((info, index) => (
+              <Card key={index} sx={{
+                height: '100%',
+                borderRadius: 4,
+                boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                transition: 'all 0.3s ease-in-out',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.15)'
+                }
+              }}>
+                <CardContent sx={{ 
+                  p: { xs: 3, md: 4 },
+                  textAlign: 'center',
+                  background: info.gradient,
+                  color: 'white',
+                  position: 'relative',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(255,255,255,0.1)',
+                    backdropFilter: 'blur(10px)',
+                    zIndex: 0
+                  }
+                }}>
+                  <Box sx={{ position: 'relative', zIndex: 1 }}>
+                    <Box sx={{
+                      mb: 2,
+                      p: 2,
+                      borderRadius: '50%',
+                      background: 'rgba(255,255,255,0.2)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      {info.icon}
+                    </Box>
+                    <Typography variant="h5" sx={{ 
+                      fontWeight: 700, 
+                      mb: 2,
+                      textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                    }}>
+                      {info.title}
+                    </Typography>
+                    {info.details.map((detail, idx) => (
+                      <Typography key={idx} variant="body1" sx={{ 
+                        mb: 0.5,
+                        textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+                      }}>
+                        {detail}
+                      </Typography>
+                    ))}
+                  </Box>
+                </CardContent>
+              </Card>
+            ))}
+          </Box>
+
+          {/* Main Content */}
+          <Box sx={{ 
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' },
+            gap: 4
+          }}>
+            {/* Contact Form */}
+            <Card sx={{
+              borderRadius: 4,
+              boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+              height: 'fit-content'
+            }}>
+              <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="h4" sx={{ 
+                    fontWeight: 700, 
+                    mb: 1,
+                    color: brandColors.neutral.darkGray
+                  }}>
+                    Envie sua Mensagem
+                  </Typography>
+                  <Typography variant="body1" sx={{ 
+                    color: brandColors.neutral.gray,
+                    mb: 2
+                  }}>
+                    Iremos responder o mais breve possível. Nossa equipe está pronta para ajudar!
+                  </Typography>
+                </Box>
+
+                <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 3 }}>
+                    <TextField
+                      fullWidth
+                      label="Seu Nome"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      variant="outlined"
+                      required
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 2,
+                          '&:hover fieldset': {
+                            borderColor: brandColors.primary.teal,
+                          },
+                          '&.Mui-focused fieldset': {
+                            borderColor: brandColors.primary.teal,
+                          },
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                          color: brandColors.primary.teal,
+                        },
+                      }}
+                    />
+                    <TextField
+                      fullWidth
+                      label="Seu E-mail"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      variant="outlined"
+                      required
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 2,
+                          '&:hover fieldset': {
+                            borderColor: brandColors.primary.teal,
+                          },
+                          '&.Mui-focused fieldset': {
+                            borderColor: brandColors.primary.teal,
+                          },
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                          color: brandColors.primary.teal,
+                        },
+                      }}
+                    />
+                  </Box>
+                  <TextField
+                    fullWidth
+                    label="Assunto"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    variant="outlined"
+                    required
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        '&:hover fieldset': {
+                          borderColor: brandColors.primary.teal,
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: brandColors.primary.teal,
+                        },
+                      },
+                      '& .MuiInputLabel-root.Mui-focused': {
+                        color: brandColors.primary.teal,
+                      },
+                    }}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Sua Mensagem"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    variant="outlined"
+                    multiline
+                    rows={6}
+                    required
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        '&:hover fieldset': {
+                          borderColor: brandColors.primary.teal,
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: brandColors.primary.teal,
+                        },
+                      },
+                      '& .MuiInputLabel-root.Mui-focused': {
+                        color: brandColors.primary.teal,
+                      },
+                    }}
+                  />
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    size="large"
+                    endIcon={<Send />}
+                    sx={{
+                      background: `linear-gradient(135deg, ${brandColors.primary.teal} 0%, ${brandColors.primary.fish} 100%)`,
+                      borderRadius: 3,
+                      px: 4,
+                      py: 1.5,
+                      fontWeight: 700,
+                      fontSize: '1.1rem',
+                      boxShadow: '0 4px 20px rgba(44,95,45,0.20)',
+                      '&:hover': {
+                        background: `linear-gradient(135deg, ${brandColors.primary.fish} 0%, ${brandColors.primary.teal} 100%)`,
+                        boxShadow: '0 6px 24px rgba(44,95,45,0.25)',
+                        transform: 'translateY(-1px)'
+                      },
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    Enviar Mensagem
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+
+            {/* Additional Info */}
+            <Card sx={{
+              borderRadius: 4,
+              boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+              background: `linear-gradient(135deg, ${brandColors.primary.teal}10 0%, ${brandColors.primary.orange}05 100%)`,
+              height: 'fit-content'
+            }}>
+              <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                  <Support sx={{ 
+                    fontSize: 32, 
+                    color: brandColors.primary.teal,
+                    mr: 2
+                  }} />
+                  <Typography variant="h5" sx={{ 
+                    fontWeight: 700,
+                    color: brandColors.neutral.darkGray
+                  }}>
+                    Atendimento
+                  </Typography>
+                </Box>
+                
+                <Box sx={{ mb: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                    <Schedule sx={{ 
+                      fontSize: 20, 
+                      color: brandColors.primary.teal,
+                      mr: 1
+                    }} />
+                    <Typography variant="h6" sx={{ 
+                      fontWeight: 600,
+                      color: brandColors.neutral.darkGray
+                    }}>
+                      Horário de Funcionamento
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" sx={{ 
+                    color: brandColors.neutral.gray,
+                    ml: 3
+                  }}>
+                    Segunda a Sexta: 8h às 18h<br />
+                    Sábado: 8h às 12h<br />
+                    Domingo: Fechado
+                  </Typography>
+                </Box>
+
+                <Divider sx={{ my: 3 }} />
+
+                <Typography variant="body2" sx={{ 
+                  color: brandColors.neutral.gray,
+                  fontStyle: 'italic',
+                  textAlign: 'center'
+                }}>
+                  "Sua aventura em Mato Grosso começa aqui! Estamos prontos para tornar sua viagem inesquecível."
+                </Typography>
+              </CardContent>
+            </Card>
+          </Box>
+
+          {/* Map Section */}
+          <Box sx={{ mt: { xs: 4, md: 8 } }}>
+            <Typography variant="h4" sx={{ 
+              fontWeight: 700, 
+              mb: 3,
+              textAlign: 'center',
+              color: brandColors.neutral.darkGray
+            }}>
+              Nossa Localização
+            </Typography>
+            <Paper sx={{ 
+              borderRadius: 4, 
+              overflow: 'hidden',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+            }}>
               <iframe
-                title="Mapa Mato Grosso"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15819018.393698497!2d-65.00000000000001!3d-13.000000000000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x939da1b6e7e7e7e7%3A0x7e7e7e7e7e7e7e7e!2sMato%20Grosso!5e0!3m2!1spt-BR!2sbr!4v1710000000000!5m2!1spt-BR!2sbr"
+                title={`Mapa ${city} - ${state}`}
+                src={generateMapUrl(city, state)}
                 width="100%"
-                height={isMobile ? 220 : 350}
+                height={isMobile ? 300 : 450}
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
-          </div>
-        </div>
-        {/* Botão de chat flutuante */}
-        <button
-          style={{
-            position: 'fixed',
-            left: isMobile ? 12 : 24,
-            bottom: isMobile ? 12 : 24,
-            background: accentColor,
-            color: brandColors.neutral.white,
-            border: 'none',
-            borderRadius: 32,
-            padding: isMobile ? '10px 18px 10px 12px' : '12px 28px 12px 18px',
-            fontWeight: 700,
-            fontSize: isMobile ? 15 : 18,
-            boxShadow: '0 2px 8px #0002',
-            display: 'flex',
-            alignItems: 'center',
-            zIndex: 1000,
-            cursor: 'pointer',
-          }}
-        >
-          <FaComments size={isMobile ? 18 : 22} style={{ marginRight: 10 }} /> Clique AQUI
-        </button>
-        {/* Botão de voltar ao topo */}
-        <button
+              />
+            </Paper>
+          </Box>
+        </Container>
+
+        {/* Floating Action Button */}
+        <Fab
           onClick={handleScrollTop}
-          style={{
+          sx={{
             position: 'fixed',
-            right: isMobile ? 16 : 32,
-            bottom: isMobile ? 16 : 32,
-            background: primaryColor,
-            color: brandColors.neutral.white,
-            border: 'none',
-            borderRadius: '50%',
-            width: isMobile ? 38 : 48,
-            height: isMobile ? 38 : 48,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 2px 8px #0002',
-            zIndex: 1000,
-            cursor: 'pointer',
+            right: { xs: 16, md: 32 },
+            bottom: { xs: 16, md: 32 },
+            background: `linear-gradient(135deg, ${brandColors.primary.teal} 0%, ${brandColors.primary.fish} 100%)`,
+            color: 'white',
+            '&:hover': {
+              background: `linear-gradient(135deg, ${brandColors.primary.fish} 0%, ${brandColors.primary.teal} 100%)`,
+              transform: 'scale(1.1)'
+            },
+            transition: 'all 0.2s'
           }}
           aria-label="Voltar ao topo"
         >
-          <FaArrowUp size={isMobile ? 16 : 22} />
-        </button>
-      </div>
+          <KeyboardArrowUp />
+        </Fab>
+      </Box>
+      <Footer />
     </>
   );
 };

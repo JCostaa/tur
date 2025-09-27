@@ -35,9 +35,10 @@ const Experiences: React.FC = () => {
   const experiences = Array.isArray(experiencesData) ? experiencesData : [];
 
 
-  // Função para navegar para detalhes da experiência
+  // Função para navegar para tours filtrados por experiência
   const handleExperienceClick = (experience: Experience) => {
-    navigate(`/experience/${experience.id}`);
+    // Navegar para AllTours filtrado pela experiência
+    navigate(`/all-tours?experience=${encodeURIComponent(experience.title)}`);
   };
 
 

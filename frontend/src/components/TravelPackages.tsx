@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Box,
   Container,
@@ -8,13 +8,14 @@ import {
   styled,
   alpha,
   useTheme,
-  useMediaQuery
+  useMediaQuery,
 } from '@mui/material';
 import {
   Star as StarIcon,
   LocationOn as LocationIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { useAutoSlide } from '../hooks/useAutoSlide';
 
 const SectionWrapper = styled(Box)(({ theme }) => ({
   padding: theme.spacing(8, 0),
@@ -247,7 +248,7 @@ const CardActionsStyled = styled(Box)(({ theme }) => ({
 
 const ActionButton = styled('button')<{
   variant?: 'contained' | 'outlined';
-}>(({ theme, variant }) => ({
+}>(({ variant }) => ({
   padding: '7px 18px',
   borderRadius: 18,
   border: variant === 'outlined' ? '1.5px solid #FF5722' : 'none',
@@ -270,12 +271,12 @@ const ActionButton = styled('button')<{
   },
 }));
 
-const StarIconStyled = styled(StarIcon)(({ theme }) => ({
+const StarIconStyled = styled(StarIcon)(() => ({
   color: '#FFD700',
   fontSize: 16,
 }));
 
-const LocationIconStyled = styled(LocationIcon)(({ theme }) => ({
+const LocationIconStyled = styled(LocationIcon)(() => ({
   color: '#666',
   fontSize: 16,
 }));
@@ -293,11 +294,12 @@ const MobileArrowsContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-const ArrowCounter = styled(Typography)(({ theme }) => ({
+const ArrowCounter = styled(Typography)(() => ({
   fontSize: '0.9rem',
   color: '#666',
   fontWeight: 500,
 }));
+
 
 // Adicionar tipos para as props
 interface TravelPackage {
@@ -321,6 +323,8 @@ interface TravelPackagesProps {
   hidePeopleAndPrice?: boolean; // novo: esconde pessoas e preço
   onCardClick?: (pkg: TravelPackage) => void; // novo: callback de clique
   showReserveButton?: boolean; // novo: controla exibição do botão "Reserve Agora"
+  enableAutoSlide?: boolean; // novo: habilita slide automático
+  autoSlideInterval?: number; // novo: intervalo do slide automático em ms
 }
 
 const defaultPackages = [
@@ -362,25 +366,36 @@ const defaultPackages = [
   },
 ];
 
-const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTitle, detailRoute = 'restaurant', showArrows = true, hidePeopleAndPrice = false, onCardClick, showReserveButton = true }) => {
+const TravelPackages: React.FC<TravelPackagesProps> = ({ 
+  customPackages, 
+  hideTitle, 
+  detailRoute = 'restaurant', 
+  showArrows = true, 
+  hidePeopleAndPrice = false, 
+  onCardClick, 
+  showReserveButton = true,
+  enableAutoSlide = false,
+  autoSlideInterval = 4000
+}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const packages = customPackages || defaultPackages;
   const navigate = useNavigate();
-
-  // Carrossel: estado do índice inicial
-  const [startIndex, setStartIndex] = useState(0);
   const cardsPerView = isMobile ? 1 : 3;
-  const canGoBack = startIndex > 0;
-  const canGoForward = startIndex + cardsPerView < packages.length;
 
-  const handlePrev = () => {
-    if (canGoBack) setStartIndex(startIndex - cardsPerView);
-  };
-  
-  const handleNext = () => {
-    if (canGoForward) setStartIndex(startIndex + cardsPerView);
-  };
+  // Hook para slide automático (apenas quando showArrows é true)
+  const {
+    currentIndex: startIndex,
+    goToNext: handleNext,
+    goToPrevious: handlePrev,
+    canGoNext: canGoForward,
+    canGoPrevious: canGoBack
+  } = useAutoSlide({
+    totalItems: packages.length,
+    itemsPerView: cardsPerView,
+    autoSlideInterval,
+    enabled: enableAutoSlide && showArrows && packages.length > cardsPerView
+  });
 
   const handleCardClick = (pkg: TravelPackage) => {
     if (typeof onCardClick === 'function') {
@@ -513,6 +528,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ customPackages, hideTit
             &#8594;
           </button>
         )}
+
 
         <PackagesGrid 
           cardsPerView={cardsPerView} 

@@ -71,6 +71,8 @@ const Accommodation: React.FC = () => {
           hidePeopleAndPrice={true}
           showReserveButton={false}
           onCardClick={handleAccommodationCardClick}
+          enableAutoSlide={true}
+          autoSlideInterval={4500}
         />
       )}
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>

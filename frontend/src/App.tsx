@@ -1,10 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material/styles';
-import { CssBaseline } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import CustomThemeProvider from './theme/CustomThemeProvider';
 import Home from './pages/Home';
-import theme from './theme/theme';
 import Contact from './pages/contact';
 import TourDetail from './pages/tours/TourDetail';
 import AccommodationDetail from './pages/accomodation/AccommodationDetail';
@@ -47,8 +45,7 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
+      <CustomThemeProvider>
         <Router>
           <ScrollToTop />
           <Routes>
@@ -80,7 +77,7 @@ function App() {
             <Route path="/experience/:id" element={<ExperienceDetail />} />
           </Routes>
         </Router>
-      </ThemeProvider>
+      </CustomThemeProvider>
     </QueryClientProvider>
   );
 }

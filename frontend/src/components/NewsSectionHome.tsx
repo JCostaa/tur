@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, Card, CardContent, CardMedia, Typography, Skeleton, useTheme, useMediaQuery } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { ArrowForward, TrendingUp, CalendarToday, Person } from '@mui/icons-material';
 import { theme } from '../theme/theme';
+import { useAutoSlide } from '../hooks/useAutoSlide';
 
 interface NewsItem {
   id: number;
@@ -135,6 +136,7 @@ const ArrowCounter = styled(Typography)({
   textAlign: 'center',
 });
 
+
 const LoadingSkeleton: React.FC = () => (
   <div style={{ 
     display: 'grid',
@@ -164,25 +166,25 @@ const LoadingSkeleton: React.FC = () => (
 const NewsSectionHome: React.FC<NewsSectionHomeProps> = ({
   news,
   isLoading = false,
-  onNewsClick,
-  onViewAllClick
+  onNewsClick
 }) => {
   const muiTheme = useTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
-  
-  // Carrossel: estado do índice inicial
-  const [startIndex, setStartIndex] = useState(0);
   const cardsPerView = isMobile ? 1 : 3;
-  const canGoBack = startIndex > 0;
-  const canGoForward = startIndex + cardsPerView < news.length;
-
-  const handlePrev = () => {
-    if (canGoBack) setStartIndex(startIndex - cardsPerView);
-  };
   
-  const handleNext = () => {
-    if (canGoForward) setStartIndex(startIndex + cardsPerView);
-  };
+  // Hook para slide automático
+  const {
+    currentIndex: startIndex,
+    goToNext: handleNext,
+    goToPrevious: handlePrev,
+    canGoNext: canGoForward,
+    canGoPrevious: canGoBack
+  } = useAutoSlide({
+    totalItems: news.length,
+    itemsPerView: cardsPerView,
+    autoSlideInterval: 5000, // 5 segundos
+    enabled: news.length > cardsPerView
+  });
 
   const handleNewsClick = (newsItem: NewsItem) => {
     if (onNewsClick) {

@@ -87,7 +87,15 @@ const Drivers: React.FC = () => {
           </div>
         </div>
       ) : (
-        <TravelPackages customPackages={allDrivers} hideTitle onCardClick={handleDriverCardClick} showReserveButton={false}  hidePeopleAndPrice/>
+        <TravelPackages 
+          customPackages={allDrivers} 
+          hideTitle 
+          onCardClick={handleDriverCardClick} 
+          showReserveButton={false}  
+          hidePeopleAndPrice
+          enableAutoSlide={true}
+          autoSlideInterval={4500}
+        />
       )}
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
         <button

@@ -10,9 +10,9 @@ class ExperienceService {
    */
   getAll = async (): Promise<Experience[]> => {
     try {
-      console.log('🌐 Buscando experiências da API...');
+      console.log('🎯 [EXPERIENCES] Fazendo requisição para /experiences');
       const response = await skoobturApi.get(this.baseUrl);
-      console.log('✅ Experiências recebidas:', response.data);
+      console.log('✅ [EXPERIENCES] Resposta recebida:', response.data);
       
       // A API Skoobtur retorna { success: true, data: { experiences: [...] } }
       const experiences = response.data?.data?.experiences || [];

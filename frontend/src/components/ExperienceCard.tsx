@@ -30,7 +30,7 @@ const Card = styled('div')(({ theme }) => ({
   '&:hover img': {
     transform: 'scale(1.08)',
   },
-  '&:hover div': {
+  '&:hover .hover-overlay': {
     opacity: 1,
     pointerEvents: 'auto',
   },
@@ -44,7 +44,20 @@ const Image = styled('img')({
   transition: 'transform 0.4s cubic-bezier(.4,2,.6,1)',
 });
 
-const Overlay = styled('div')(() => ({
+// Overlay que aparece sempre na parte inferior
+const TitleOverlay = styled('div')(() => ({
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  right: 0,
+  background: 'linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4), transparent)',
+  color: '#fff',
+  padding: '40px 24px 24px',
+  textAlign: 'center',
+}));
+
+// Overlay que aparece apenas no hover
+const HoverOverlay = styled('div')(() => ({
   position: 'absolute',
   inset: 0,
   background: 'rgba(10, 32, 80, 0.72)',
@@ -60,7 +73,16 @@ const Overlay = styled('div')(() => ({
   pointerEvents: 'none',
 }));
 
+// Título sempre visível
 const Title = styled('h2')({
+  fontSize: 24,
+  fontWeight: 700,
+  margin: 0,
+  textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+});
+
+// Título para o hover
+const HoverTitle = styled('h2')({
   fontSize: 28,
   fontWeight: 700,
   margin: 0,
@@ -94,10 +116,17 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({ experience, onClick }) 
   return (
     <Card onClick={onClick}>
       <Image src={imageSrc} alt={experience.title} />
-      <Overlay>
+      
+      {/* Título sempre visível na parte inferior */}
+      <TitleOverlay>
         <Title>{experience.title}</Title>
+      </TitleOverlay>
+      
+      {/* Overlay completo que aparece no hover */}
+      <HoverOverlay className="hover-overlay">
+        <HoverTitle>{experience.title}</HoverTitle>
         <Subtitle>{experience.subtitle || experience.description?.substring(0, 100) + '...' || 'Experiência única'}</Subtitle>
-      </Overlay>
+      </HoverOverlay>
     </Card>
   );
 };

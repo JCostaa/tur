@@ -92,7 +92,15 @@ const Agencies: React.FC = () => {
           </div>
         </div>
       ) : (
-        <TravelPackages customPackages={allAgencies} hideTitle onCardClick={handleAgencyCardClick} showReserveButton={false}  hidePeopleAndPrice/>
+        <TravelPackages 
+          customPackages={allAgencies} 
+          hideTitle 
+          onCardClick={handleAgencyCardClick} 
+          showReserveButton={false}  
+          hidePeopleAndPrice
+          enableAutoSlide={true}
+          autoSlideInterval={4500}
+        />
       )}
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
         <button

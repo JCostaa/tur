@@ -1,30 +1,8 @@
 import React from 'react';
 import { Box, Container, Typography } from '@mui/material';
-import { brandColors } from '../config/colors';
-
-interface BannerItem {
-  src: string;
-  alt: string;
-  title: string;
-  description: string;
-}
+import AnimatedGif from './AnimatedGif';
 
 const GifSection: React.FC = () => {
-  const banners: BannerItem[] = [
-    {
-      src: '/images/banners/GIF Biz (1).gif',
-      alt: 'Planejamento Estratégico',
-      title: 'Planejamento estratégico, capacitação e conexão.',
-      description: 'O turismo comunitário fortalecido na prática!'
-    },
-    {
-      src: '/images/banners/GIF TBC (1).gif', 
-      alt: 'Plataforma VAR',
-      title: 'VAR PLATAFORMA DE INTELIGÊNCIA TURÍSTICA',
-      description: 'Transforme o turismo com tecnologia, inovação e estratégia em um só lugar!'
-    },
-    
-  ];
 
   return (
     <Box
@@ -50,14 +28,14 @@ const GifSection: React.FC = () => {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              minHeight: { xs: 200, md: 280 },
+              minHeight: { xs: 200, md: 350 },
               position: 'relative'
             }}
           >
             {/* Conteúdo do lado esquerdo */}
             <Box
               sx={{
-                flex: { xs: 1, md: '0 0 60%' },
+                flex: { xs: 1, md: '0 0 40%' },
                 p: { xs: 3, md: 4 },
                 color: 'white',
                 zIndex: 2
@@ -148,21 +126,18 @@ const GifSection: React.FC = () => {
             <Box
               sx={{
                 display: { xs: 'none', md: 'block' },
-                flex: '0 0 40%',
-                height: 280,
+                flex: '0 0 60%',
+                height: 350,
                 position: 'relative'
               }}
             >
-              <Box
-                component="img"
-                src="/images/banners/GIF Biz (1).gif"
+              <AnimatedGif
+                src="/images/banners/GIF%20Biz%20(1).gif"
                 alt="Turismo Comunitário"
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: 'center'
-                }}
+                width="100%"
+                height="100%"
+                objectFit="contain"
+                objectPosition="center"
               />
             </Box>
 
@@ -196,14 +171,14 @@ const GifSection: React.FC = () => {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              minHeight: { xs: 200, md: 280 },
+              minHeight: { xs: 200, md: 350 },
               position: 'relative'
             }}
           >
             {/* Conteúdo do lado esquerdo */}
             <Box
               sx={{
-                flex: { xs: 1, md: '0 0 60%' },
+                flex: { xs: 1, md: '0 0 40%' },
                 p: { xs: 3, md: 4 },
                 color: 'white',
                 zIndex: 2
@@ -277,68 +252,22 @@ const GifSection: React.FC = () => {
               </Box>
             </Box>
 
-            {/* Logo/Imagem do lado direito */}
+            {/* GIF do lado direito */}
             <Box
               sx={{
-                display: { xs: 'none', md: 'flex' },
-                flex: '0 0 40%',
-                height: 280,
-                alignItems: 'center',
-                justifyContent: 'center',
+                display: { xs: 'none', md: 'block' },
+                flex: '0 0 60%',
+                height: 350,
                 position: 'relative'
               }}
             >
-              {/* Logo VAR circulado */}
-              <Box
-                sx={{
-                  width: 120,
-                  height: 120,
-                  borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #FF9800 0%, #FFD54F 100%)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
-                  position: 'relative',
-                  zIndex: 2
-                }}
-              >
-                <Typography
-                  variant="h3"
-                  sx={{
-                    fontWeight: 'bold',
-                    color: 'white',
-                    textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
-                  }}
-                >
-                  VAR
-                </Typography>
-              </Box>
-
-              {/* Elementos decorativos circulares */}
-              <Box
-                sx={{
-                  position: 'absolute',
-                  width: 200,
-                  height: 200,
-                  borderRadius: '50%',
-                  border: '2px solid rgba(255,255,255,0.2)',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)'
-                }}
-              />
-              <Box
-                sx={{
-                  position: 'absolute',
-                  width: 280,
-                  height: 280,
-                  borderRadius: '50%',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)'
-                }}
+              <AnimatedGif
+                src="/images/banners/GIF%20TBC%20(1).gif"
+                alt="Plataforma VAR"
+                width="100%"
+                height="100%"
+                objectFit="contain"
+                objectPosition="center"
               />
             </Box>
 

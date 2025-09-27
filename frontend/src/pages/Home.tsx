@@ -83,6 +83,23 @@ const Home: React.FC = () => {
     navigate('/testimonials');
   };
 
+  // Função para renderizar seções sempre (independente de ter dados)
+  const renderSectionWithDivider = (
+    sectionId: string,
+    SectionComponent: React.ComponentType,
+    sectionIndex: number,
+    boxSx?: object
+  ) => {
+    return (
+      <>
+        <Box id={sectionId} sx={boxSx}>
+          <SectionComponent />
+        </Box>
+        <SectionDivider sectionIndex={sectionIndex} />
+      </>
+    );
+  };
+
 
   return (
     <>
@@ -99,46 +116,55 @@ const Home: React.FC = () => {
         </Box>
         <SectionDivider sectionIndex={1} />
         
-        <Box id="experiencias">
-          <Experiences />
-        </Box>
-        <SectionDivider sectionIndex={2} />
+        {renderSectionWithDivider(
+          "experiencias",
+          Experiences,
+          2
+        )}
         
+        {renderSectionWithDivider(
+          "tours",
+          Tours,
+          3
+        )}
         
-        <Box id="tours">
-          <Tours />
-        </Box>
-        <SectionDivider sectionIndex={3} />
+        {renderSectionWithDivider(
+          "eventos",
+          Events,
+          4
+        )}
         
-        <Box id="eventos">
-          <Events />
-        </Box>
-        <SectionDivider sectionIndex={4} />
+        {renderSectionWithDivider(
+          "accommodations",
+          Accommodation,
+          5
+        )}
         
-        <Box id="accommodations">
-          <Accommodation />
-        </Box>
-        <SectionDivider sectionIndex={5} />
+        {renderSectionWithDivider(
+          "restaurants",
+          Restaurants,
+          6
+        )}
         
-        <Box id="restaurants">
-          <Restaurants />
-        </Box>
-        <SectionDivider sectionIndex={6} />
+        {renderSectionWithDivider(
+          "agencies",
+          Agencies,
+          7
+        )}
         
-        <Box id="agencies">
-          <Agencies />
-        </Box>
-        <SectionDivider sectionIndex={7} />
+        {renderSectionWithDivider(
+          "guides",
+          Guides,
+          8,
+          { minHeight: 300 }
+        )}
         
-        <Box id="guides" sx={{ minHeight: 300 }}>
-          <Guides />
-        </Box>
-        <SectionDivider sectionIndex={8} />
-        
-        <Box id="drivers" sx={{ minHeight: 300 }}>
-          <Drivers />
-        </Box>
-        <SectionDivider sectionIndex={9} />
+        {renderSectionWithDivider(
+          "drivers",
+          Drivers,
+          9,
+          { minHeight: 300 }
+        )}
         
         <Box id="noticias">
           <NewsSectionHome 
@@ -148,7 +174,7 @@ const Home: React.FC = () => {
             onViewAllClick={handleViewAllNews}
           />
         </Box>
-        <SectionDivider sectionIndex={10} />
+        <SectionDivider sectionIndex={100} />
         
         <Box id="depoimentos">
           <TestimonialsSectionHome 

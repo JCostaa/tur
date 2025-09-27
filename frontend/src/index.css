@@ -46,6 +46,21 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Garantir que GIFs animem corretamente */
+img[src$=".gif"], img[src*=".gif"] {
+  image-rendering: auto !important;
+  /* Sobrescrever qualquer configuração que possa pausar animações */
+  animation-play-state: running !important;
+}
+
+/* Respeitar preferências de movimento reduzido, mas manter GIFs animados */
+@media (prefers-reduced-motion: reduce) {
+  /* Manter GIFs animados mesmo com movimento reduzido */
+  img[src$=".gif"], img[src*=".gif"] {
+    animation-play-state: running !important;
+  }
+}
+
 /* Animation classes */
 @keyframes fadeInUp {
   from {

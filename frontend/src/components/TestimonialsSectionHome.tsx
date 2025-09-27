@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, Card, CardContent, Avatar, Typography, Rating, Button } from '@mui/material';
+import { Box, Card, CardContent, Avatar, Typography, Rating, useTheme, useMediaQuery } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { ArrowForward, Star, VerifiedUser, LocationOn, AccessTime } from '@mui/icons-material';
 import { theme } from '../theme/theme';
+import { useAutoSlide } from '../hooks/useAutoSlide';
 
 interface TestimonialItem {
   id: number;
@@ -165,6 +166,31 @@ const QuoteIcon = styled(Box)({
   fontWeight: 'bold',
 });
 
+const CarouselContainer = styled(Box)({
+  position: 'relative',
+  padding: '0 20px',
+});
+
+const MobileArrowsContainer = styled(Box)({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: 16,
+  marginBottom: 24,
+  [theme.breakpoints.up('md')]: {
+    display: 'none',
+  },
+});
+
+const ArrowCounter = styled(Typography)({
+  fontSize: '0.9rem',
+  fontWeight: 600,
+  color: theme.palette.text.secondary,
+  minWidth: 80,
+  textAlign: 'center',
+});
+
+
 const LoadingSkeleton: React.FC = () => (
   <div style={{ 
     display: 'grid',
@@ -198,6 +224,23 @@ const TestimonialsSectionHome: React.FC<TestimonialsSectionHomeProps> = ({
   onTestimonialClick,
   onViewAllClick
 }) => {
+  const muiTheme = useTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
+  const cardsPerView = isMobile ? 1 : 3;
+  
+  // Hook para slide automático
+  const {
+    currentIndex: startIndex,
+    goToNext: handleNext,
+    goToPrevious: handlePrev,
+    canGoNext: canGoForward,
+    canGoPrevious: canGoBack
+  } = useAutoSlide({
+    totalItems: testimonials.length,
+    itemsPerView: cardsPerView,
+    autoSlideInterval: 6000, // 6 segundos para depoimentos (mais tempo para ler)
+    enabled: testimonials.length > cardsPerView
+  });
   const handleTestimonialClick = (testimonial: TestimonialItem) => {
     if (onTestimonialClick) {
       onTestimonialClick(testimonial.id);
@@ -228,8 +271,58 @@ const TestimonialsSectionHome: React.FC<TestimonialsSectionHomeProps> = ({
     return labels[experience] || experience;
   };
 
-  // Mostrar apenas 3 depoimentos na home
-  const displayTestimonials = testimonials.slice(0, 3);
+  // Mostrar depoimentos com base no carrossel
+  const displayTestimonials = testimonials.slice(startIndex, startIndex + cardsPerView);
+
+  // Estilos para as setas
+  const arrowStyleDesktop = {
+    position: 'absolute' as const,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    zIndex: 10,
+    background: '#fff',
+    border: 'none',
+    borderRadius: '50%',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+    width: 40,
+    height: 40,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    fontSize: 24,
+    color: muiTheme.palette.primary.main,
+    opacity: 0.95,
+    transition: 'all 0.2s ease',
+    '&:hover': {
+      transform: 'translateY(-50%) scale(1.1)',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
+    },
+    '&:disabled': {
+      opacity: 0.3,
+      cursor: 'not-allowed',
+    },
+  };
+
+  const arrowStyleMobile = {
+    background: '#fff',
+    border: 'none',
+    borderRadius: '50%',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+    width: 40,
+    height: 40,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    fontSize: 20,
+    color: muiTheme.palette.primary.main,
+    transition: 'all 0.2s ease',
+    '&:disabled': {
+      opacity: 0.3,
+      cursor: 'not-allowed',
+    },
+  };
 
   if (!testimonials.length && !isLoading) {
     return null;
@@ -265,15 +358,77 @@ const TestimonialsSectionHome: React.FC<TestimonialsSectionHomeProps> = ({
           <LoadingSkeleton />
         </div>
       ) : (
-        <div style={{ padding: '0 20px' }}>
-          <div style={{ 
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '24px',
-            maxWidth: '1200px',
-            margin: '0 auto'
-          }}>
-            {displayTestimonials.map((testimonial) => (
+        <>
+          {/* Setas de navegação Mobile - acima dos cards */}
+          {isMobile && testimonials.length > cardsPerView && (
+            <MobileArrowsContainer>
+              <button
+                aria-label="Voltar"
+                style={{
+                  ...arrowStyleMobile,
+                  opacity: canGoBack ? 1 : 0.3
+                }}
+                onClick={handlePrev}
+                disabled={!canGoBack}
+              >
+                &#8592;
+              </button>
+              <ArrowCounter>
+                {startIndex + 1} de {testimonials.length}
+              </ArrowCounter>
+              <button
+                aria-label="Avançar"
+                style={{
+                  ...arrowStyleMobile,
+                  opacity: canGoForward ? 1 : 0.3
+                }}
+                onClick={handleNext}
+                disabled={!canGoForward}
+              >
+                &#8594;
+              </button>
+            </MobileArrowsContainer>
+          )}
+
+          <CarouselContainer>
+            {/* Setas de navegação Desktop - laterais */}
+            {!isMobile && testimonials.length > cardsPerView && (
+              <>
+                <button
+                  aria-label="Voltar"
+                  style={{ 
+                    ...arrowStyleDesktop, 
+                    left: 20,
+                    opacity: canGoBack ? 0.95 : 0.3
+                  }}
+                  onClick={handlePrev}
+                  disabled={!canGoBack}
+                >
+                  &#8592;
+                </button>
+                <button
+                  aria-label="Avançar"
+                  style={{ 
+                    ...arrowStyleDesktop, 
+                    right: 20,
+                    opacity: canGoForward ? 0.95 : 0.3
+                  }}
+                  onClick={handleNext}
+                  disabled={!canGoForward}
+                >
+                  &#8594;
+                </button>
+              </>
+            )}
+
+            <div style={{ 
+              display: 'grid',
+              gridTemplateColumns: `repeat(${cardsPerView}, 1fr)`,
+              gap: '24px',
+              maxWidth: '1200px',
+              margin: '0 auto'
+            }}>
+              {displayTestimonials.map((testimonial) => (
               <TestimonialCard key={testimonial.id} onClick={() => handleTestimonialClick(testimonial)}>
                 <QuoteIcon>"</QuoteIcon>
                 <TestimonialContent>
@@ -325,9 +480,10 @@ const TestimonialsSectionHome: React.FC<TestimonialsSectionHomeProps> = ({
                   </TestimonialFooter>
                 </TestimonialContent>
               </TestimonialCard>
-            ))}
-          </div>
-        </div>
+              ))}
+            </div>
+          </CarouselContainer>
+        </>
       )}
 
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>

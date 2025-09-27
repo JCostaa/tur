@@ -86,7 +86,15 @@ const Restaurants: React.FC = () => {
           </div>
         </div>
       ) : (
-        <TravelPackages customPackages={allRestaurants} hideTitle detailRoute="restaurant" onCardClick={handleRestaurantCardClick} showReserveButton={false} />
+        <TravelPackages 
+          customPackages={allRestaurants} 
+          hideTitle 
+          detailRoute="restaurant" 
+          onCardClick={handleRestaurantCardClick} 
+          showReserveButton={false}
+          enableAutoSlide={true}
+          autoSlideInterval={4500}
+        />
       )}
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
         <button

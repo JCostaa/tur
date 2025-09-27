@@ -1,29 +1,20 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   Box,
-  Container,
   Typography,
-  Button,
-  IconButton,
   styled,
   alpha,
-  useTheme,
-  useMediaQuery
+  useTheme
 } from '@mui/material';
-import {
-  PlayArrow as PlayIcon,
-  Facebook,
-  Twitter,
-  Instagram,
-  LinkedIn
-} from '@mui/icons-material';
+// Imports removidos para limpar linter errors
 import { useQuery } from '@tanstack/react-query';
 import { getTours } from '../services/tours';
+import { generateOptimizedUrl, preloadOptimizedImage } from '../utils/imageOptimization';
 
 const HeroSection = styled(Box)(({ theme }) => ({
   position: 'relative',
-  height: '100vh',
-  minHeight: 600,
+  height: '75vh', // Reduzido de 100vh para 75vh
+  minHeight: 500, // Reduzido de 600 para 500
   display: 'flex',
   alignItems: 'center',
   overflow: 'hidden',
@@ -43,7 +34,7 @@ const HeroSection = styled(Box)(({ theme }) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%)',
+    background: 'linear-gradient(135deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 100%)',
     zIndex: 1,
   },
 }));
@@ -62,12 +53,17 @@ const BackgroundImage = styled(Box, {
   opacity: $active ? 1 : 0,
   transform: $active ? 'scale(1.05)' : 'scale(1)',
   transition: 'opacity 1s ease-in-out, transform 8s ease-in-out',
+  zIndex: $active ? 2 : 1, // Z-index dinâmico baseado no estado ativo
+  // Melhorias para imagens de baixa qualidade
+  filter: 'blur(0.3px) contrast(1.05) saturate(1.1) brightness(1.1)',
+  imageRendering: 'auto',
   // Mobile: ajuste para não cortar a imagem
   [theme.breakpoints.down('md')]: {
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
     height: '100%',
     width: '100%',
+    filter: 'blur(0.2px) contrast(1.03) saturate(1.05) brightness(1.08)',
   },
   '&::before': {
     content: '""',
@@ -76,92 +72,12 @@ const BackgroundImage = styled(Box, {
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%)',
+    background: 'linear-gradient(135deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.1) 100%)',
     zIndex: 1,
   },
 }));
 
-const ContentWrapper = styled(Container)(({ theme }) => ({
-  position: 'relative',
-  zIndex: 2,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  height: '100%',
-  color: '#fff',
-  [theme.breakpoints.down('md')]: {
-    textAlign: 'center',
-  },
-}));
-
-const HeroTitle = styled(Typography)(({ theme }) => ({
-  fontFamily: '"Playfair Display", serif',
-  fontSize: '3.5rem',
-  fontWeight: 700,
-  lineHeight: 1.2,
-  marginBottom: theme.spacing(3),
-  textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-  [theme.breakpoints.down('md')]: {
-    fontSize: '2.5rem',
-  },
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '2rem',
-  },
-}));
-
-const HeroSubtitle = styled(Typography)(({ theme }) => ({
-  fontSize: '1.2rem',
-  lineHeight: 1.6,
-  marginBottom: theme.spacing(4),
-  maxWidth: 600,
-  opacity: 0.9,
-  textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
-  [theme.breakpoints.down('md')]: {
-    fontSize: '1rem',
-    marginBottom: theme.spacing(3),
-  },
-}));
-
-const CTAButton = styled(Button)(({ theme }) => ({
-  backgroundColor: '#f5f5f5',
-  color: '#333',
-  textTransform: 'none',
-  fontSize: '1rem',
-  fontWeight: 600,
-  padding: theme.spacing(1.5, 4),
-  borderRadius: 30,
-  boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-  transition: 'all 0.3s ease',
-  '&:hover': {
-    backgroundColor: '#f5f5f5',
-    transform: 'translateY(-3px)',
-    boxShadow: '0 6px 25px rgba(0,0,0,0.2)',
-  },
-}));
-
-const SocialSection = styled(Box)(({ theme }) => ({
-  position: 'absolute',
-  bottom: 40,
-  left: 40,
-  zIndex: 3,
-  [theme.breakpoints.down('md')]: {
-    position: 'relative',
-    bottom: 'auto',
-    left: 'auto',
-    marginTop: theme.spacing(4),
-    textAlign: 'center',
-  },
-}));
-
-const SocialIcon = styled(IconButton)(({ theme }) => ({
-  color: '#fff',
-  margin: theme.spacing(0, 1),
-  transition: 'all 0.3s ease',
-  '&:hover': {
-    backgroundColor: alpha('#fff', 0.1),
-    transform: 'scale(1.1)',
-  },
-}));
+// Componentes styled removidos para limpar linter errors
 
 const SlideIndicator = styled(Box)(({ theme }) => ({
   position: 'absolute',
@@ -170,7 +86,7 @@ const SlideIndicator = styled(Box)(({ theme }) => ({
   transform: 'translateX(-50%)',
   display: 'flex',
   gap: theme.spacing(1),
-  zIndex: 3,
+  zIndex: 10, // Z-index alto para ficar sempre visível
   [theme.breakpoints.down('md')]: {
     bottom: 20,
   },
@@ -178,7 +94,7 @@ const SlideIndicator = styled(Box)(({ theme }) => ({
 
 const Indicator = styled(Box, {
   shouldForwardProp: (prop) => prop !== '$active',
-})<{ $active: boolean }>(({ theme, $active }) => ({
+})<{ $active: boolean }>(({ $active }) => ({
   width: 12,
   height: 12,
   borderRadius: '50%',
@@ -190,22 +106,66 @@ const Indicator = styled(Box, {
   },
 }));
 
-// Tour type para integração com skoobtur
-type Tour = {
-  id: number;
-  title: string;
-  name?: string;
-  banner?: string;
-  image?: string;
-  gallery?: Array<{ large?: string; [key: string]: any }>;
-  [key: string]: any;
-};
+// Componente de Loading Skeleton para o banner
+const BannerSkeleton = styled(Box)(() => ({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  background: `
+    linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%),
+    linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%)
+  `,
+  backgroundSize: '200% 100%, 200% 100%',
+  animation: 'shimmer 2s infinite ease-in-out',
+  '@keyframes shimmer': {
+    '0%': {
+      backgroundPosition: '200% 0, 200% 0',
+    },
+    '100%': {
+      backgroundPosition: '-200% 0, -200% 0',
+    },
+  },
+}));
+
+// Tour type para integração com skoobtur (removido para limpar linter)
+
+// Constantes de fallback removidas - não mais necessárias
 
 const HeroBanner: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [tourSlides, setTourSlides] = useState<Array<{ id: string; title: string; imageUrl: string; source: 'tour' }>>([]);
+  const [imageLoadingStates, setImageLoadingStates] = useState<Record<string, 'loading' | 'loaded' | 'error'>>({});
+  const [slidesProcessed, setSlidesProcessed] = useState(false);
+  const [userInteracting, setUserInteracting] = useState(false);
+  const slidesRef = useRef<Array<{ id: string; title: string; imageUrl: string; source: 'tour' }>>([]);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const userInteractionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  // Verificação de tamanho removida - aceitar todas as imagens
+
+  // Função para pré-carregar imagens com otimização
+  const preloadImage = async (imageUrl: string, slideId: string): Promise<void> => {
+    try {
+      setImageLoadingStates(prev => ({ ...prev, [slideId]: 'loading' }));
+      
+      // Gerar URL otimizada
+      const optimizedUrl = generateOptimizedUrl(imageUrl, {
+        maxWidth: 1920,
+        maxHeight: 1080,
+        quality: 0.8,
+        format: 'webp'
+      });
+      
+      await preloadOptimizedImage(optimizedUrl);
+      setImageLoadingStates(prev => ({ ...prev, [slideId]: 'loaded' }));
+    } catch {
+      setImageLoadingStates(prev => ({ ...prev, [slideId]: 'error' }));
+      throw new Error(`Falha ao carregar imagem: ${slideId}`);
+    }
+  };
 
   // Query tours para obter imagens
   const { data: toursData, isLoading, isError } = useQuery({
@@ -214,91 +174,401 @@ const HeroBanner: React.FC = () => {
     staleTime: 1000 * 60 * 5, // 5 minutos
   });
 
+  console.log('📡 API STATE:', { 
+    isLoading, 
+    isError, 
+    hasData: !!toursData,
+    dataStructure: toursData ? Object.keys(toursData) : null
+  });
+
+  // Reset slidesProcessed quando API começar a carregar
+  useEffect(() => {
+    if (isLoading && slidesProcessed) {
+      console.log('🔄 RESETTING SLIDES PROCESSED - API is loading');
+      setSlidesProcessed(false);
+    }
+  }, [isLoading, slidesProcessed]);
+
   // Extrair tours da resposta da API
   const tours = useMemo(() => {
-    if (!toursData) return [];
-    // A API retorna dados aninhados: data.data.tours
-    return Array.isArray(toursData?.data?.tours) ? toursData.data.tours : [];
-  }, [toursData]);
-
-  // Processar tours para criar slides
-  useEffect(() => {
-    const slides: Array<{ id: string; title: string; imageUrl: string; source: 'tour' }> = [];
+    console.log('🔍 EXTRACTING TOURS:', toursData);
     
-    if (tours && tours.length > 0) {
-      // Embaralhar tours para variedade
-      const shuffledTours = [...tours].sort(() => Math.random() - 0.5);
-      
-      shuffledTours.forEach(tour => {
-        let imageUrl = '';
-        
-        // Priorizar banner do tour
-        if (tour.banner) {
-          imageUrl = tour.banner;
-        }
-        // Senão, usar image
-        else if (tour.image) {
-          imageUrl = tour.image;
-        }
-        // Tentar gallery se disponível
-        else if (tour.gallery && Array.isArray(tour.gallery) && tour.gallery.length > 0) {
-          const firstGalleryItem = tour.gallery[0];
-          if (firstGalleryItem && firstGalleryItem.large) {
-            imageUrl = firstGalleryItem.large;
-          }
-        }
-        
-        if (imageUrl) {
-          slides.push({
-            id: `tour-${tour.id}`,
-            title: tour.title || tour.name || 'Tour Experience',
-            imageUrl,
-            source: 'tour'
-          });
-        }
-      });
+    if (!toursData) {
+      console.log('❌ No toursData');
+      return [];
     }
     
-    setTourSlides(slides);
-  }, [tours]);
+    console.log('📊 ToursData structure:', {
+      hasData: !!toursData.data,
+      hasTours: !!toursData?.data?.tours,
+      toursLength: Array.isArray(toursData?.data?.tours) ? toursData.data.tours.length : 'not array'
+    });
+    
+    const extractedTours = Array.isArray(toursData?.data?.tours) ? toursData.data.tours : [];
+    console.log('✅ EXTRACTED TOURS:', extractedTours.length);
+    
+    return extractedTours;
+  }, [toursData]);
 
-  // Atualizar slide automaticamente
+  // Processar tours para criar slides - APENAS quando API finalizar
   useEffect(() => {
-    if (!tourSlides || tourSlides.length === 0) return;
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % tourSlides.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [tourSlides]);
+    // CRÍTICO: Não processar se ainda está carregando
+    // Isso garante que só criamos slides quando temos dados reais da API
+    if (isLoading) {
+      console.log('⏳ WAITING FOR API TO LOAD...');
+      return;
+    }
+    
+    console.log('🔄 PROCESSING SLIDES - Tours:', tours.length, 'Processed:', slidesProcessed, 'Loading:', isLoading);
+    
+    const processSlides = async () => {
+      const slides: Array<{ id: string; title: string; imageUrl: string; source: 'tour' }> = [];
+      const usedImageUrls = new Set<string>(); // Track de URLs já utilizadas
+      const MAX_SLIDES = 2; // Limite de 2 slides
+      
+      if (tours && tours.length > 0) {
+        // Usar tours na ordem original para evitar mudanças constantes
+        const toursToProcess = [...tours];
+        
+        for (let i = 0; i < toursToProcess.length && slides.length < MAX_SLIDES; i++) {
+          const tour = toursToProcess[i];
+          let imageUrl = '';
+          
+          console.log(`🏖️ PROCESSING TOUR ${i}:`, {
+            id: tour.id,
+            title: tour.title || tour.name,
+            banner: tour.banner,
+            image: tour.image,
+            gallery: tour.gallery ? tour.gallery.length : 0
+          });
+          
+          // Priorizar banner do tour
+          if (tour.banner) {
+            imageUrl = tour.banner;
+            console.log(`📸 Using BANNER for tour ${i}:`, imageUrl);
+          }
+          // Senão, usar image
+          else if (tour.image) {
+            imageUrl = tour.image;
+            console.log(`📸 Using IMAGE for tour ${i}:`, imageUrl);
+          }
+          // Tentar gallery se disponível
+          else if (tour.gallery && Array.isArray(tour.gallery) && tour.gallery.length > 0) {
+            const firstGalleryItem = tour.gallery[0];
+            if (firstGalleryItem && firstGalleryItem.large) {
+              imageUrl = firstGalleryItem.large;
+              console.log(`📸 Using GALLERY for tour ${i}:`, imageUrl);
+            }
+          }
+          
+          if (imageUrl) {
+            // ✨ NOVA LÓGICA: Só criar slide se a imagem for única
+            if (usedImageUrls.has(imageUrl)) {
+              console.log(`🚫 SKIPPING DUPLICATE IMAGE for tour ${i}:`, imageUrl);
+              continue; // Pular este tour pois a imagem já foi usada
+            }
+            
+            // Aceitar todas as imagens - verificação de tamanho removida
+            
+            // Adicionar URL ao set de URLs usadas
+            usedImageUrls.add(imageUrl);
+            console.log(`✅ UNIQUE IMAGE ADDED for tour ${i}:`, imageUrl);
+            
+            const slideId = `tour-${tour.id}`;
+            
+            // Pré-carregar imagem principal com otimização
+            preloadImage(imageUrl, slideId).catch(() => {
+              // Se falhar ao carregar, ainda adiciona o slide mas marca como erro
+            });
+            
+            const slideData = {
+              id: slideId,
+              title: tour.title || tour.name || 'Tour Experience',
+              imageUrl,
+              source: 'tour' as const
+            };
+            
+            console.log(`📋 CREATING SLIDE ${slides.length + 1}/${MAX_SLIDES}:`, {
+              id: slideData.id,
+              title: slideData.title,
+              imageUrl: slideData.imageUrl
+            });
+            
+            slides.push(slideData);
+            
+            // Parar se atingiu o limite
+            if (slides.length >= MAX_SLIDES) {
+              console.log(`🎯 REACHED MAXIMUM SLIDES LIMIT: ${MAX_SLIDES}`);
+              break;
+            }
+          }
+        }
+      }
+      
+      // Se não houver tours com imagens válidas, o banner ficará vazio
+      
+      // Atualizar tanto o estado quanto a ref
+      console.log('Processing completed. Total slides created:', slides.length);
+      setTourSlides(slides);
+      slidesRef.current = slides;
+      setSlidesProcessed(true);
+    };
 
-  const handleIndicatorClick = (index: number) => {
-    setCurrentSlide(index);
+    processSlides();
+  }, [tours, slidesProcessed, tourSlides.length, isLoading]);
+
+  // Reset currentSlide quando slides mudarem (apenas se necessário)
+  useEffect(() => {
+    if (tourSlides.length > 0) {
+      // Só resetar se o índice atual for inválido
+      if (currentSlide >= tourSlides.length) {
+        console.log('Resetting currentSlide from', currentSlide, 'to 0 because tourSlides.length is', tourSlides.length);
+        setCurrentSlide(0);
+      }
+      // Se não há slides ainda, começar do 0
+      else if (currentSlide < 0) {
+        console.log('Setting initial currentSlide to 0');
+        setCurrentSlide(0);
+      }
+    }
+  }, [tourSlides.length, currentSlide]);
+
+  // Função startSlideshow removida - usando apenas a do useEffect
+
+  // Parar slideshow
+  const stopSlideshow = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
   };
 
+  // Iniciar slideshow quando slides estiverem prontos
+  useEffect(() => {
+    const initSlideshow = () => {
+      // Não iniciar se usuário está interagindo
+      if (userInteracting) return;
+      
+      // Limpar intervalo anterior se existir
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      
+      // Só iniciar se houver slides
+      if (slidesRef.current.length > 1) {
+        intervalRef.current = setInterval(() => {
+          // Verificar novamente se usuário não está interagindo
+          if (!userInteracting) {
+            setCurrentSlide((prev) => {
+              const slidesCount = slidesRef.current.length;
+              const nextSlide = slidesCount > 0 ? (prev + 1) % slidesCount : 0;
+              console.log('Auto advancing from slide', prev, 'to slide', nextSlide, 'Total slides:', slidesCount);
+              return nextSlide;
+            });
+          }
+        }, 5000);
+      }
+    };
+
+    if (tourSlides.length > 1 && !userInteracting) {
+      initSlideshow();
+    } else {
+      stopSlideshow();
+    }
+    
+    return () => stopSlideshow();
+  }, [tourSlides.length, userInteracting]);
+
+  // Cleanup no unmount
+  useEffect(() => {
+    return () => {
+      stopSlideshow();
+      if (userInteractionTimeoutRef.current) {
+        clearTimeout(userInteractionTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleIndicatorClick = (index: number) => {
+    console.log('🔴 CLICK - Index:', index, 'Current:', currentSlide, 'Total:', tourSlides.length);
+    
+    // Validar índice antes de definir
+    if (index >= 0 && index < tourSlides.length) {
+      // Marcar que usuário está interagindo
+      setUserInteracting(true);
+      
+      // Parar slideshow
+      stopSlideshow();
+      
+      // Limpar timeout anterior se existir
+      if (userInteractionTimeoutRef.current) {
+        clearTimeout(userInteractionTimeoutRef.current);
+      }
+      
+      // Definir novo slide
+      setCurrentSlide(index);
+      console.log('🟢 SET SLIDE TO:', index);
+      
+      // Aguardar 3 segundos após interação do usuário para retomar slideshow
+      userInteractionTimeoutRef.current = setTimeout(() => {
+        console.log('🔄 RESUMING SLIDESHOW');
+        setUserInteracting(false);
+      }, 3000);
+    } else {
+      console.error('❌ INVALID INDEX:', index, 'Valid range: 0 to', tourSlides.length - 1);
+    }
+  };
+
+  // Só renderizar o banner quando a request estiver finalizada
   if (isLoading) {
-    return <Box sx={{ height: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Typography color="#fff">Carregando tours...</Typography></Box>;
+    return (
+      <Box sx={{ 
+        height: '100vh', 
+        minHeight: 600,
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+      }}>
+        <Typography 
+          variant="h4" 
+          color="#fff" 
+          sx={{ 
+            textAlign: 'center',
+            fontWeight: 300,
+            letterSpacing: 2
+          }}
+        >
+          Carregando experiências...
+        </Typography>
+      </Box>
+    );
   }
   
   if (isError) {
-    return <Box sx={{ height: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Typography color="#fff">Erro ao carregar tours.</Typography></Box>;
+    return (
+      <Box sx={{ 
+        height: '100vh', 
+        minHeight: 600,
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)'
+      }}>
+        <Typography 
+          variant="h4" 
+          color="#fff"
+          sx={{ 
+            textAlign: 'center',
+            fontWeight: 300,
+            letterSpacing: 2
+          }}
+        >
+          Erro ao carregar tours
+        </Typography>
+      </Box>
+    );
   }
 
+  // Se chegou aqui, a request foi finalizada (com ou sem tours)
   if (tourSlides.length === 0) {
-    return <Box sx={{ height: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Typography color="#fff">Nenhum tour disponível.</Typography></Box>;
+    return (
+      <Box sx={{ 
+        height: '100vh', 
+        minHeight: 600,
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)'
+      }}>
+        <Typography 
+          variant="h4" 
+          color="#fff"
+          sx={{ 
+            textAlign: 'center',
+            fontWeight: 300,
+            letterSpacing: 2
+          }}
+        >
+          Nenhum tour disponível
+        </Typography>
+      </Box>
+    );
   }
+
+  console.log('🎬 RENDER - Current:', currentSlide, 'Total:', tourSlides.length);
 
   return (
     <HeroSection>
-      {tourSlides.map((slide, index) => (
-        <BackgroundImage
-          key={slide.id}
-          $active={index === currentSlide}
-          sx={{
-            backgroundImage: `url(${slide.imageUrl})`,
-            backgroundColor: '#222', // Fallback color
-          }}
-        />
-      ))}
+      {tourSlides.map((slide, index) => {
+        const loadingState = imageLoadingStates[slide.id];
+        const isActive = index === currentSlide;
+        
+        if (isActive) {
+          console.log('✅ ACTIVE SLIDE:', index, 'ID:', slide.id);
+          console.log('🖼️ IMAGE URL:', slide.imageUrl);
+        }
+        
+        // Simplificar: mostrar imagem se estiver ativa, independente do loading
+        const shouldShowImage = isActive;
+        console.log(`📷 SLIDE ${index}: isActive=${isActive}, loadingState=${loadingState}, shouldShow=${shouldShowImage}`);
+        
+        return (
+          <React.Fragment key={slide.id}>
+            {/* Skeleton loading */}
+            {loadingState === 'loading' && isActive && <BannerSkeleton />}
+            
+            {/* Não precisa mais de imagem de fallback - só imagens de alta qualidade */}
+            
+            {/* Imagem principal */}
+            <BackgroundImage
+              $active={shouldShowImage}
+              sx={{
+                backgroundImage: (() => {
+                  const optimizedUrl = generateOptimizedUrl(slide.imageUrl, {
+                    maxWidth: 1920,
+                    maxHeight: 1080,
+                    quality: 0.8,
+                    format: 'webp'
+                  });
+                  if (isActive) {
+                    console.log(`🔗 OPTIMIZED URL for slide ${index}:`, optimizedUrl);
+                  }
+                  return `url(${optimizedUrl})`;
+                })(),
+                backgroundColor: '#3a3a3a', // Fallback color
+                // Filtros otimizados para todas as imagens
+                filter: 'blur(0.2px) contrast(1.08) saturate(1.1) brightness(1.15)',
+                // Usar cover para preencher toda a tela
+                backgroundSize: 'cover',
+                backgroundPosition: 'center center',
+                // Mobile: ajustes específicos
+                [theme.breakpoints.down('md')]: {
+                  filter: 'blur(0.1px) contrast(1.05) saturate(1.08) brightness(1.12)',
+                },
+                zIndex: shouldShowImage ? 2 : 1, // Z-index dinâmico
+              }}
+            />
+            
+            {/* Overlay sutil apenas para melhorar legibilidade do texto */}
+            {isActive && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: 'linear-gradient(135deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.15) 100%)',
+                  zIndex: 3, // Acima das imagens
+                  opacity: isActive ? 1 : 0,
+                  transition: 'opacity 1s ease-in-out',
+                }}
+              />
+            )}
+          </React.Fragment>
+        );
+      })}
 {/* 
       <ContentWrapper maxWidth="xl">
         <Box sx={{ maxWidth: isMobile ? '100%' : '60%' }}>
@@ -359,7 +629,10 @@ const HeroBanner: React.FC = () => {
           <Indicator
             key={index}
             $active={index === currentSlide}
-            onClick={() => handleIndicatorClick(index)}
+            onClick={() => {
+              console.log('DIRECT CLICK ON INDICATOR:', index);
+              handleIndicatorClick(index);
+            }}
           />
         ))}
       </SlideIndicator>

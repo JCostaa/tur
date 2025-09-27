@@ -87,7 +87,13 @@ const Events: React.FC = () => {
           </div>
         </div>
       ) : (
-        <TravelPackages customPackages={allEvents} hideTitle  onCardClick={handleEventCardClick}/>
+        <TravelPackages 
+          customPackages={allEvents} 
+          hideTitle  
+          onCardClick={handleEventCardClick}
+          enableAutoSlide={true}
+          autoSlideInterval={4500}
+        />
       )}
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
         <button

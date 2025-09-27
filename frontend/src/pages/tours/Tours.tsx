@@ -16,23 +16,42 @@ const Tours: React.FC = () => {
     queryFn: getTours,
   });
 
-  const handleTourCardClick = (tour: any) => {
+  const handleTourCardClick = (tour: { id: number }) => {
     navigate(`/tour/${tour.id}`, { state: { tour } });
   };
 
   // Mapeamento para o formato esperado pelo TravelPackages
-  const mapTourToPackage = (tour: any) => {
+  const mapTourToPackage = (tour: { 
+    id: number;
+    title?: string;
+    name?: string;
+    location?: string | { address?: string; city?: string; state?: string };
+    rating?: number;
+    duration_description?: string;
+    duration?: string;
+    price?: string;
+    image?: string;
+    people?: number;
+    gallery?: unknown[];
+    provider?: unknown;
+    attributes?: { items?: unknown[]; name?: string }[] | unknown[];
+    content?: string;
+    description?: string;
+    [key: string]: unknown;
+  }) => {
     let location = '';
     if (typeof tour.location === 'string' && tour.location) {
       location = tour.location;
     } else if (
       tour.location &&
-      (tour.location.address || tour.location.city || tour.location.state)
+      typeof tour.location === 'object' &&
+      ('address' in tour.location || 'city' in tour.location || 'state' in tour.location)
     ) {
+      const locationObj = tour.location as { address?: string; city?: string; state?: string };
       location = [
-        tour.location.address,
-        tour.location.city,
-        tour.location.state,
+        locationObj.address,
+        locationObj.city,
+        locationObj.state,
       ]
         .filter(Boolean)
         .join(', ');
@@ -51,10 +70,10 @@ const Tours: React.FC = () => {
       gallery: tour.gallery || [],
       provider: tour.provider || {},
       tags: Array.isArray(tour.attributes)
-        ? tour.attributes.flatMap((attr: any) =>
-            Array.isArray(attr.items)
-              ? attr.items
-              : [attr.name || attr]
+        ? tour.attributes.flatMap((attr: { items?: unknown[]; name?: string } | unknown) =>
+            typeof attr === 'object' && attr !== null && 'items' in attr && Array.isArray(attr.items)
+              ? attr.items.map(item => String(item))
+              : [typeof attr === 'object' && attr !== null && 'name' in attr ? String(attr.name) : String(attr)]
           )
         : [],
       description:
@@ -80,7 +99,13 @@ const Tours: React.FC = () => {
       ) : isError ? (
         <div style={{ textAlign: 'center', margin: '40px 0', color: 'red' }}>Erro ao carregar tours.</div>
       ) : (
-        <TravelPackages customPackages={allTours} hideTitle  onCardClick={handleTourCardClick}/>
+        <TravelPackages 
+          customPackages={allTours} 
+          hideTitle  
+          onCardClick={handleTourCardClick}
+          enableAutoSlide={true}
+          autoSlideInterval={5000}
+        />
       )}
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
         <button
