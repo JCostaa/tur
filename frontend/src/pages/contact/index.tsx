@@ -27,6 +27,7 @@ import { brandColors } from '../../config/colors';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { getLocationParams } from '../../services/globalParams';
+import { useCity } from '../../hooks/useCity';
 
 const Contact: React.FC = () => {
   const theme = useTheme();
@@ -38,13 +39,33 @@ const Contact: React.FC = () => {
     message: ''
   });
   
-  // Obter parâmetros de localização do .env
+  // Obter informações da cidade do contexto
+  const { currentCity } = useCity();
+  const touristSupport = currentCity?.tourist_support_agency;
+  
+  // Debug: verificar dados recebidos
+  console.log('🏙️ currentCity:', currentCity);
+  console.log('📞 touristSupport:', touristSupport);
+  console.log('🔍 currentCity?.tourist_support_agency:', currentCity?.tourist_support_agency);
+  
+  // Fallback para parâmetros de localização do .env se não houver dados do contexto
   const locationParams = getLocationParams();
-  const city = locationParams.city as string || 'Barra do Bugres';
-  const state = locationParams.state as string || 'MT';
+  const city = currentCity?.name || locationParams.city as string || 'Barra do Bugres';
+  const state = currentCity?.state || locationParams.state as string || 'MT';
+  
+  // Função para tratar valores null/undefined
+  const getValueOrDefault = (value: string | null | undefined, defaultValue: string = 'Não Informado') => {
+    return value && value.trim() !== '' ? value : defaultValue;
+  };
   
   // Função para gerar URL do Google Maps
   const generateMapUrl = (city: string, state: string) => {
+    // Se houver coordenadas específicas do tourist_support_agency, usar elas
+    if (touristSupport?.lat && touristSupport?.lng) {
+      return `https://www.google.com/maps?q=${touristSupport.lat},${touristSupport.lng}&output=embed`;
+    }
+    
+    // Caso contrário, usar a cidade e estado
     const location = `${city}, ${state}, Brasil`;
     const encodedLocation = encodeURIComponent(location);
     return `https://www.google.com/maps?q=${encodedLocation}&output=embed`;
@@ -71,13 +92,14 @@ const Contact: React.FC = () => {
     // Aqui você pode implementar o envio do formulário
   };
 
-  // Contact info data
+  console.log('🏙️ touristSupport:', touristSupport);
+  // Contact info data usando informações do tourist_support_agency
   const contactInfo = [
     {
       icon: <LocationOn sx={{ fontSize: 40, color: '#fff' }} />,
       title: 'Localização',
       details: [
-        'Rua Voluntários da Pátria, 118 - Centro',
+        getValueOrDefault(touristSupport?.address),
         `${city} - ${state}, Brasil`
       ],
       gradient: 'linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%)'
@@ -86,8 +108,7 @@ const Contact: React.FC = () => {
       icon: <Phone sx={{ fontSize: 40, color: '#fff' }} />,
       title: 'Telefone',
       details: [
-        '+55 (65) 3345-6789',
-        '+55 (65) 99999-9999'
+        getValueOrDefault(touristSupport?.phone_number)
       ],
       gradient: 'linear-gradient(135deg, #FF9800 0%, #F57C00 100%)'
     },
@@ -95,8 +116,7 @@ const Contact: React.FC = () => {
       icon: <Email sx={{ fontSize: 40, color: '#fff' }} />,
       title: 'E-mail',
       details: [
-        'contato@vivabarra.com.br',
-        'turismo@vivabarra.com.br'
+        getValueOrDefault(touristSupport?.email)
       ],
       gradient: 'linear-gradient(135deg, #2196F3 0%, #1565C0 100%)'
     }
@@ -403,7 +423,7 @@ const Contact: React.FC = () => {
                     fontWeight: 700,
                     color: brandColors.neutral.darkGray
                   }}>
-                    Atendimento
+                    {getValueOrDefault(touristSupport?.name, 'Atendimento')}
                   </Typography>
                 </Box>
                 
@@ -433,12 +453,72 @@ const Contact: React.FC = () => {
 
                 <Divider sx={{ my: 3 }} />
 
+                {/* Informações adicionais do tourist_support_agency */}
+                {touristSupport && (
+                  <Box sx={{ mb: 3 }}>
+                    {touristSupport.site && (
+                      <Typography variant="body2" sx={{ 
+                        color: brandColors.neutral.gray,
+                        mb: 1
+                      }}>
+                        <strong>Site:</strong> {getValueOrDefault(touristSupport.site)}
+                      </Typography>
+                    )}
+                    {touristSupport.observations && (
+                      <Typography variant="body2" sx={{ 
+                        color: brandColors.neutral.gray,
+                        mb: 1
+                      }}>
+                        <strong>Observações:</strong> {getValueOrDefault(touristSupport.observations)}
+                      </Typography>
+                    )}
+                    
+                    {/* Redes Sociais */}
+                    {(touristSupport.instagram || touristSupport.facebook || touristSupport.youtube) && (
+                      <Box sx={{ mt: 2 }}>
+                        <Typography variant="body2" sx={{ 
+                          color: brandColors.neutral.darkGray,
+                          fontWeight: 600,
+                          mb: 1
+                        }}>
+                          Redes Sociais:
+                        </Typography>
+                        {touristSupport.instagram && (
+                          <Typography variant="body2" sx={{ color: brandColors.neutral.gray, ml: 1 }}>
+                            Instagram: {getValueOrDefault(touristSupport.instagram)}
+                          </Typography>
+                        )}
+                        {touristSupport.facebook && (
+                          <Typography variant="body2" sx={{ color: brandColors.neutral.gray, ml: 1 }}>
+                            Facebook: {getValueOrDefault(touristSupport.facebook)}
+                          </Typography>
+                        )}
+                        {touristSupport.youtube && (
+                          <Typography variant="body2" sx={{ color: brandColors.neutral.gray, ml: 1 }}>
+                            YouTube: {getValueOrDefault(touristSupport.youtube)}
+                          </Typography>
+                        )}
+                        {touristSupport.tiktok && (
+                          <Typography variant="body2" sx={{ color: brandColors.neutral.gray, ml: 1 }}>
+                            TikTok: {getValueOrDefault(touristSupport.tiktok)}
+                          </Typography>
+                        )}
+                        {touristSupport.linkedin && (
+                          <Typography variant="body2" sx={{ color: brandColors.neutral.gray, ml: 1 }}>
+                            LinkedIn: {getValueOrDefault(touristSupport.linkedin)}
+                          </Typography>
+                        )}
+                      </Box>
+                    )}
+                  </Box>
+                )}
+
                 <Typography variant="body2" sx={{ 
                   color: brandColors.neutral.gray,
                   fontStyle: 'italic',
                   textAlign: 'center'
                 }}>
-                  "Sua aventura em Mato Grosso começa aqui! Estamos prontos para tornar sua viagem inesquecível."
+                  "Sua aventura em {city} começa aqui! Estamos prontos para tornar sua viagem inesquecível."
                 </Typography>
               </CardContent>
             </Card>

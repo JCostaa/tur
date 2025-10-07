@@ -21,11 +21,11 @@ interface TravelPackage {
 }
 import Header from '../../components/Header';
 import { useQuery } from '@tanstack/react-query';
-import { getTours } from '../../services/tours';
+import { getProviders } from '../../services/providers';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-// Tipo básico para tour
-interface Tour {
+// Tipo básico para provider tour
+interface ProviderTour {
   id: number;
   title: string;
   content?: string;
@@ -52,7 +52,7 @@ const DURATIONS = [
 
 const PRICE_RANGE = [0, 300];
 
-const AllTours: React.FC = () => {
+const AllProvidersTours: React.FC = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -64,9 +64,9 @@ const AllTours: React.FC = () => {
   const [price, setPrice] = useState<number[]>(PRICE_RANGE);
   const [selectedExperiences, setSelectedExperiences] = useState<string[]>([]);
 
-  const { data: toursData, isLoading, isError } = useQuery({
-    queryKey: ['tours'],
-    queryFn: getTours,
+  const { data: providersData, isLoading, isError } = useQuery({
+    queryKey: ['providers-tours'],
+    queryFn: () => getProviders('tours'),
   });
 
   // Capturar parâmetro de experiência da URL
@@ -78,19 +78,19 @@ const AllTours: React.FC = () => {
     }
   }, [searchParams]);
 
-  // Obter todos os tours
-  const allTours = Array.isArray(toursData?.data?.tours) ? toursData.data.tours : [];
+  // Obter todos os providers tours
+  const allProviderTours = Array.isArray(providersData?.data?.providers) ? providersData.data.providers : [];
 
   // Extrair todas as experiências únicas dos tours
   const allExperiences: string[] = Array.from(new Set(
-    allTours
-      .flatMap((tour: Tour) => tour.expriences || [])
+    allProviderTours
+      .flatMap((tour: ProviderTour) => tour.expriences || [])
       .filter(Boolean)
   ));
 
   // Filtrar tours por experiências selecionadas
   const filteredTours = selectedExperiences.length > 0
-    ? allTours.filter((tour: Tour) => {
+    ? allProviderTours.filter((tour: ProviderTour) => {
         if (!Array.isArray(tour.expriences)) return false;
         
         return selectedExperiences.some(selectedExp => {
@@ -105,9 +105,9 @@ const AllTours: React.FC = () => {
           );
         });
       })
-    : allTours;
+    : allProviderTours;
 
-  console.log('All tours:', allTours.length);
+  console.log('All provider tours:', allProviderTours.length);
   console.log('Selected experiences:', selectedExperiences);
   console.log('All experiences available:', allExperiences);
   console.log('Filtered tours:', filteredTours.length);
@@ -118,7 +118,7 @@ const AllTours: React.FC = () => {
     console.log('Selected experience parts:', selectedParts);
     
     // Mostrar alguns tours e suas experiências para debug
-    console.log('Sample tours with experiences:', allTours.slice(0, 3).map((tour: Tour) => ({
+    console.log('Sample tours with experiences:', allProviderTours.slice(0, 3).map((tour: ProviderTour) => ({
       id: tour.id,
       title: tour.title,
       expriences: tour.expriences
@@ -126,12 +126,12 @@ const AllTours: React.FC = () => {
   }
 
   // Mapeamento para o formato esperado pelo TravelPackages
-  const mapTourToPackage = (tour: Tour) => ({
+  const mapTourToPackage = (tour: ProviderTour) => ({
     id: tour.id,
     title: tour.title,
     location: tour.location?.city || tour.location?.address || 'Local não informado',
     rating: 5, // valor padrão
-    duration: tour.duration_description || (tour.duration ? `${tour.duration} min` : 'Duração não informada'),
+    duration: '', // Removido para não exibir duração
     price: tour.price,
     image: tour.image,
     people: 2, // valor padrão
@@ -142,8 +142,8 @@ const AllTours: React.FC = () => {
 
   // Gerar lista dinâmica de cidades a partir dos dados
   const dynamicLocations: string[] = Array.from(new Set(
-    (toursData?.data?.tours || [])
-      .map((tour: Tour) => tour.location?.city)
+    (providersData?.data?.providers || [])
+      .map((tour: ProviderTour) => tour.location?.city)
       .filter((city: string | undefined): city is string => !!city)
   ));
 
@@ -173,11 +173,11 @@ const AllTours: React.FC = () => {
     setPrice(PRICE_RANGE);
     setSelectedExperiences([]);
     // Remover parâmetro de experiência da URL
-    navigate('/all-tours', { replace: true });
+    navigate('/all-providers-tours', { replace: true });
   };
 
   const handleTourCardClick = (pkg: TravelPackage) => {
-    navigate(`/tour/${pkg.id}`, { state: { tour: pkg } });
+    navigate(`/provider-tour/${pkg.id}`, { state: { tour: pkg } });
   };
 
   return (
@@ -187,12 +187,12 @@ const AllTours: React.FC = () => {
         <Container maxWidth="xl">
           <Box sx={{ textAlign: 'center', mb: 4 }}>
             <Typography variant="h2" sx={{ color: theme.palette.primary.main, fontWeight: 800, letterSpacing: 2, fontSize: isMobile ? 28 : 44, mb: 1 }}>
-              {selectedExperiences.length > 0 ? `Tours Filtrados por Experiência` : 'Encontre o seu próximo passeio'}
+              {selectedExperiences.length > 0 ? `Fornecedores de Atrativos Filtrados por Experiência` : 'Fornecedores de Atrativos'}
             </Typography>
             <Typography variant="h5" sx={{ color: theme.palette.text.secondary, fontWeight: 400, fontSize: isMobile ? 16 : 22 }}>
               {selectedExperiences.length > 0
-                ? `Mostrando tours que oferecem: ${selectedExperiences.join(', ')}`
-                : 'Descubra experiências incríveis em Barra de São Miguel e região'
+                ? `Mostrando fornecedores que oferecem: ${selectedExperiences.join(', ')}`
+                : 'Descubra fornecedores de atrativos incríveis em Barra de São Miguel e região'
               }
             </Typography>
           </Box>
@@ -204,8 +204,8 @@ const AllTours: React.FC = () => {
             >
               <InputBase
                 sx={{ ml: 1, flex: 1, fontSize: 18 }}
-                placeholder="Buscar por nome do passeio..."
-                inputProps={{ 'aria-label': 'buscar passeio' }}
+                placeholder="Buscar por nome do fornecedor..."
+                inputProps={{ 'aria-label': 'buscar fornecedor' }}
                 value={search}
                 onChange={e => setSearch(e.target.value)}
               />
@@ -298,18 +298,18 @@ const AllTours: React.FC = () => {
             {/* Resultados */}
             <Box sx={{ flex: 1 }}>
               {isLoading ? (
-                <Typography align="center" sx={{ mt: 8, color: '#888' }}>Carregando passeios...</Typography>
+                <Typography align="center" sx={{ mt: 8, color: '#888' }}>Carregando fornecedores...</Typography>
               ) : isError ? (
-                <Typography align="center" sx={{ mt: 8, color: 'error.main' }}>Erro ao carregar passeios.</Typography>
+                <Typography align="center" sx={{ mt: 8, color: 'error.main' }}>Erro ao carregar fornecedores.</Typography>
               ) : filteredTours.length === 0 ? (
                 <Typography align="center" sx={{ mt: 8, color: '#888' }}>
                   {selectedExperiences.length > 0
-                    ? `Nenhum tour encontrado para as experiências selecionadas: ${selectedExperiences.join(', ')}.`
-                    : 'Nenhum passeio encontrado.'
+                    ? `Nenhum fornecedor encontrado para as experiências selecionadas: ${selectedExperiences.join(', ')}.`
+                    : 'Nenhum fornecedor encontrado.'
                   }
                 </Typography>
               ) : (
-                <TravelPackages customPackages={mappedPackages} hideTitle showArrows={false} onCardClick={handleTourCardClick} />
+                <TravelPackages customPackages={mappedPackages} hideTitle showArrows={false} hidePeopleAndPrice={true} showReserveButton={false} onCardClick={handleTourCardClick} />
               )}
             </Box>
           </Box>
@@ -319,4 +319,4 @@ const AllTours: React.FC = () => {
   );
 };
 
-export default AllTours; 
+export default AllProvidersTours;

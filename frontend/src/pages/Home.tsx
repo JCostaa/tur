@@ -13,10 +13,12 @@ import { Drivers } from './drivers';
 import Guides from './guides/Guides';
 import Agencies from './agencie/Agencies'; // Não utilizado
 import { Events } from './events';
+import { AttractionsProviders } from './attractions';
 import NewsSectionHome from '../components/NewsSectionHome';
 import TestimonialsSectionHome from '../components/TestimonialsSectionHome';
 import Preloader from '../components/Preloader';
 import SectionDivider from '../components/SectionDivider';
+import PodcastSection from '../components/PodcastSection';
 import { useQuery } from '@tanstack/react-query';
 import { getNews } from '../services/news';
 import { getTestimonials } from '../services/testimonials';
@@ -135,36 +137,47 @@ const Home: React.FC = () => {
         )}
         
         {renderSectionWithDivider(
+          "fornecedores-atrativos",
+          AttractionsProviders,
+          5
+        )}
+        
+        {renderSectionWithDivider(
           "accommodations",
           Accommodation,
-          5
+          6
         )}
         
         {renderSectionWithDivider(
           "restaurants",
           Restaurants,
-          6
+          7
         )}
         
         {renderSectionWithDivider(
           "agencies",
           Agencies,
-          7
+          8
         )}
         
         {renderSectionWithDivider(
           "guides",
           Guides,
-          8,
+          9,
           { minHeight: 300 }
         )}
         
         {renderSectionWithDivider(
           "drivers",
           Drivers,
-          9,
+          10,
           { minHeight: 300 }
         )}
+        
+        <Box id="podcast">
+          <PodcastSection />
+        </Box>
+        <SectionDivider sectionIndex={11} />
         
         <Box id="noticias">
           <NewsSectionHome 

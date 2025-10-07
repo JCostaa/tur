@@ -10,6 +10,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { getTours } from '../services/tours';
 import { generateOptimizedUrl, preloadOptimizedImage } from '../utils/imageOptimization';
+import { useCity } from '../hooks/useCity';
 
 const HeroSection = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -135,14 +136,17 @@ const BannerSkeleton = styled(Box)(() => ({
 
 const HeroBanner: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [tourSlides, setTourSlides] = useState<Array<{ id: string; title: string; imageUrl: string; source: 'tour' }>>([]);
+  const [citySlides, setCitySlides] = useState<Array<{ id: string; title: string; imageUrl: string; source: 'city' }>>([]);
   const [imageLoadingStates, setImageLoadingStates] = useState<Record<string, 'loading' | 'loaded' | 'error'>>({});
   const [slidesProcessed, setSlidesProcessed] = useState(false);
   const [userInteracting, setUserInteracting] = useState(false);
-  const slidesRef = useRef<Array<{ id: string; title: string; imageUrl: string; source: 'tour' }>>([]);
+  const slidesRef = useRef<Array<{ id: string; title: string; imageUrl: string; source: 'city' }>>([]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const userInteractionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const theme = useTheme();
+  
+  // Usar o contexto da cidade
+  const { currentCity, isLoading: cityLoading } = useCity();
 
   // Verificação de tamanho removida - aceitar todas as imagens
 
@@ -167,114 +171,53 @@ const HeroBanner: React.FC = () => {
     }
   };
 
-  // Query tours para obter imagens
-  const { data: toursData, isLoading, isError } = useQuery({
-    queryKey: ['tours'],
-    queryFn: getTours,
-    staleTime: 1000 * 60 * 5, // 5 minutos
+  console.log('📡 CITY STATE:', { 
+    cityLoading, 
+    hasCity: !!currentCity,
+    hasGallery: !!currentCity?.gallery,
+    galleryLength: currentCity?.gallery?.length || 0
   });
 
-  console.log('📡 API STATE:', { 
-    isLoading, 
-    isError, 
-    hasData: !!toursData,
-    dataStructure: toursData ? Object.keys(toursData) : null
-  });
-
-  // Reset slidesProcessed quando API começar a carregar
+  // Reset slidesProcessed quando cidade começar a carregar
   useEffect(() => {
-    if (isLoading && slidesProcessed) {
-      console.log('🔄 RESETTING SLIDES PROCESSED - API is loading');
+    if (cityLoading && slidesProcessed) {
+      console.log('🔄 RESETTING SLIDES PROCESSED - City is loading');
       setSlidesProcessed(false);
     }
-  }, [isLoading, slidesProcessed]);
+  }, [cityLoading, slidesProcessed]);
 
-  // Extrair tours da resposta da API
-  const tours = useMemo(() => {
-    console.log('🔍 EXTRACTING TOURS:', toursData);
-    
-    if (!toursData) {
-      console.log('❌ No toursData');
-      return [];
-    }
-    
-    console.log('📊 ToursData structure:', {
-      hasData: !!toursData.data,
-      hasTours: !!toursData?.data?.tours,
-      toursLength: Array.isArray(toursData?.data?.tours) ? toursData.data.tours.length : 'not array'
-    });
-    
-    const extractedTours = Array.isArray(toursData?.data?.tours) ? toursData.data.tours : [];
-    console.log('✅ EXTRACTED TOURS:', extractedTours.length);
-    
-    return extractedTours;
-  }, [toursData]);
-
-  // Processar tours para criar slides - APENAS quando API finalizar
+  // Processar gallery da cidade para criar slides - APENAS quando cidade finalizar
   useEffect(() => {
     // CRÍTICO: Não processar se ainda está carregando
-    // Isso garante que só criamos slides quando temos dados reais da API
-    if (isLoading) {
-      console.log('⏳ WAITING FOR API TO LOAD...');
+    // Isso garante que só criamos slides quando temos dados reais da cidade
+    if (cityLoading) {
+      console.log('⏳ WAITING FOR CITY TO LOAD...');
       return;
     }
     
-    console.log('🔄 PROCESSING SLIDES - Tours:', tours.length, 'Processed:', slidesProcessed, 'Loading:', isLoading);
+    console.log('🔄 PROCESSING SLIDES - City:', currentCity?.name, 'Gallery:', currentCity?.gallery?.length || 0, 'Processed:', slidesProcessed, 'Loading:', cityLoading);
     
     const processSlides = async () => {
-      const slides: Array<{ id: string; title: string; imageUrl: string; source: 'tour' }> = [];
-      const usedImageUrls = new Set<string>(); // Track de URLs já utilizadas
-      const MAX_SLIDES = 2; // Limite de 2 slides
+      const slides: Array<{ id: string; title: string; imageUrl: string; source: 'city' }> = [];
       
-      if (tours && tours.length > 0) {
-        // Usar tours na ordem original para evitar mudanças constantes
-        const toursToProcess = [...tours];
+      if (currentCity?.gallery && Array.isArray(currentCity.gallery) && currentCity.gallery.length > 0) {
+        // Usar gallery da cidade na ordem original
+        const galleryToProcess = [...currentCity.gallery];
         
-        for (let i = 0; i < toursToProcess.length && slides.length < MAX_SLIDES; i++) {
-          const tour = toursToProcess[i];
-          let imageUrl = '';
+        for (let i = 0; i < galleryToProcess.length; i++) {
+          const galleryItem = galleryToProcess[i];
           
-          console.log(`🏖️ PROCESSING TOUR ${i}:`, {
-            id: tour.id,
-            title: tour.title || tour.name,
-            banner: tour.banner,
-            image: tour.image,
-            gallery: tour.gallery ? tour.gallery.length : 0
+          console.log(`🏙️ PROCESSING CITY GALLERY ${i}:`, {
+            large: galleryItem.large,
+            thumb: galleryItem.thumb
           });
           
-          // Priorizar banner do tour
-          if (tour.banner) {
-            imageUrl = tour.banner;
-            console.log(`📸 Using BANNER for tour ${i}:`, imageUrl);
-          }
-          // Senão, usar image
-          else if (tour.image) {
-            imageUrl = tour.image;
-            console.log(`📸 Using IMAGE for tour ${i}:`, imageUrl);
-          }
-          // Tentar gallery se disponível
-          else if (tour.gallery && Array.isArray(tour.gallery) && tour.gallery.length > 0) {
-            const firstGalleryItem = tour.gallery[0];
-            if (firstGalleryItem && firstGalleryItem.large) {
-              imageUrl = firstGalleryItem.large;
-              console.log(`📸 Using GALLERY for tour ${i}:`, imageUrl);
-            }
-          }
-          
-          if (imageUrl) {
-            // ✨ NOVA LÓGICA: Só criar slide se a imagem for única
-            if (usedImageUrls.has(imageUrl)) {
-              console.log(`🚫 SKIPPING DUPLICATE IMAGE for tour ${i}:`, imageUrl);
-              continue; // Pular este tour pois a imagem já foi usada
-            }
+          // Usar gallery[i].large da cidade
+          if (galleryItem && galleryItem.large) {
+            const imageUrl = galleryItem.large;
+            console.log(`📸 Using GALLERY[${i}].LARGE for city:`, imageUrl);
             
-            // Aceitar todas as imagens - verificação de tamanho removida
-            
-            // Adicionar URL ao set de URLs usadas
-            usedImageUrls.add(imageUrl);
-            console.log(`✅ UNIQUE IMAGE ADDED for tour ${i}:`, imageUrl);
-            
-            const slideId = `tour-${tour.id}`;
+            const slideId = `city-gallery-${i}`;
             
             // Pré-carregar imagem principal com otimização
             preloadImage(imageUrl, slideId).catch(() => {
@@ -283,46 +226,44 @@ const HeroBanner: React.FC = () => {
             
             const slideData = {
               id: slideId,
-              title: tour.title || tour.name || 'Tour Experience',
+              title: `${currentCity.name} - Imagem ${i + 1}`,
               imageUrl,
-              source: 'tour' as const
+              source: 'city' as const
             };
             
-            console.log(`📋 CREATING SLIDE ${slides.length + 1}/${MAX_SLIDES}:`, {
+            console.log(`📋 CREATING SLIDE ${slides.length + 1}:`, {
               id: slideData.id,
               title: slideData.title,
               imageUrl: slideData.imageUrl
             });
             
             slides.push(slideData);
-            
-            // Parar se atingiu o limite
-            if (slides.length >= MAX_SLIDES) {
-              console.log(`🎯 REACHED MAXIMUM SLIDES LIMIT: ${MAX_SLIDES}`);
-              break;
-            }
+          } else {
+            console.log(`🚫 SKIPPING CITY GALLERY ${i} - No large image available`);
           }
         }
       }
       
-      // Se não houver tours com imagens válidas, o banner ficará vazio
+      // Se não houver gallery da cidade, o banner ficará vazio
       
       // Atualizar tanto o estado quanto a ref
       console.log('Processing completed. Total slides created:', slides.length);
-      setTourSlides(slides);
+      setCitySlides(slides);
       slidesRef.current = slides;
       setSlidesProcessed(true);
     };
 
-    processSlides();
-  }, [tours, slidesProcessed, tourSlides.length, isLoading]);
+    if (!slidesProcessed) {
+      processSlides();
+    }
+  }, [currentCity, cityLoading, slidesProcessed]);
 
   // Reset currentSlide quando slides mudarem (apenas se necessário)
   useEffect(() => {
-    if (tourSlides.length > 0) {
+    if (citySlides.length > 0) {
       // Só resetar se o índice atual for inválido
-      if (currentSlide >= tourSlides.length) {
-        console.log('Resetting currentSlide from', currentSlide, 'to 0 because tourSlides.length is', tourSlides.length);
+      if (currentSlide >= citySlides.length) {
+        console.log('Resetting currentSlide from', currentSlide, 'to 0 because citySlides.length is', citySlides.length);
         setCurrentSlide(0);
       }
       // Se não há slides ainda, começar do 0
@@ -331,7 +272,7 @@ const HeroBanner: React.FC = () => {
         setCurrentSlide(0);
       }
     }
-  }, [tourSlides.length, currentSlide]);
+  }, [citySlides.length, currentSlide]);
 
   // Função startSlideshow removida - usando apenas a do useEffect
 
@@ -370,14 +311,14 @@ const HeroBanner: React.FC = () => {
       }
     };
 
-    if (tourSlides.length > 1 && !userInteracting) {
+    if (citySlides.length > 1 && !userInteracting) {
       initSlideshow();
     } else {
       stopSlideshow();
     }
     
     return () => stopSlideshow();
-  }, [tourSlides.length, userInteracting]);
+  }, [citySlides.length, userInteracting]);
 
   // Cleanup no unmount
   useEffect(() => {
@@ -390,10 +331,10 @@ const HeroBanner: React.FC = () => {
   }, []);
 
   const handleIndicatorClick = (index: number) => {
-    console.log('🔴 CLICK - Index:', index, 'Current:', currentSlide, 'Total:', tourSlides.length);
+    console.log('🔴 CLICK - Index:', index, 'Current:', currentSlide, 'Total:', citySlides.length);
     
     // Validar índice antes de definir
-    if (index >= 0 && index < tourSlides.length) {
+    if (index >= 0 && index < citySlides.length) {
       // Marcar que usuário está interagindo
       setUserInteracting(true);
       
@@ -415,12 +356,12 @@ const HeroBanner: React.FC = () => {
         setUserInteracting(false);
       }, 3000);
     } else {
-      console.error('❌ INVALID INDEX:', index, 'Valid range: 0 to', tourSlides.length - 1);
+      console.error('❌ INVALID INDEX:', index, 'Valid range: 0 to', citySlides.length - 1);
     }
   };
 
-  // Só renderizar o banner quando a request estiver finalizada
-  if (isLoading) {
+  // Só renderizar o banner quando a cidade estiver carregada
+  if (cityLoading) {
     return (
       <Box sx={{ 
         height: '100vh', 
@@ -439,13 +380,13 @@ const HeroBanner: React.FC = () => {
             letterSpacing: 2
           }}
         >
-          Carregando experiências...
+          Carregando cidade...
         </Typography>
       </Box>
     );
   }
   
-  if (isError) {
+  if (!currentCity) {
     return (
       <Box sx={{ 
         height: '100vh', 
@@ -464,14 +405,14 @@ const HeroBanner: React.FC = () => {
             letterSpacing: 2
           }}
         >
-          Erro ao carregar tours
+          Cidade não encontrada
         </Typography>
       </Box>
     );
   }
 
-  // Se chegou aqui, a request foi finalizada (com ou sem tours)
-  if (tourSlides.length === 0) {
+  // Se chegou aqui, a cidade foi carregada (com ou sem gallery)
+  if (citySlides.length === 0) {
     return (
       <Box sx={{ 
         height: '100vh', 
@@ -490,17 +431,17 @@ const HeroBanner: React.FC = () => {
             letterSpacing: 2
           }}
         >
-          Nenhum tour disponível
+          Nenhuma imagem disponível para {currentCity.name}
         </Typography>
       </Box>
     );
   }
 
-  console.log('🎬 RENDER - Current:', currentSlide, 'Total:', tourSlides.length);
+  console.log('🎬 RENDER - Current:', currentSlide, 'Total:', citySlides.length);
 
   return (
     <HeroSection>
-      {tourSlides.map((slide, index) => {
+      {citySlides.map((slide, index) => {
         const loadingState = imageLoadingStates[slide.id];
         const isActive = index === currentSlide;
         
@@ -625,7 +566,7 @@ const HeroBanner: React.FC = () => {
       </SocialSection> */}
 
       <SlideIndicator>
-        {tourSlides.map((_, index) => (
+        {citySlides.map((_, index) => (
           <Indicator
             key={index}
             $active={index === currentSlide}

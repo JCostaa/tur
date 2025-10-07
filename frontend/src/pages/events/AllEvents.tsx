@@ -106,6 +106,8 @@ const AllEvents: React.FC = () => {
             customPackages={allEvents} 
             hideTitle 
             onCardClick={handleEventCardClick}
+            enableAutoSlide={true}
+            autoSlideInterval={4500}
           />
         )}
       </Box>

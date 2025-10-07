@@ -1,23 +1,34 @@
-import api from '../api';
+import skoobturApi from '../skoobtur';
 
+// Interface baseada na resposta da API Skoobtur
 export interface TestimonialItem {
   id: number;
   name: string;
-  location: string;
+  location?: string;
   occupation?: string;
   rating: number;
-  title: string;
+  title?: string;
   content: string;
+  message?: string; // Alguns feedbacks podem usar 'message' ao invés de 'content'
   image?: string;
   avatar?: string;
-  visitDate: string;
-  experience: string; // tour, restaurant, accommodation, etc.
+  visitDate?: string;
+  created_at?: string;
+  updated_at?: string;
+  experience?: string; // tour, restaurant, accommodation, etc.
   experienceId?: number;
   featured?: boolean;
   verified?: boolean;
   helpful?: number;
   tags?: string[];
   status?: 'published' | 'pending' | 'archived';
+  // Campos específicos da API Skoobtur
+  author?: string;
+  email?: string;
+  phone?: string;
+  city?: string;
+  state?: string;
+  country?: string;
 }
 
 export interface TestimonialResponse {
@@ -43,154 +54,74 @@ export interface TestimonialFilters {
   sortOrder?: 'asc' | 'desc';
 }
 
-// Mock data para desenvolvimento
-const mockTestimonials: TestimonialItem[] = [
-  {
-    id: 1,
-    name: "Maria Silva",
-    location: "São Paulo, SP",
-    occupation: "Fotógrafa",
-    rating: 5,
-    title: "Experiência Inesquecível no Pantanal",
-    content: "Minha viagem para Barra do Bugres superou todas as expectativas! A diversidade de aves que consegui fotografar foi impressionante. Os guias locais são extremamente conhecedores da região e me levaram aos melhores pontos para observação da fauna. Recomendo para todos os amantes da natureza!",
-    image: "",
-    avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b776?w=150&h=150&fit=crop&crop=face",
-    visitDate: "2024-01-10T00:00:00Z",
-    experience: "tours",
-    experienceId: 1,
-    featured: true,
-    verified: true,
-    helpful: 24,
-    tags: ["pantanal", "fotografia", "aves", "natureza"]
-  },
-  {
-    id: 2,
-    name: "João Santos",
-    location: "Rio de Janeiro, RJ",
-    occupation: "Empresário",
-    rating: 5,
-    title: "Gastronomia Pantaneira Autêntica",
-    content: "A experiência gastronômica em Barra do Bugres foi extraordinária! Experimentei pratos típicos da região pantaneira que nunca havia provado. O pacu assado e a farofa de banana foram os destaques. O atendimento foi caloroso e o ambiente muito acolhedor.",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-    visitDate: "2024-01-08T00:00:00Z",
-    experience: "restaurants",
-    experienceId: 2,
-    featured: false,
-    verified: true,
-    helpful: 18,
-    tags: ["gastronomia", "culinária pantaneira", "pacu", "tradição"]
-  },
-  {
-    id: 3,
-    name: "Ana Costa",
-    location: "Brasília, DF",
-    occupation: "Professora",
-    rating: 5,
-    title: "Pousada Aconchegante com Vista Deslumbrante",
-    content: "Me hospedei por 3 dias em uma pousada às margens do Rio Paraguai e foi simplesmente perfeito! O nascer do sol visto do quarto era de tirar o fôlego. A hospitalidade dos proprietários e a tranquilidade do local fizeram desta uma experiência única e relaxante.",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-    visitDate: "2024-01-05T00:00:00Z",
-    experience: "accommodations",
-    experienceId: 3,
-    featured: true,
-    verified: true,
-    helpful: 31,
-    tags: ["pousada", "rio paraguai", "hospitalidade", "tranquilidade"]
-  },
-  {
-    id: 4,
-    name: "Carlos Oliveira",
-    location: "Cuiabá, MT",
-    occupation: "Biólogo",
-    rating: 4,
-    title: "Aventura de Pesca Esportiva Emocionante",
-    content: "A pesca esportiva no Rio Paraguai foi uma aventura incrível! Pesquei alguns exemplares magníficos de dourado e pintado. O equipamento fornecido era de primeira qualidade e os guias conheciam os melhores pontos. Uma experiência que todo pescador deveria ter!",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-    visitDate: "2024-01-03T00:00:00Z",
-    experience: "tours",
-    experienceId: 4,
-    featured: false,
-    verified: true,
-    helpful: 15,
-    tags: ["pesca esportiva", "rio paraguai", "dourado", "pintado"]
-  },
-  {
-    id: 5,
-    name: "Luiza Ferreira",
-    location: "Belo Horizonte, MG",
-    occupation: "Arquiteta",
-    rating: 5,
-    title: "Trilha Ecológica Fascinante",
-    content: "A trilha ecológica na Serra do Roncador foi uma das experiências mais marcantes da minha vida! A biodiversidade local é impressionante e a paisagem é de uma beleza indescritível. Os guias são muito preparados e compartilharam conhecimentos valiosos sobre a flora e fauna.",
-    image: "/images/browse-5.jpg",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
-    visitDate: "2024-01-01T00:00:00Z",
-    experience: "tours",
-    experienceId: 5,
-    featured: false,
-    verified: true,
-    helpful: 22,
-    tags: ["trilha ecológica", "serra do roncador", "biodiversidade", "natureza"]
-  },
-  {
-    id: 6,
-    name: "Pedro Almeida",
-    location: "Porto Alegre, RS",
-    occupation: "Médico",
-    rating: 5,
-    title: "Festival Cultural Emocionante",
-    content: "Participar do festival cultural local foi uma experiência enriquecedora! Conheci as tradições pantaneiras, a música típica e o artesanato regional. A comunidade nos recebeu com muito carinho e pude aprender sobre a história e cultura da região.",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
-    visitDate: "2023-12-28T00:00:00Z",
-    experience: "events",
-    experienceId: 6,
-    featured: false,
-    verified: true,
-    helpful: 19,
-    tags: ["festival cultural", "tradições", "música", "artesanato"]
-  },
-  {
-    id: 7,
-    name: "Fernanda Lima",
-    location: "Salvador, BA",
-    occupation: "Jornalista",
-    rating: 4,
-    title: "Passeio de Barco Inesquecível",
-    content: "O passeio de barco pelo Rio Paraguai foi incrível! Avistamos diversas espécies de aves, jacarés e capivaras. O pôr do sol visto do rio é algo que ficará para sempre na minha memória. O piloto era muito experiente e nos deixou muito seguros durante todo o trajeto.",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
-    visitDate: "2023-12-25T00:00:00Z",
-    experience: "tours",
-    experienceId: 7,
-    featured: true,
-    verified: true,
-    helpful: 27,
-    tags: ["passeio de barco", "rio paraguai", "vida selvagem", "pôr do sol"]
-  },
-  {
-    id: 8,
-    name: "Roberto Silva",
-    location: "Fortaleza, CE",
-    occupation: "Engenheiro",
-    rating: 5,
-    title: "Agência de Turismo Excepcional",
-    content: "A agência que nos atendeu foi simplesmente excepcional! Desde o planejamento até a execução da viagem, tudo foi perfeito. O atendimento personalizado e a atenção aos detalhes fizeram toda a diferença. Recomendo fortemente para quem quer uma experiência inesquecível!",
-    avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face",
-    visitDate: "2023-12-20T00:00:00Z",
-    experience: "agencies",
-    experienceId: 8,
-    featured: false,
-    verified: true,
-    helpful: 16,
-    tags: ["agência", "atendimento", "planejamento", "personalizado"]
-  }
-];
+// Interface para dados brutos da API Skoobtur
+interface SkoobturFeedback {
+  id: number;
+  rating: string; // Vem como string da API
+  description: string;
+  created_at: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    avatar?: string;
+  };
+  tour: {
+    id: number;
+    title: string;
+    slug: string;
+    image?: string;
+    banner?: string;
+    location: {
+      id: number;
+      name: string;
+      state: string;
+      city: string;
+      address?: string;
+      lat?: string | null;
+      lng?: string | null;
+    };
+  };
+}
 
-// Simular delay de API
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+// Função para normalizar dados da API Skoobtur
+const normalizeTestimonial = (item: SkoobturFeedback): TestimonialItem => {
+  // Filtrar mensagens de áudio (que começam com "audioMessage|")
+  const isAudioMessage = item.description?.startsWith('audioMessage|');
+  const content = isAudioMessage ? 'Mensagem de áudio' : item.description || '';
+  
+  return {
+    id: item.id,
+    name: item.user?.name || 'Anônimo',
+    location: `${item.tour?.location?.city || ''}${item.tour?.location?.city && item.tour?.location?.state ? ', ' : ''}${item.tour?.location?.state || ''}`.trim() || undefined,
+    occupation: undefined, // Não disponível na API
+    rating: parseInt(item.rating) || 5,
+    title: item.tour?.title || undefined,
+    content: content,
+    message: item.description,
+    image: item.tour?.image || item.tour?.banner,
+    avatar: item.user?.avatar,
+    visitDate: item.created_at,
+    created_at: item.created_at,
+    updated_at: undefined,
+    experience: 'tours', // Baseado na estrutura da API (sempre tours)
+    experienceId: item.tour?.id,
+    featured: parseInt(item.rating) >= 9, // Considera featured se rating >= 9
+    verified: true, // Por padrão considera verificado
+    helpful: 0, // Não disponível na API
+    tags: [], // Não disponível na API
+    status: 'published',
+    author: item.user?.name,
+    email: item.user?.email,
+    phone: undefined,
+    city: item.tour?.location?.city,
+    state: item.tour?.location?.state,
+    country: 'BR' // Assumindo Brasil
+  };
+};
 
 export const getTestimonials = async (filters: TestimonialFilters = {}): Promise<TestimonialResponse> => {
-  await delay(600); // Simular delay da API
-  
+  try {
   const {
     page = 1,
     limit = 10,
@@ -199,159 +130,176 @@ export const getTestimonials = async (filters: TestimonialFilters = {}): Promise
     search,
     featured,
     verified,
-    sortBy = 'visitDate',
+      sortBy = 'created_at',
     sortOrder = 'desc'
   } = filters;
 
-  let filteredTestimonials = [...mockTestimonials];
+    // Construir parâmetros da query
+    const params: Record<string, string | number | boolean> = {
+      page,
+      limit,
+      sort: `${sortBy}:${sortOrder}`
+    };
 
-  // Filtrar por experiência
+    // A cidade será adicionada automaticamente pelo interceptor
+    // baseado na variável VITE_CITY do .env
+    // Para a API de feedbacks, pode precisar do parâmetro 'city' específico
+    // Exemplo: city=bugres (será adicionado pelo interceptor)
+
   if (experience && experience !== 'all') {
-    filteredTestimonials = filteredTestimonials.filter(item => 
-      item.experience.toLowerCase() === experience.toLowerCase()
-    );
+      params.experience = experience;
   }
 
-  // Filtrar por rating mínimo
   if (rating) {
-    filteredTestimonials = filteredTestimonials.filter(item => item.rating >= rating);
+      params.rating_min = rating;
   }
 
-  // Filtrar por busca
   if (search) {
-    const searchLower = search.toLowerCase();
-    filteredTestimonials = filteredTestimonials.filter(item =>
-      item.name.toLowerCase().includes(searchLower) ||
-      item.title.toLowerCase().includes(searchLower) ||
-      item.content.toLowerCase().includes(searchLower) ||
-      item.location.toLowerCase().includes(searchLower) ||
-      item.occupation?.toLowerCase().includes(searchLower) ||
-      item.tags?.some(tag => tag.toLowerCase().includes(searchLower))
-    );
-  }
+      params.search = search;
+    }
 
-  // Filtrar por featured
   if (featured !== undefined) {
-    filteredTestimonials = filteredTestimonials.filter(item => item.featured === featured);
+      params.featured = featured;
   }
 
-  // Filtrar por verified
   if (verified !== undefined) {
-    filteredTestimonials = filteredTestimonials.filter(item => item.verified === verified);
-  }
+      params.verified = verified;
+    }
 
-  // Ordenar
-  filteredTestimonials.sort((a, b) => {
-    let aValue: any, bValue: any;
+    const response = await skoobturApi.get('/feedbacks', { params });
     
-    switch (sortBy) {
-      case 'visitDate':
-        aValue = new Date(a.visitDate);
-        bValue = new Date(b.visitDate);
-        break;
-      case 'rating':
-        aValue = a.rating;
-        bValue = b.rating;
-        break;
-      case 'helpful':
-        aValue = a.helpful || 0;
-        bValue = b.helpful || 0;
-        break;
-      case 'name':
-        aValue = a.name.toLowerCase();
-        bValue = b.name.toLowerCase();
-        break;
-      default:
-        aValue = new Date(a.visitDate);
-        bValue = new Date(b.visitDate);
-    }
-
-    if (sortOrder === 'asc') {
-      return aValue > bValue ? 1 : -1;
-    } else {
-      return aValue < bValue ? 1 : -1;
-    }
-  });
+    // Normalizar dados da resposta baseado na estrutura real da API
+    const apiData = response.data?.data || response.data;
+    const feedbacks = apiData?.feedbacks || [];
+    
+    const testimonials = feedbacks.map(normalizeTestimonial);
 
   // Calcular rating médio
-  const averageRating = filteredTestimonials.length > 0 
-    ? filteredTestimonials.reduce((sum, item) => sum + item.rating, 0) / filteredTestimonials.length
-    : 0;
+    const averageRating = testimonials.length > 0 
+      ? testimonials.reduce((sum: number, item: TestimonialItem) => sum + item.rating, 0) / testimonials.length
+      : 0;
 
-  // Paginação
-  const total = filteredTestimonials.length;
-  const startIndex = (page - 1) * limit;
-  const endIndex = startIndex + limit;
-  const paginatedTestimonials = filteredTestimonials.slice(startIndex, endIndex);
+    // Estrutura de resposta baseada na API real
+    const total = apiData?.total || testimonials.length;
+    const totalPages = Math.ceil(total / limit);
 
   return {
-    data: paginatedTestimonials,
+      data: testimonials,
     meta: {
       total,
       page,
       limit,
-      totalPages: Math.ceil(total / limit),
+        totalPages,
       averageRating: Math.round(averageRating * 10) / 10
     }
   };
+  } catch (error) {
+    console.error('Erro ao buscar depoimentos:', error);
+    
+    // Retornar resposta vazia em caso de erro
+    return {
+      data: [],
+      meta: {
+        total: 0,
+        page: 1,
+        limit: 10,
+        totalPages: 0,
+        averageRating: 0
+      }
+    };
+  }
 };
 
 export const getTestimonialById = async (id: number): Promise<TestimonialItem | null> => {
-  await delay(500);
-  
-  const testimonial = mockTestimonials.find(item => item.id === id);
-  
-  if (testimonial) {
-    // Incrementar helpful (simulado)
-    testimonial.helpful = (testimonial.helpful || 0) + 1;
+  try {
+    const response = await skoobturApi.get(`/feedbacks/${id}`);
+    
+    if (response.data) {
+      return normalizeTestimonial(response.data);
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('Erro ao buscar depoimento por ID:', error);
+    return null;
   }
-  
-  return testimonial || null;
 };
 
 export const getFeaturedTestimonials = async (): Promise<TestimonialItem[]> => {
-  await delay(300);
-  return mockTestimonials.filter(item => item.featured);
+  try {
+    const response = await getTestimonials({ featured: true, limit: 50 });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar depoimentos em destaque:', error);
+    return [];
+  }
 };
 
 export const getRelatedTestimonials = async (id: number, limit = 4): Promise<TestimonialItem[]> => {
-  await delay(400);
-  
-  const currentTestimonial = mockTestimonials.find(item => item.id === id);
+  try {
+    // Primeiro buscar o depoimento atual para obter informações de contexto
+    const currentTestimonial = await getTestimonialById(id);
   if (!currentTestimonial) return [];
   
-  // Buscar depoimentos relacionados por experiência ou tags
-  const related = mockTestimonials
-    .filter(item => 
-      item.id !== id && (
-        item.experience === currentTestimonial.experience ||
-        item.tags?.some(tag => currentTestimonial.tags?.includes(tag))
-      )
-    )
+    // Buscar depoimentos relacionados por experiência
+    const response = await getTestimonials({ 
+      experience: currentTestimonial.experience,
+      limit: limit + 1 // +1 para excluir o atual
+    });
+    
+    // Filtrar o depoimento atual e limitar resultados
+    const related = response.data
+      .filter(item => item.id !== id)
     .slice(0, limit);
   
   return related;
+  } catch (error) {
+    console.error('Erro ao buscar depoimentos relacionados:', error);
+    return [];
+  }
 };
 
 export const getTestimonialExperiences = async (): Promise<string[]> => {
-  await delay(200);
-  
-  const experiences = [...new Set(mockTestimonials.map(item => item.experience).filter(Boolean))];
+  try {
+    // Buscar uma amostra grande de depoimentos para extrair experiências únicas
+    const response = await getTestimonials({ limit: 100 });
+    
+    const experiences = [...new Set(
+      response.data
+        .map(item => item.experience)
+        .filter(Boolean)
+    )];
+    
   return experiences as string[];
+  } catch (error) {
+    console.error('Erro ao buscar tipos de experiências:', error);
+    return ['tours', 'restaurants', 'accommodations', 'events', 'agencies']; // Fallback
+  }
 };
 
 export const getTestimonialStats = async () => {
-  await delay(300);
-  
-  const total = mockTestimonials.length;
-  const averageRating = mockTestimonials.reduce((sum, item) => sum + item.rating, 0) / total;
-  const verified = mockTestimonials.filter(item => item.verified).length;
-  const experienceCount = new Set(mockTestimonials.map(item => item.experience)).size;
+  try {
+    // Buscar uma amostra grande para calcular estatísticas
+    const response = await getTestimonials({ limit: 1000 });
+    
+    const total = response.meta.total;
+    const averageRating = response.meta.averageRating;
+    const verified = response.data.filter(item => item.verified).length;
+    const experienceCount = new Set(response.data.map(item => item.experience).filter(Boolean)).size;
   
   return {
     total,
-    averageRating: Math.round(averageRating * 10) / 10,
+      averageRating,
     verified,
     experienceCount
   };
+  } catch (error) {
+    console.error('Erro ao buscar estatísticas de depoimentos:', error);
+    return {
+      total: 0,
+      averageRating: 0,
+      verified: 0,
+      experienceCount: 0
+    };
+  }
 };

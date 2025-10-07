@@ -1,73 +1,11 @@
-# ===============================================
-# ARQUIVO .env PARA PERSONALIZAÇÃO DO PORTAL
-# ===============================================
-# 
-# Copie este conteúdo para um arquivo chamado ".env"
-# na pasta packages/frontend/
-#
+# Spotify API Configuration
+# Para usar a API oficial do Spotify, você precisa:
+# 1. Criar uma conta de desenvolvedor no Spotify: https://developer.spotify.com/
+# 2. Criar uma aplicação e obter Client ID e Client Secret
+# 3. Configurar as variáveis abaixo
 
-# ===== CONFIGURAÇÕES DE LOGO CUSTOMIZADA =====
+VITE_SPOTIFY_CLIENT_ID=your_spotify_client_id_here
+VITE_SPOTIFY_CLIENT_SECRET=your_spotify_client_secret_here
 
-# Logo atual (que você já está vendo)
-VITE_CUSTOM_LOGO_URL=/images/teste.png
-
-# Nome do seu negócio/empresa
-VITE_BUSINESS_NAME=Viva Barra do Bugres
-
-# Mostrar nome junto com a logo? (true/false)
-VITE_SHOW_BUSINESS_NAME=false
-
-# ===== CONFIGURAÇÕES DE CORES PERSONALIZADAS =====
-
-# Cores primárias (usadas para botões principais, links, destaques)
-VITE_PRIMARY_COLOR=#ff6b35
-VITE_PRIMARY_LIGHT=#ff8a65
-VITE_PRIMARY_DARK=#e55a2b
-
-# Cores secundárias (usadas para header, navegação, fundos)
-VITE_SECONDARY_COLOR=#2c5f2d
-VITE_SECONDARY_LIGHT=#4a7c59
-VITE_SECONDARY_DARK=#1e3d1e
-
-# Cor de fundo padrão (opcional)
-VITE_BACKGROUND_COLOR=#ffffff
-
-# Cor do texto principal (opcional)
-VITE_TEXT_COLOR=#333333
-
-# ===============================================
-# EXEMPLOS DE USO:
-# ===============================================
-
-# 1. Esquema azul e branco (profissional):
-# VITE_PRIMARY_COLOR=#1976d2
-# VITE_PRIMARY_LIGHT=#42a5f5
-# VITE_PRIMARY_DARK=#1565c0
-# VITE_SECONDARY_COLOR=#424242
-# VITE_SECONDARY_LIGHT=#6d6d6d
-# VITE_SECONDARY_DARK=#1b1b1b
-
-# 2. Esquema verde e dourado (natural):
-# VITE_PRIMARY_COLOR=#4caf50
-# VITE_PRIMARY_LIGHT=#81c784
-# VITE_PRIMARY_DARK=#388e3c
-# VITE_SECONDARY_COLOR=#ff9800
-# VITE_SECONDARY_LIGHT=#ffb74d
-# VITE_SECONDARY_DARK=#f57c00
-
-# 3. Esquema roxo e rosa (moderno):
-# VITE_PRIMARY_COLOR=#9c27b0
-# VITE_PRIMARY_LIGHT=#ba68c8
-# VITE_PRIMARY_DARK=#7b1fa2
-# VITE_SECONDARY_COLOR=#e91e63
-# VITE_SECONDARY_LIGHT=#f06292
-# VITE_SECONDARY_DARK=#c2185b
-
-# 4. Para usar sua própria logo online:
-# VITE_CUSTOM_LOGO_URL=https://seusite.com/logo.png
-# VITE_BUSINESS_NAME=Sua Empresa
-# VITE_SHOW_BUSINESS_NAME=true
-
-# 5. Para mostrar apenas texto (sem logo):
-# (Não definir VITE_CUSTOM_LOGO_URL)
-# VITE_BUSINESS_NAME=Minha Empresa
+# API Base URL (opcional - para fallback)
+VITE_API_URL=http://localhost:3001

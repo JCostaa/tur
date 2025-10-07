@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import CustomThemeProvider from './theme/CustomThemeProvider';
+import { CityProvider } from './contexts/CityContext';
 import Home from './pages/Home';
 import Contact from './pages/contact';
 import TourDetail from './pages/tours/TourDetail';
@@ -22,6 +23,7 @@ import News from './pages/news/News';
 import NewsDetail from './pages/news/NewsDetail';
 import { Testimonials, TestimonialDetail } from './pages/testimonials';
 import ExperienceDetail from './pages/experience/ExperienceDetail';
+import { AllProvidersTours, ProviderTourDetail } from './pages/attractions';
 
 // Componente utilitário para zerar o scroll ao trocar de rota
 function ScrollToTop() {
@@ -46,9 +48,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <CustomThemeProvider>
-        <Router>
-          <ScrollToTop />
-          <Routes>
+        <CityProvider>
+          <Router>
+            <ScrollToTop />
+            <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<div>About Page</div>} />
             <Route path="/destination" element={<div>Destination Page</div>} />
@@ -58,6 +61,8 @@ function App() {
             <Route path="/accommodation/:id" element={<AccommodationDetail />} />
             <Route path="/restaurant/:id" element={<RestaurantDetail />} />
             <Route path="/all-tours" element={<AllTours />} />
+            <Route path="/all-providers-tours" element={<AllProvidersTours />} />
+            <Route path="/provider-tour/:id" element={<ProviderTourDetail />} />
             <Route path="/all-restaurants" element={<AllRestaurants />} />
             <Route path="/all-accommodation" element={<AllAccommodation />} />
             <Route path="/all-drivers" element={<AllDrivers />} />
@@ -77,7 +82,8 @@ function App() {
             <Route path="/experience/:id" element={<ExperienceDetail />} />
           </Routes>
         </Router>
-      </CustomThemeProvider>
+      </CityProvider>
+    </CustomThemeProvider>
     </QueryClientProvider>
   );
 }

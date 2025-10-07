@@ -37,26 +37,8 @@ const pulse = keyframes`
     opacity: 1;
   }
   50% {
-    transform: scale(1.05);
-    opacity: 0.8;
-  }
-`;
-
-const logoAnimation = keyframes`
-  0% {
-    transform: rotate(0deg) scale(1);
-  }
-  25% {
-    transform: rotate(5deg) scale(1.1);
-  }
-  50% {
-    transform: rotate(0deg) scale(1);
-  }
-  75% {
-    transform: rotate(-5deg) scale(1.1);
-  }
-  100% {
-    transform: rotate(0deg) scale(1);
+    transform: scale(1.02);
+    opacity: 0.9;
   }
 `;
 
@@ -65,16 +47,19 @@ const PreloaderContainer = styled(Box)<{ isVisible: boolean }>(({ isVisible }) =
   position: 'fixed',
   top: 0,
   left: 0,
-  width: '100%',
-  height: '100%',
+  width: '100vw',
+  height: '100vh',
   background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
   zIndex: 9999,
-  animation: isVisible ? `${fadeIn} 0.5s ease-out` : `${fadeOut} 0.8s ease-in forwards`,
+  animation: isVisible ? `${fadeIn} 0.6s ease-out` : `${fadeOut} 0.6s ease-in forwards`,
+  padding: theme.spacing(3),
+  minHeight: '100vh',
   
+  // Padrão de fundo mais sutil e elegante
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -82,123 +67,240 @@ const PreloaderContainer = styled(Box)<{ isVisible: boolean }>(({ isVisible }) =
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-    opacity: 0.3,
+    background: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.02"%3E%3Ccircle cx="30" cy="30" r="1"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+    opacity: 0.6,
+  },
+  
+  // Overlay moderno com gradiente radial
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.05) 0%, transparent 60%)',
+    pointerEvents: 'none',
+  },
+  
+  // Responsividade
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(2),
   },
 }));
 
 const LogoContainer = styled(Box)({
   position: 'relative',
   zIndex: 2,
-  marginBottom: theme.spacing(4),
-  animation: `${logoAnimation} 3s ease-in-out infinite`,
+  marginBottom: theme.spacing(6),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  animation: `${fadeIn} 1s ease-out 0.2s both`,
+  
+  // Responsividade
+  [theme.breakpoints.down('md')]: {
+    marginBottom: theme.spacing(4),
+  },
+  
+  [theme.breakpoints.down('sm')]: {
+    marginBottom: theme.spacing(3),
+  },
 });
 
-const LogoIcon = styled(Box)({
-  width: 160,
-  height: 160,
-  background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
-  borderRadius: '50%',
+const LogoWrapper = styled(Box)({
+  position: 'relative',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  padding: theme.spacing(3),
+  background: 'rgba(255, 255, 255, 0.08)',
+  borderRadius: '24px',
+  backdropFilter: 'blur(20px)',
+  border: '1px solid rgba(255, 255, 255, 0.12)',
   boxShadow: `
-    0 30px 100px rgba(0,0,0,0.3),
-    0 15px 50px rgba(0,0,0,0.2),
-    inset 0 4px 8px rgba(255,255,255,0.9),
-    0 0 0 2px rgba(255,255,255,0.9),
-    0 0 40px rgba(255,255,255,0.3)
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15)
   `,
-  fontSize: '4rem',
-  color: theme.palette.primary.main,
-  fontWeight: 'bold',
-  animation: `${pulse} 2s ease-in-out infinite`,
-  border: '8px solid rgba(255,255,255,0.95)',
-  position: 'relative',
-  overflow: 'hidden',
+  animation: `${pulse} 3s ease-in-out infinite`,
   
+  // Efeito de brilho sutil
   '&::before': {
     content: '""',
     position: 'absolute',
-    top: '-12px',
-    left: '-12px',
-    right: '-12px',
-    bottom: '-12px',
-    borderRadius: '50%',
-    background: 'conic-gradient(from 0deg, rgba(255,255,255,0.4), transparent, rgba(255,255,255,0.2), transparent, rgba(255,255,255,0.4))',
-    animation: `${logoAnimation} 4s linear infinite`,
-    zIndex: -1,
-  },
-  
-  '&::after': {
-    content: '""',
-    position: 'absolute',
-    top: '15%',
-    left: '15%',
-    width: '35%',
-    height: '35%',
-    borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.3) 50%, transparent 70%)',
-    opacity: 0.7,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: '24px',
+    background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%)',
+    opacity: 0.6,
+    pointerEvents: 'none',
   },
   
   '& img': {
-    borderRadius: '8px',
-    maxWidth: '70%',
-    maxHeight: '70%',
+    maxWidth: '120px',
+    maxHeight: '80px',
     objectFit: 'contain',
-    filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.2))',
-  }
+    filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.1))',
+    zIndex: 1,
+    position: 'relative',
+  },
+  
+  // Responsividade
+  [theme.breakpoints.down('md')]: {
+    padding: theme.spacing(2.5),
+    borderRadius: '20px',
+    
+    '& img': {
+      maxWidth: '100px',
+      maxHeight: '70px',
+    },
+  },
+  
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(2),
+    borderRadius: '16px',
+    
+    '& img': {
+      maxWidth: '90px',
+      maxHeight: '60px',
+    },
+  },
 });
 
 const ContentContainer = styled(Box)({
   position: 'relative',
   zIndex: 2,
   textAlign: 'center',
-  maxWidth: 400,
-  padding: theme.spacing(0, 3),
+  maxWidth: 500,
+  width: '100%',
+  padding: theme.spacing(0, 4),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: theme.spacing(2),
+  
+  // Responsividade
+  [theme.breakpoints.down('md')]: {
+    maxWidth: 400,
+    padding: theme.spacing(0, 3),
+    gap: theme.spacing(1.5),
+  },
+  
+  [theme.breakpoints.down('sm')]: {
+    maxWidth: 320,
+    padding: theme.spacing(0, 2),
+    gap: theme.spacing(1),
+  },
 });
 
 const Title = styled(Typography)({
   fontSize: '2rem',
   fontWeight: 700,
   color: 'white',
-  marginBottom: theme.spacing(2),
   fontFamily: '"Playfair Display", serif',
   animation: `${fadeIn} 1s ease-out 0.5s both`,
+  textShadow: '0 2px 12px rgba(0,0,0,0.4)',
+  letterSpacing: '0.8px',
+  textAlign: 'center',
+  
+  // Responsividade
+  [theme.breakpoints.down('md')]: {
+    fontSize: '1.7rem',
+    letterSpacing: '0.6px',
+  },
+  
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1.5rem',
+    letterSpacing: '0.4px',
+  },
 });
 
 const Subtitle = styled(Typography)({
   fontSize: '1.1rem',
-  color: 'rgba(255,255,255,0.9)',
-  marginBottom: theme.spacing(4),
+  color: 'rgba(255,255,255,0.92)',
   lineHeight: 1.6,
   animation: `${fadeIn} 1s ease-out 0.8s both`,
+  textShadow: '0 1px 6px rgba(0,0,0,0.25)',
+  fontWeight: 400,
+  textAlign: 'center',
+  maxWidth: '400px',
+  
+  // Responsividade
+  [theme.breakpoints.down('md')]: {
+    fontSize: '1rem',
+    maxWidth: '350px',
+  },
+  
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '0.95rem',
+    lineHeight: 1.5,
+    maxWidth: '280px',
+  },
 });
 
 const ProgressContainer = styled(Box)({
   width: '100%',
-  maxWidth: 300,
+  maxWidth: 320,
   animation: `${fadeIn} 1s ease-out 1.1s both`,
+  position: 'relative',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: theme.spacing(2),
+  
+  // Responsividade
+  [theme.breakpoints.down('md')]: {
+    maxWidth: 280,
+  },
+  
+  [theme.breakpoints.down('sm')]: {
+    maxWidth: 240,
+    gap: theme.spacing(1.5),
+  },
 });
 
 const StyledLinearProgress = styled(LinearProgress)({
-  height: 6,
-  borderRadius: 3,
-  backgroundColor: 'rgba(255,255,255,0.2)',
+  width: '100%',
+  height: 4,
+  borderRadius: 8,
+  backgroundColor: 'rgba(255,255,255,0.15)',
+  boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)',
   
   '& .MuiLinearProgress-bar': {
     backgroundColor: 'white',
-    borderRadius: 3,
-    boxShadow: '0 0 10px rgba(255,255,255,0.5)',
+    borderRadius: 8,
+    boxShadow: '0 0 12px rgba(255,255,255,0.6), 0 2px 4px rgba(255,255,255,0.3)',
+    position: 'relative',
+    
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
+      borderRadius: 8,
+    },
   },
 });
 
 const LoadingText = styled(Typography)({
   fontSize: '0.9rem',
-  color: 'rgba(255,255,255,0.8)',
-  marginTop: theme.spacing(2),
+  color: 'rgba(255,255,255,0.88)',
   animation: `${pulse} 1.5s ease-in-out infinite`,
+  fontWeight: 400,
+  letterSpacing: '0.4px',
+  textAlign: 'center',
+  
+  // Responsividade
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '0.85rem',
+    letterSpacing: '0.3px',
+  },
 });
 
 const DotAnimation = styled('span')({
@@ -261,12 +363,12 @@ const Preloader: React.FC<PreloaderProps> = ({ isLoading }) => {
   return (
     <PreloaderContainer isVisible={isLoading}>
       <LogoContainer>
-        <LogoIcon>
+        <LogoWrapper>
           <CustomLogo 
-            height={80} 
+            height={60} 
             variant="preloader" 
           />
-        </LogoIcon>
+        </LogoWrapper>
       </LogoContainer>
 
       <ContentContainer>

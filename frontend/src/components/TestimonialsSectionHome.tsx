@@ -8,15 +8,15 @@ import { useAutoSlide } from '../hooks/useAutoSlide';
 interface TestimonialItem {
   id: number;
   name: string;
-  location: string;
+  location?: string;
   occupation?: string;
   rating: number;
-  title: string;
+  title?: string;
   content: string;
   image?: string;
   avatar?: string;
-  visitDate: string;
-  experience: string;
+  visitDate?: string;
+  experience?: string;
   verified?: boolean;
   helpful?: number;
 }
@@ -324,9 +324,7 @@ const TestimonialsSectionHome: React.FC<TestimonialsSectionHomeProps> = ({
     },
   };
 
-  if (!testimonials.length && !isLoading) {
-    return null;
-  }
+  // Sempre renderiza a seção, mesmo sem dados
 
   return (
     <div style={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
@@ -357,7 +355,7 @@ const TestimonialsSectionHome: React.FC<TestimonialsSectionHomeProps> = ({
         <div style={{ padding: '0 20px' }}>
           <LoadingSkeleton />
         </div>
-      ) : (
+      ) : testimonials.length > 0 ? (
         <>
           {/* Setas de navegação Mobile - acima dos cards */}
           {isMobile && testimonials.length > cardsPerView && (
@@ -441,10 +439,12 @@ const TestimonialsSectionHome: React.FC<TestimonialsSectionHomeProps> = ({
                     </TestimonialAvatar>
                     <TestimonialUserInfo>
                       <TestimonialName>{testimonial.name}</TestimonialName>
-                      <TestimonialLocation>
-                        <LocationOn style={{ fontSize: 14 }} />
-                        <span>{testimonial.location}</span>
-                      </TestimonialLocation>
+                      {testimonial.location && (
+                        <TestimonialLocation>
+                          <LocationOn style={{ fontSize: 14 }} />
+                          <span>{testimonial.location}</span>
+                        </TestimonialLocation>
+                      )}
                       {testimonial.occupation && (
                         <TestimonialOccupation>{testimonial.occupation}</TestimonialOccupation>
                       )}
@@ -464,17 +464,19 @@ const TestimonialsSectionHome: React.FC<TestimonialsSectionHomeProps> = ({
                     )}
                   </TestimonialRating>
 
-                  <TestimonialTitle>{testimonial.title}</TestimonialTitle>
+                  {testimonial.title && (
+                    <TestimonialTitle>{testimonial.title}</TestimonialTitle>
+                  )}
                   <TestimonialText>{testimonial.content}</TestimonialText>
 
                   <TestimonialFooter>
                     <TestimonialMeta>
                       <TestimonialMetaItem>
                         <AccessTime style={{ fontSize: 14 }} />
-                        <span>{formatDate(testimonial.visitDate)}</span>
+                        <span>{testimonial.visitDate ? formatDate(testimonial.visitDate) : 'Data não informada'}</span>
                       </TestimonialMetaItem>
                       <TestimonialMetaItem>
-                        <span>{getExperienceLabel(testimonial.experience)}</span>
+                        <span>{testimonial.experience ? getExperienceLabel(testimonial.experience) : 'Experiência'}</span>
                       </TestimonialMetaItem>
                     </TestimonialMeta>
                   </TestimonialFooter>
@@ -484,6 +486,30 @@ const TestimonialsSectionHome: React.FC<TestimonialsSectionHomeProps> = ({
             </div>
           </CarouselContainer>
         </>
+      ) : (
+        // Estado vazio - seguindo o padrão das agências
+        <div style={{ 
+          textAlign: 'center', 
+          padding: '80px 20px',
+          maxWidth: '600px',
+          margin: '0 auto'
+        }}>
+          <h2 style={{ 
+            fontSize: '2rem',
+            fontWeight: 600,
+            color: '#9e9e9e',
+            marginBottom: '16px'
+          }}>
+            Nenhum depoimento encontrado
+          </h2>
+          <p style={{ 
+            fontSize: '1.1rem',
+            color: '#757575',
+            marginBottom: '32px'
+          }}>
+            Não há depoimentos disponíveis no momento.
+          </p>
+        </div>
       )}
 
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>

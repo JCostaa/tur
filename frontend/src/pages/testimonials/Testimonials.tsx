@@ -18,7 +18,6 @@ import {
   Rating,
   Button,
   IconButton,
-  Skeleton
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { 
@@ -26,9 +25,7 @@ import {
   Star, 
   Filter, 
   AccessTime, 
-  Person, 
   LocationOn,
-  Visibility,
   Share,
   ThumbUp,
   VerifiedUser,
@@ -36,7 +33,7 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout';
-import { getTestimonials, getTestimonialExperiences, getTestimonialStats } from '../../services/testimonials';
+import { getTestimonials, getTestimonialExperiences } from '../../services/testimonials';
 import type { TestimonialFilters } from '../../services/testimonials';
 import { theme } from '../../theme/theme';
 
@@ -520,7 +517,7 @@ const Testimonials: React.FC = () => {
     navigate(`/testimonials/${id}`);
   };
 
-  const handleShare = (testimonial: any, event: React.MouseEvent) => {
+  const handleShare = (testimonial: { id: number; title?: string; content: string }, event: React.MouseEvent) => {
     event.stopPropagation();
     if (navigator.share) {
       navigator.share({
@@ -684,10 +681,10 @@ const Testimonials: React.FC = () => {
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <AccessTime />
-                            <Typography>{formatDate(featuredTestimonial.visitDate)}</Typography>
+                            <Typography>{featuredTestimonial.visitDate ? formatDate(featuredTestimonial.visitDate) : 'Data não informada'}</Typography>
                           </Box>
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <Typography>{getExperienceLabel(featuredTestimonial.experience)}</Typography>
+                            <Typography>{featuredTestimonial.experience ? getExperienceLabel(featuredTestimonial.experience) : 'Experiência'}</Typography>
                           </Box>
                           {featuredTestimonial.verified && (
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'success.main' }}>
@@ -733,10 +730,10 @@ const Testimonials: React.FC = () => {
                           <MetadataLeft>
                             <MetadataItem>
                               <AccessTime style={{ fontSize: 14 }} />
-                              <span>{formatDate(testimonial.visitDate)}</span>
+                              <span>{testimonial.visitDate ? formatDate(testimonial.visitDate) : 'Data não informada'}</span>
                             </MetadataItem>
                             <MetadataItem>
-                              <span>{getExperienceLabel(testimonial.experience)}</span>
+                              <span>{testimonial.experience ? getExperienceLabel(testimonial.experience) : 'Experiência'}</span>
                             </MetadataItem>
                           </MetadataLeft>
                           <MetadataRight>

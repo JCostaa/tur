@@ -11,6 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Slide from '@mui/material/Slide';
+import { getVarMarketplaceUrl } from '../../utils/varMarketplace';
 
 const BackgroundImage = styled(Box)(({ theme }) => ({
   width: '100%',
@@ -465,7 +466,8 @@ const TourDetail: React.FC = () => {
             </ProviderBox>
           )}
           <ReserveButton sx={{ mt: 2 }} onClick={() => {
-            window.open(`https://www.skoobtur.com/tour/${tour.slug}`, '_blank');
+            const baseUrl = getVarMarketplaceUrl().replace('/municipio/', '');
+            window.open(`${baseUrl}/tour/${tour.slug}`, '_blank');
           }}>Reservar Agora</ReserveButton>
         </InfoCard>
       </Container>

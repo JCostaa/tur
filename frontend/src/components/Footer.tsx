@@ -1,11 +1,11 @@
 
-import { Box, Container, Typography, Link, Button } from '@mui/material';
+import { Box, Container, Typography, Link, Button, Tooltip, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { 
   Facebook as FacebookIcon, 
-  Twitter as TwitterIcon, 
   Instagram as InstagramIcon, 
   LinkedIn as LinkedInIcon,
+  YouTube as YouTubeIcon,
   Home as HomeIcon,
   Email as EmailIcon,
   Phone as PhoneIcon,
@@ -16,8 +16,10 @@ import {
   FaCcMastercard, 
   FaCcPaypal
 } from 'react-icons/fa6';
-import { SiPix } from 'react-icons/si';
+import { SiPix, SiTiktok } from 'react-icons/si';
 import brandColors from '../config/colors';
+import { useCity } from '../hooks/useCity';
+import { getVarMarketplaceUrl, getCityName } from '../utils/varMarketplace';
 
 // Importe os logos disponíveis. Use placeholders para os que não existem.
 import logoCentelha from '../../public/images/footer/centelha.png'; // Placeholder
@@ -65,21 +67,24 @@ const FooterBottomSection = styled(Box)({
   borderTop: '1px solid #34495E',
 });
 
-const SocialIcon = styled(Box)({
+const SocialIcon = styled(IconButton)<{ disabled?: boolean }>(({ disabled }) => ({
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
   width: 40,
   height: 40,
-  backgroundColor: '#3498DB',
+  backgroundColor: disabled ? '#7F8C8D' : '#3498DB',
   borderRadius: '50%',
-  margin: '0 8px',
-  cursor: 'pointer',
+  cursor: disabled ? 'not-allowed' : 'pointer',
   transition: 'background-color 0.3s',
   '&:hover': {
-    backgroundColor: '#2980B9',
+    backgroundColor: disabled ? '#7F8C8D' : '#2980B9',
   },
-});
+  '&:disabled': {
+    backgroundColor: '#7F8C8D',
+    cursor: 'not-allowed',
+  },
+}));
 
 const FooterLink = styled(Link)({
   color: 'white',
@@ -107,7 +112,35 @@ const LanguageButton = styled(Button)({
 
 
 
-const Footer: React.FC = () => (
+const Footer: React.FC = () => {
+  const { currentCity } = useCity();
+  const touristSupport = currentCity?.tourist_support_agency;
+
+  // Função para renderizar ícone social com tooltip
+  const renderSocialIcon = (
+    icon: React.ReactNode,
+    url: string | null,
+    platform: string
+  ) => {
+    const isDisabled = !url;
+    const tooltipTitle = isDisabled ? `${platform} não informado` : `Visitar ${platform}`;
+
+    return (
+      <Tooltip title={tooltipTitle} arrow>
+        <span>
+          <SocialIcon
+            disabled={isDisabled}
+            onClick={() => !isDisabled && window.open(url, '_blank')}
+            aria-label={`${platform} ${isDisabled ? '(não disponível)' : ''}`}
+          >
+            {icon}
+          </SocialIcon>
+        </span>
+      </Tooltip>
+    );
+  };
+
+  return (
   <>
     {/* Footer original com logos */}
     <Box component="footer" sx={{
@@ -168,47 +201,79 @@ const Footer: React.FC = () => (
           gap: 4,
           flexWrap: 'wrap'
         }}>
-          {/* Secretaria Adjunta de Turismo */}
+          {/* Informações de Suporte Turístico */}
           <Box sx={{ flex: { xs: '1', md: '0 0 300px' }, mb: { xs: 4, md: 0 } }}>
             <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2, color: 'white' }}>
-              Secretaria Adjunta de Turismo
+              {touristSupport?.name || 'Suporte Turístico'}
             </Typography>
             <Box sx={{ mb: 2 }}>
+              {/* Endereço */}
               <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 1 }}>
                 <HomeIcon sx={{ fontSize: 16, mr: 1, mt: 0.5 }} />
                 <Typography variant="body2">
-                  Rua Voluntários da Pátria, 118 - Centro Norte,<br />
-                  Cuiabá - MT, 78005-180
+                  {touristSupport?.address || 'Endereço não informado'}
                 </Typography>
               </Box>
+              
+              {/* Email */}
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                 <EmailIcon sx={{ fontSize: 16, mr: 1 }} />
                 <Typography variant="body2">
-                  contato@descubramatogrosso.com.br
+                  {touristSupport?.email || 'Email não informado'}
                 </Typography>
               </Box>
+              
+              {/* Telefone */}
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                 <PhoneIcon sx={{ fontSize: 16, mr: 1 }} />
-                <Typography variant="body2">+55 (65) 3613-9300</Typography>
+                <Typography variant="body2">
+                  {touristSupport?.phone_number || 'Telefone não informado'}
+                </Typography>
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <PrintIcon sx={{ fontSize: 16, mr: 1 }} />
-                <Typography variant="body2">+55 (65) 3613-9300</Typography>
-              </Box>
+              
+              {/* Fax (se disponível) */}
+              {touristSupport?.phone_number && (
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <PrintIcon sx={{ fontSize: 16, mr: 1 }} />
+                  <Typography variant="body2">
+                    {touristSupport.phone_number}
+                  </Typography>
+                </Box>
+              )}
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <SocialIcon>
-                <FacebookIcon sx={{ fontSize: 20, color: 'white' }} />
-              </SocialIcon>
-              <SocialIcon>
-                <TwitterIcon sx={{ fontSize: 20, color: 'white' }} />
-              </SocialIcon>
-              <SocialIcon>
-                <InstagramIcon sx={{ fontSize: 20, color: 'white' }} />
-              </SocialIcon>
-              <SocialIcon>
-                <LinkedInIcon sx={{ fontSize: 20, color: 'white' }} />
-              </SocialIcon>
+            
+            {/* Redes Sociais */}
+            <Box sx={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(3, 1fr)', 
+              gap: 1,
+              maxWidth: '150px'
+            }}>
+              {renderSocialIcon(
+                <FacebookIcon sx={{ fontSize: 20, color: 'white' }} />,
+                touristSupport?.facebook || null,
+                'Facebook'
+              )}
+              {renderSocialIcon(
+                <InstagramIcon sx={{ fontSize: 20, color: 'white' }} />,
+                touristSupport?.instagram || null,
+                'Instagram'
+              )}
+              {renderSocialIcon(
+                <YouTubeIcon sx={{ fontSize: 20, color: 'white' }} />,
+                touristSupport?.youtube || null,
+                'YouTube'
+              )}
+              {renderSocialIcon(
+                <LinkedInIcon sx={{ fontSize: 20, color: 'white' }} />,
+                touristSupport?.linkedin || null,
+                'LinkedIn'
+              )}
+              {renderSocialIcon(
+                <SiTiktok size={20} color="white" />,
+                touristSupport?.tiktok || null,
+                'TikTok'
+              )}
             </Box>
           </Box>
 
@@ -217,11 +282,14 @@ const Footer: React.FC = () => (
             <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2, color: 'white' }}>
               Menu
             </Typography>
-            <FooterLink href="/services">Serviços</FooterLink>
-            <FooterLink href="/experiences">Experiências</FooterLink>
-            <FooterLink href="#">Pacotes</FooterLink>
+            <FooterLink href="/">Início</FooterLink>
+            <FooterLink href="/#servicos">Serviços</FooterLink>
+            <FooterLink href="/#experiencias">Experiências</FooterLink>
+            <FooterLink href="/#eventos">Eventos</FooterLink>
             <FooterLink href="/news">Notícias</FooterLink>
-            <FooterLink href="/contact">Contato</FooterLink>
+            <FooterLink href="/#promocoes">Promoções</FooterLink>
+            <FooterLink href="/#provedores">Fornecedores</FooterLink>
+            <FooterLink href={getVarMarketplaceUrl()} target="_blank" rel="noopener noreferrer">Var Marketplace</FooterLink>
           </Box>
 
           {/* Suporte */}
@@ -308,7 +376,7 @@ const Footer: React.FC = () => (
           gap: 2
         }}>
           <Typography variant="body2" sx={{ color: '#B0B0B0' }}>
-            © Descubra Mato Grosso. All right reserved.
+            © Viva {getCityName()}. All right reserved.
           </Typography>
           <Typography variant="body2" sx={{ color: '#B0B0B0' }}>
             Desenvolvido Por <Link href="https://bizmd.com.br/2020/" sx={{ color: '#3498DB' }}>BIZ Marketing Digital</Link>. 
@@ -318,6 +386,7 @@ const Footer: React.FC = () => (
       </Container>
     </FooterBottomSection>
   </>
-);
+  );
+};
 
 export default Footer; 

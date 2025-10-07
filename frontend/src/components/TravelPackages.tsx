@@ -56,6 +56,39 @@ const PackagesGrid = styled(Box)<{ cardsPerView: number; showArrows?: boolean }>
   },
 }));
 
+const CarouselContainer = styled(Box)(({ theme }) => ({
+  position: 'relative',
+  overflow: 'hidden',
+  width: '100%',
+  // Mobile: ajustes específicos
+  [theme.breakpoints.down('md')]: {
+    padding: theme.spacing(0, 1),
+  },
+}));
+
+const CarouselTrack = styled(Box)<{ translateX: number }>(({ theme, translateX }) => ({
+  display: 'flex',
+  transition: 'transform 0.6s ease-in-out',
+  transform: `translateX(${translateX}px)`,
+  gap: theme.spacing(4),
+  willChange: 'transform',
+  // Mobile: ajustes específicos
+  [theme.breakpoints.down('md')]: {
+    gap: theme.spacing(2),
+  },
+}));
+
+const CarouselCard = styled(Box)(({ theme }) => ({
+  minWidth: 350,
+  maxWidth: 350,
+  flexShrink: 0,
+  // Mobile: ajustes específicos
+  [theme.breakpoints.down('md')]: {
+    minWidth: 280,
+    maxWidth: 280,
+  },
+}));
+
 const PackageCard = styled(Card)(({ theme }) => ({
   position: 'relative',
   background: '#fff',
@@ -140,17 +173,19 @@ const BadgeBase = styled(Box)(({ theme }) => ({
   },
 }));
 
-const RatingBadge = styled(BadgeBase)(({ theme }) => ({
+const RatingBadge = styled(BadgeBase)<{ hasFeatured?: boolean }>(({ theme, hasFeatured }) => ({
   position: 'absolute',
   top: 18,
-  left: 18,
+  left: hasFeatured ? 'auto' : 18,
+  right: hasFeatured ? 18 : 'auto',
   color: '#222',
   background: alpha('#fff', 0.98),
   zIndex: 3,
   // Mobile: posicionamento ajustado
   [theme.breakpoints.down('md')]: {
     top: 12,
-    left: 12,
+    left: hasFeatured ? 'auto' : 12,
+    right: hasFeatured ? 12 : 'auto',
   },
 }));
 
@@ -179,6 +214,28 @@ const PeopleBadge = styled(BadgeBase)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
     bottom: 12,
     left: 12,
+  },
+}));
+
+const FeaturedBadge = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  top: 18,
+  left: 18,
+  background: '#d9534f', // Cor vermelha/terracota como na imagem
+  color: '#fff',
+  borderRadius: 20,
+  padding: theme.spacing(0.5, 1.5),
+  fontWeight: 600,
+  fontSize: 14,
+  zIndex: 4,
+  boxShadow: '0 2px 8px rgba(217,83,79,0.3)',
+  // Mobile: ajustes específicos
+  [theme.breakpoints.down('md')]: {
+    top: 12,
+    left: 12,
+    padding: theme.spacing(0.4, 1.2),
+    fontSize: 12,
+    borderRadius: 16,
   },
 }));
 
@@ -281,24 +338,45 @@ const LocationIconStyled = styled(LocationIcon)(() => ({
   fontSize: 16,
 }));
 
-// Container para setinhas mobile - acima dos cards
-const MobileArrowsContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: theme.spacing(2),
-  paddingLeft: theme.spacing(2),
-  paddingRight: theme.spacing(2),
-  [theme.breakpoints.up('md')]: {
-    display: 'none', // Esconde no desktop
-  },
-}));
+// Função para formatar localização sem duplicações
+const formatLocation = (location: string): string => {
+  if (!location) return 'Local não informado';
+  
+  // Remove vírgulas extras e espaços
+  const cleanLocation = location.replace(/,\s*,/g, ',').replace(/,\s*$/, '').trim();
+  
+  // Se contém "Barra do Bugres" e "Mato Grosso", formata especificamente
+  if (cleanLocation.includes('Barra do Bugres') && cleanLocation.includes('Mato Grosso')) {
+    return 'Barra do Bugres - Mato Grosso';
+  }
+  
+  // Para outros casos, remove duplicações comuns
+  const parts = cleanLocation.split(',').map(part => part.trim()).filter(Boolean);
+  const uniqueParts = [...new Set(parts)];
+  
+  return uniqueParts.join(' - ');
+};
 
-const ArrowCounter = styled(Typography)(() => ({
-  fontSize: '0.9rem',
-  color: '#666',
-  fontWeight: 500,
-}));
+// Função para calcular desconto e formatar preços
+const calculateDiscount = (price: string, salePrice: string): { discount: number; displayPrice: string; originalPrice: string } => {
+  // Extrair números dos preços (remover R$, espaços, etc.)
+  const priceNum = parseFloat(price.replace(/[^\d,]/g, '').replace(',', '.'));
+  const salePriceNum = parseFloat(salePrice.replace(/[^\d,]/g, '').replace(',', '.'));
+  
+  // Só exibe desconto se sale_price for maior que zero e menor que price
+  if (isNaN(priceNum) || isNaN(salePriceNum) || salePriceNum <= 0 || priceNum <= salePriceNum) {
+    return { discount: 0, displayPrice: price, originalPrice: '' };
+  }
+  
+  const discount = Math.round(((priceNum - salePriceNum) / priceNum) * 100);
+  
+  return {
+    discount,
+    displayPrice: salePrice,
+    originalPrice: price
+  };
+};
+
 
 
 // Adicionar tipos para as props
@@ -309,10 +387,12 @@ interface TravelPackage {
   rating: number;
   duration: string;
   price: string;
+  sale_price?: string; // Preço de promoção
   image: string;
   people: number;
   description: string;
   tags?: string[]; // Adicionar tags
+  is_featured?: boolean; // Indica se o pacote é destaque
 }
 
 interface TravelPackagesProps {
@@ -339,6 +419,7 @@ const defaultPackages = [
     people: 2,
     description: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt nemo quia quae illum aperiam fugiat voluptatem repellat',
     tags: ['Aves', 'Natureza', 'Fotografia'],
+    is_featured: true, // Exemplo de pacote em destaque
   },
   {
     id: 2,
@@ -351,6 +432,7 @@ const defaultPackages = [
     people: 2,
     description: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt nemo quia quae illum aperiam fugiat voluptatem repellat',
     tags: ['Cultura', 'Comunidade', 'História'],
+    is_featured: false,
   },
   {
     id: 3,
@@ -363,6 +445,7 @@ const defaultPackages = [
     people: 2,
     description: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt nemo quia quae illum aperiam fugiat voluptatem repellat',
     tags: ['Passeio', 'Rio', 'Natureza'],
+    is_featured: false,
   },
 ];
 
@@ -397,6 +480,13 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
     enabled: enableAutoSlide && showArrows && packages.length > cardsPerView
   });
 
+  // Calcular o translateX para o efeito de scroll suave
+  const cardWidth = isMobile ? 280 : 350;
+  const gap = isMobile ? 16 : 32; // theme.spacing(2) = 16px, theme.spacing(4) = 32px
+  const translateX = showArrows ? -(startIndex * (cardWidth + gap)) : 0;
+
+
+
   const handleCardClick = (pkg: TravelPackage) => {
     if (typeof onCardClick === 'function') {
       onCardClick(pkg);
@@ -409,51 +499,6 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
     }
   };
 
-  // Estilos para as setas - desktop: lateral, mobile: acima
-  const arrowStyleDesktop = {
-    position: 'absolute' as const,
-    top: '50%',
-    transform: 'translateY(-50%)',
-    zIndex: 10,
-    background: '#fff',
-    border: 'none',
-    borderRadius: '50%',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
-    width: 40,
-    height: 40,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    fontSize: 24,
-    color: theme.palette.primary.main,
-    opacity: 0.95,
-    transition: 'all 0.2s ease',
-    '&:hover': {
-      transform: 'translateY(-50%) scale(1.1)',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
-    },
-  };
-
-  const arrowStyleMobile = {
-    background: '#fff',
-    border: 'none',
-    borderRadius: '50%',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
-    width: 48,
-    height: 48,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    fontSize: 28,
-    color: theme.palette.primary.main,
-    transition: 'all 0.2s ease',
-    '&:hover': {
-      transform: 'scale(1.05)',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
-    },
-  };
 
   return (
     <SectionWrapper style={{ position: 'relative' }}>
@@ -482,54 +527,228 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
           </>
         )}
 
-        {/* Setas de navegação Mobile - acima dos cards */}
-        {showArrows && isMobile && (
-          <MobileArrowsContainer>
+        {/* Setas de navegação - acima dos cards */}
+        {showArrows && (
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            gap: 2, 
+            marginBottom: 3 
+          }}>
             <button
               aria-label="Voltar"
-              style={arrowStyleMobile}
+              style={{
+                background: '#fff',
+                border: 'none',
+                borderRadius: '50%',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+                width: 40,
+                height: 40,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: canGoBack ? 'pointer' : 'not-allowed',
+                fontSize: 18,
+                color: canGoBack ? theme.palette.primary.main : '#ccc',
+                opacity: canGoBack ? 0.95 : 0.5,
+                transition: 'all 0.2s ease',
+              }}
               onClick={handlePrev}
               disabled={!canGoBack}
+              onMouseEnter={(e) => {
+                if (canGoBack) {
+                  e.currentTarget.style.transform = 'scale(1.1)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.18)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (canGoBack) {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+                }
+              }}
             >
               &#8592;
             </button>
-            <ArrowCounter>
-              {startIndex + 1} de {packages.length}
-            </ArrowCounter>
+            
+            <Box sx={{ 
+              fontSize: 14, 
+              color: '#666', 
+              fontWeight: 500,
+              minWidth: 80,
+              textAlign: 'center'
+            }}>
+              {Math.floor(startIndex / cardsPerView) + 1} de {Math.ceil(packages.length / cardsPerView)}
+            </Box>
+            
             <button
               aria-label="Avançar"
-              style={arrowStyleMobile}
+              style={{
+                background: '#fff',
+                border: 'none',
+                borderRadius: '50%',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+                width: 40,
+                height: 40,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: canGoForward ? 'pointer' : 'not-allowed',
+                fontSize: 18,
+                color: canGoForward ? theme.palette.primary.main : '#ccc',
+                opacity: canGoForward ? 0.95 : 0.5,
+                transition: 'all 0.2s ease',
+              }}
               onClick={handleNext}
               disabled={!canGoForward}
+              onMouseEnter={(e) => {
+                if (canGoForward) {
+                  e.currentTarget.style.transform = 'scale(1.1)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.18)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (canGoForward) {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+                }
+              }}
             >
               &#8594;
             </button>
-          </MobileArrowsContainer>
-        )}
-
-        {/* Setas de navegação Desktop - laterais */}
-        {showArrows && !isMobile && canGoBack && (
-          <button
-            aria-label="Voltar"
-            style={{ ...arrowStyleDesktop, left: 100 }}
-            onClick={handlePrev}
-            disabled={!canGoBack}
-          >
-            &#8592;
-          </button>
-        )}
-        {showArrows && !isMobile && canGoForward && (
-          <button
-            aria-label="Avançar"
-            style={{ ...arrowStyleDesktop, right: 100 }}
-            onClick={handleNext}
-            disabled={!canGoForward}
-          >
-            &#8594;
-          </button>
+          </Box>
         )}
 
 
+        {showArrows ? (
+          <CarouselContainer>
+            <CarouselTrack translateX={translateX}>
+              {packages.map((pkg: TravelPackage, index: number) => (
+                <CarouselCard key={pkg.id}>
+                  <PackageCard
+                    className="animate-zoomIn hover-from-left"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                    onClick={() => handleCardClick(pkg)}
+                  >
+                    <ImageContainer>
+                      {pkg.image && (
+                        <PackageImage
+                          src={pkg.image}
+                          alt={pkg.title}
+                          className="package-image"
+                        />
+                      )}
+                      <ImageGradient />
+                      {pkg.is_featured && (
+                        <FeaturedBadge>
+                          Destaque
+                        </FeaturedBadge>
+                      )}
+                      <RatingBadge className="rating-badge" hasFeatured={pkg.is_featured}>
+                        <StarIconStyled style={{ color: '#FFD700', fontSize: 15, marginRight: 3 }} />
+                        <Typography variant="body2" sx={{ fontWeight: 600, fontSize: 13 }}>
+                          {pkg.rating}
+                        </Typography>
+                      </RatingBadge>
+                      <DurationBadge className="package-overlay">
+                        <Typography variant="body2" sx={{ fontWeight: 600, fontSize: 13 }}>
+                          {pkg.duration}
+                        </Typography>
+                      </DurationBadge>
+                      {!hidePeopleAndPrice && (
+                        <PeopleBadge>
+                          <span role="img" aria-label="pessoas">👥</span> {pkg.people} Pessoas
+                        </PeopleBadge>
+                      )}
+                    </ImageContainer>
+                    <CardContentStyled>
+                      <PackageTitle>
+                        {pkg.title}
+                      </PackageTitle>
+                      <PackageLocation>
+                        <LocationIconStyled />
+                        <Typography variant="body2">
+                          {formatLocation(pkg.location)}
+                        </Typography>
+                      </PackageLocation>
+                      {/* Tags como chips/badges */}
+                      {pkg.tags && Array.isArray(pkg.tags) && pkg.tags.length > 0 && (
+                        <Box sx={{ 
+                          display: 'grid', 
+                          gridTemplateColumns: '1fr 1fr', 
+                          gap: 0.5, 
+                          mb: 1 
+                        }}>
+                          {pkg.tags.slice(0, 5).map((tag: string, idx: number) => (
+                            <Box key={idx} sx={{
+                              background: '#e0e0e0',
+                              color: '#333',
+                              borderRadius: 12,
+                              px: 1.5,
+                              py: 0.2,
+                              fontSize: 12,
+                              fontWeight: 500,
+                              display: 'inline-block',
+                              textAlign: 'center',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap'
+                            }}>{tag}</Box>
+                          ))}
+                        </Box>
+                      )}
+                      <PackageDescription>
+                        {pkg.description}
+                      </PackageDescription>
+                      {!hidePeopleAndPrice && (
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+                          {pkg.sale_price && calculateDiscount(pkg.price, pkg.sale_price).discount > 0 ? (
+                            <>
+                              <PackagePrice sx={{ color: theme.palette.primary.main }}>
+                                {pkg.sale_price}
+                              </PackagePrice>
+                              <Box sx={{ 
+                                background: '#ff4444', 
+                                color: '#fff', 
+                                padding: '2px 6px', 
+                                borderRadius: 1, 
+                                fontSize: 11, 
+                                fontWeight: 600 
+                              }}>
+                                -{calculateDiscount(pkg.price, pkg.sale_price).discount}%
+                              </Box>
+                              <Typography variant="body2" sx={{ 
+                                textDecoration: 'line-through', 
+                                color: '#999', 
+                                fontSize: 12 
+                              }}>
+                                {pkg.price}
+                              </Typography>
+                            </>
+                          ) : (
+                            <PackagePrice>
+                              {pkg.price}
+                            </PackagePrice>
+                          )}
+                        </Box>
+                      )}
+                      <CardActionsStyled>
+                        <ActionButton
+                          variant="outlined"
+                          onClick={e => { e.stopPropagation(); handleCardClick(pkg); }}
+                        >Leia Mais</ActionButton>
+                        {showReserveButton && (
+                          <ActionButton variant="contained">Reserve Agora</ActionButton>
+                        )}
+                      </CardActionsStyled>
+                    </CardContentStyled>
+                  </PackageCard>
+                </CarouselCard>
+              ))}
+            </CarouselTrack>
+          </CarouselContainer>
+        ) : (
         <PackagesGrid 
           cardsPerView={cardsPerView} 
           showArrows={showArrows}
@@ -539,11 +758,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
             minHeight: isMobile ? 420 : 350 
           }}
         >
-          {(
-            showArrows
-              ? packages.slice(startIndex, startIndex + cardsPerView)
-              : packages
-          ).map((pkg: TravelPackage, index: number) => (
+            {packages.map((pkg: TravelPackage, index: number) => (
             <PackageCard
               key={pkg.id}
               className="animate-zoomIn hover-from-left"
@@ -559,7 +774,12 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                   />
                 )}
                 <ImageGradient />
-                <RatingBadge className="rating-badge">
+                {pkg.is_featured && (
+                  <FeaturedBadge>
+                    Destaque
+                  </FeaturedBadge>
+                )}
+                <RatingBadge className="rating-badge" hasFeatured={pkg.is_featured}>
                   <StarIconStyled style={{ color: '#FFD700', fontSize: 15, marginRight: 3 }} />
                   <Typography variant="body2" sx={{ fontWeight: 600, fontSize: 13 }}>
                     {pkg.rating}
@@ -583,7 +803,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                 <PackageLocation>
                   <LocationIconStyled />
                   <Typography variant="body2">
-                    {pkg.location}
+                      {formatLocation(pkg.location)}
                   </Typography>
                 </PackageLocation>
                 {/* Tags como chips/badges */}
@@ -616,9 +836,36 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                   {pkg.description}
                 </PackageDescription>
                 {!hidePeopleAndPrice && (
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+                      {pkg.sale_price && calculateDiscount(pkg.price, pkg.sale_price).discount > 0 ? (
+                        <>
+                          <PackagePrice sx={{ color: theme.palette.primary.main }}>
+                            {pkg.sale_price}
+                          </PackagePrice>
+                          <Box sx={{ 
+                            background: '#ff4444', 
+                            color: '#fff', 
+                            padding: '2px 6px', 
+                            borderRadius: 1, 
+                            fontSize: 11, 
+                            fontWeight: 600 
+                          }}>
+                            -{calculateDiscount(pkg.price, pkg.sale_price).discount}%
+                          </Box>
+                          <Typography variant="body2" sx={{ 
+                            textDecoration: 'line-through', 
+                            color: '#999', 
+                            fontSize: 12 
+                          }}>
+                            {pkg.price}
+                          </Typography>
+                        </>
+                      ) : (
                   <PackagePrice>
                     {pkg.price}
                   </PackagePrice>
+                      )}
+                    </Box>
                 )}
                 <CardActionsStyled>
                   <ActionButton
@@ -633,6 +880,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
             </PackageCard>
           ))}
         </PackagesGrid>
+        )}
       </Container>
     </SectionWrapper>
   );

@@ -11,7 +11,6 @@ import {
   Link,
   CircularProgress,
   Alert,
-  Divider,
   Paper,
   IconButton,
   Fade,
@@ -396,13 +395,13 @@ const TestimonialDetail: React.FC = () => {
                     <MetadataItem>
                       <AccessTime />
                       <Typography>
-                        Visitou em {formatDate(testimonial.visitDate)}
+                        Visitou em {testimonial.visitDate ? formatDate(testimonial.visitDate) : 'Data não informada'}
                       </Typography>
                     </MetadataItem>
                     <MetadataItem>
                       <Star />
                       <Typography>
-                        {getExperienceLabel(testimonial.experience)}
+                        {testimonial.experience ? getExperienceLabel(testimonial.experience) : 'Experiência'}
                       </Typography>
                     </MetadataItem>
                     {testimonial.helpful && (
