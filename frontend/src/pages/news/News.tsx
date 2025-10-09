@@ -545,7 +545,7 @@ const News: React.FC = () => {
                   Portal de Notícias
                 </HeroTitle>
                 <HeroSubtitle>
-                  Fique por dentro de todas as novidades do turismo em Barra do Bugres. 
+                  Fique por dentro de todas as novidades do turismo em {import.meta.env.VITE_CITY || 'Barra do Bugres'}. 
                   Descubra eventos especiais, novas atrações e as melhores experiências da nossa região.
                 </HeroSubtitle>
                 <StatsContainer>

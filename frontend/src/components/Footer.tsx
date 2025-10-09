@@ -49,22 +49,22 @@ const LogoImg = styled('img')({
 const SectionTitle = styled(Typography)({
   fontWeight: 500,
   fontSize: 20,
-  color: brandColors.primary.teal,
+  color: brandColors.primary.green, // Verde da logo Cuniã
   marginBottom: 16,
   textAlign: 'center',
 });
 
 const FooterSection = styled(Box)({
-  backgroundColor: '#2C3E50',
+  backgroundColor: brandColors.primary.greenDark, // Verde escuro da logo Cuniã
   color: 'white',
   padding: '48px 0',
 });
 
 const FooterBottomSection = styled(Box)({
-  backgroundColor: '#1A252F',
+  backgroundColor: brandColors.primary.black, // Preto da logo Cuniã
   color: '#B0B0B0',
   padding: '24px 0',
-  borderTop: '1px solid #34495E',
+  borderTop: `1px solid ${brandColors.primary.greenDark}`,
 });
 
 const SocialIcon = styled(IconButton)<{ disabled?: boolean }>(({ disabled }) => ({
@@ -73,12 +73,12 @@ const SocialIcon = styled(IconButton)<{ disabled?: boolean }>(({ disabled }) => 
   justifyContent: 'center',
   width: 40,
   height: 40,
-  backgroundColor: disabled ? '#7F8C8D' : '#3498DB',
+  backgroundColor: disabled ? '#7F8C8D' : brandColors.primary.gold, // Ouro da logo Cuniã
   borderRadius: '50%',
   cursor: disabled ? 'not-allowed' : 'pointer',
   transition: 'background-color 0.3s',
   '&:hover': {
-    backgroundColor: disabled ? '#7F8C8D' : '#2980B9',
+    backgroundColor: disabled ? '#7F8C8D' : brandColors.primary.goldDark, // Ouro escuro no hover
   },
   '&:disabled': {
     backgroundColor: '#7F8C8D',
@@ -93,20 +93,20 @@ const FooterLink = styled(Link)({
   padding: '4px 0',
   fontSize: 14,
   '&:hover': {
-    color: '#3498DB',
+    color: brandColors.primary.gold, // Ouro da logo Cuniã no hover
     textDecoration: 'none',
   },
 });
 
 const LanguageButton = styled(Button)({
   backgroundColor: 'transparent',
-  border: '1px solid #34495E',
+  border: `1px solid ${brandColors.primary.greenDark}`, // Verde escuro da logo Cuniã
   color: 'white',
   borderRadius: 8,
   padding: '8px 16px',
   margin: '0 8px',
   '&:hover': {
-    backgroundColor: '#34495E',
+    backgroundColor: brandColors.primary.greenDark, // Verde escuro no hover
   },
 });
 
@@ -354,10 +354,10 @@ const Footer: React.FC = () => {
               </Box>
             </Box>
             <Box sx={{ textAlign: 'right' }}>
-                              <img 
-                  src="/images/teste.png" 
-                  alt="Descubra Mato Grosso" 
-                  style={{ height: 250, filter: 'brightness(0) invert(1)', width: 250 }}
+              <img 
+                src={import.meta.env.VITE_CUSTOM_LOGO_URL || 'RESEX Cuniã'}
+                alt="RESEX Cuniã" 
+                style={{ height: 250, opacity: 0.8, width: 250 }}
               />
             </Box>
           </Box>
@@ -376,11 +376,11 @@ const Footer: React.FC = () => {
           gap: 2
         }}>
           <Typography variant="body2" sx={{ color: '#B0B0B0' }}>
-            © Viva {getCityName()}. All right reserved.
+            ©  {getCityName()}. All right reserved.
           </Typography>
           <Typography variant="body2" sx={{ color: '#B0B0B0' }}>
-            Desenvolvido Por <Link href="https://bizmd.com.br/2020/" sx={{ color: '#3498DB' }}>BIZ Marketing Digital</Link>. 
-            Com a tecnologia <Link href="https://var.tur.br/" sx={{ color: '#3498DB' }}>VAR - Plataforma de Inteligência Turística</Link>
+            Desenvolvido Por <Link href="https://bizmd.com.br/2020/" sx={{ color: brandColors.primary.gold }}>BIZ Marketing Digital</Link>. 
+            Com a tecnologia <Link href="https://var.tur.br/" sx={{ color: brandColors.primary.gold }}>VAR - Plataforma de Inteligência Turística</Link>
           </Typography>
         </Box>
       </Container>

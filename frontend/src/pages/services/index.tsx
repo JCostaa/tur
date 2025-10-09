@@ -41,14 +41,14 @@ const ENHANCED_SEGMENTS = [
       {
         id: 'atrativos',
         name: 'ATRATIVOS',
-        icon: <Attractions sx={{ fontSize: 20, color: brandColors.primary.teal }} />,
+        icon: <Attractions sx={{ fontSize: 20, color: brandColors.legacy.teal }} />,
         description: 'Pontos turísticos e atrações locais',
         route: '/all-tours'
       },
       {
         id: 'eventos',
         name: 'EVENTOS',
-        icon: <Event sx={{ fontSize: 20, color: brandColors.primary.teal }} />,
+        icon: <Event sx={{ fontSize: 20, color: brandColors.legacy.teal }} />,
         description: 'Eventos e festivais da região',
         route: '/events'
       }
@@ -65,7 +65,7 @@ const ENHANCED_SEGMENTS = [
       {
         id: 'hospedagens',
         name: 'HOSPEDAGENS',
-        icon: <Bed sx={{ fontSize: 20, color: brandColors.primary.teal }} />,
+        icon: <Bed sx={{ fontSize: 20, color: brandColors.legacy.teal }} />,
         description: 'Opções de acomodação para todos os gostos',
         route: '/all-accommodation'
       }
@@ -82,7 +82,7 @@ const ENHANCED_SEGMENTS = [
       {
         id: 'restaurantes',
         name: 'RESTAURANTES',
-        icon: <RestaurantMenu sx={{ fontSize: 20, color: brandColors.primary.teal }} />,
+        icon: <RestaurantMenu sx={{ fontSize: 20, color: brandColors.legacy.teal }} />,
         description: 'Gastronomia local e regional',
         route: '/all-restaurants'
       }
@@ -99,14 +99,14 @@ const ENHANCED_SEGMENTS = [
       {
         id: 'agencias',
         name: 'AGÊNCIAS',
-        icon: <Business sx={{ fontSize: 20, color: brandColors.primary.teal }} />,
+        icon: <Business sx={{ fontSize: 20, color: brandColors.legacy.teal }} />,
         description: 'Agências de turismo receptivo',
         route: '/all-agencies'
       },
       {
         id: 'guias',
         name: 'GUIAS/CONDUTORES',
-        icon: <PersonPin sx={{ fontSize: 20, color: brandColors.primary.teal }} />,
+        icon: <PersonPin sx={{ fontSize: 20, color: brandColors.legacy.teal }} />,
         description: 'Guias e condutores especializados',
         route: '/all-guides'
       }
@@ -149,7 +149,7 @@ const Services: React.FC = () => {
           <Typography
             variant="h6"
             sx={{
-              color: brandColors.primary.teal,
+              color: brandColors.legacy.teal,
               fontWeight: 700,
               letterSpacing: 2,
               mb: 1,
@@ -355,7 +355,7 @@ const Services: React.FC = () => {
             variant="contained"
             size="large"
             sx={{
-              backgroundColor: brandColors.primary.teal,
+              backgroundColor: brandColors.legacy.teal,
               borderRadius: 8,
               px: 6,
               py: 2,
@@ -363,7 +363,7 @@ const Services: React.FC = () => {
               fontSize: '1.1rem',
               boxShadow: '0 4px 20px rgba(44,95,45,0.20)',
               '&:hover': {
-                backgroundColor: brandColors.primary.orange,
+                backgroundColor: brandColors.legacy.orange,
                 boxShadow: '0 6px 24px rgba(44,95,45,0.25)',
               }
             }}

@@ -45,8 +45,8 @@ VITE_DEFAULT_PAGE_SIZE=10
 
 # ===== CONFIGURAÇÕES DE LOGO CUSTOMIZADA =====
 
-# URL da logo customizada (se não definida, usa logo padrão /images/teste.png)
-VITE_CUSTOM_LOGO_URL=/images/teste.png
+# URL da logo customizada (se não definida, usa logo padrão /images/cunia/logo.jpg)
+VITE_CUSTOM_LOGO_URL=/images/cunia/logo.jpg
 
 # Nome do negócio/empresa
 VITE_BUSINESS_NAME=Viva Barra do Bugres

@@ -188,7 +188,7 @@ const CustomLogo: React.FC<CustomLogoProps> = ({
   // Se tem logo customizada, usar ela com destaque especial
   if (logoUrl) {
     // Aumentar tamanho da logo para dar mais destaque
-    const logoHeight = height * 1.4; // 40% maior
+    const logoHeight = height * 2.0; // 40% maior
     
     return (
       <LogoContainer variant={variant} className={className} hasimage={true}>

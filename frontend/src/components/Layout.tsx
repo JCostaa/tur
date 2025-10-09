@@ -29,7 +29,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           position: 'fixed',
           right: 32,
           bottom: 32,
-          background: '#008080', // cor teal padrão, pode ser ajustada conforme o tema
+          background: '#E7A400', // Ouro da logo Cuniã
           color: '#fff',
           border: 'none',
           borderRadius: '50%',
@@ -38,9 +38,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: '0 2px 8px #0002',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
           zIndex: 1000,
           cursor: 'pointer',
+          transition: 'all 0.3s ease',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = '#B8860B'; // Ouro escuro no hover
+          e.currentTarget.style.transform = 'scale(1.1)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = '#E7A400'; // Volta ao ouro original
+          e.currentTarget.style.transform = 'scale(1)';
         }}
         aria-label="Voltar ao topo"
       >

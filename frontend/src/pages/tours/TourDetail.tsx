@@ -466,8 +466,21 @@ const TourDetail: React.FC = () => {
             </ProviderBox>
           )}
           <ReserveButton sx={{ mt: 2 }} onClick={() => {
-            const baseUrl = getVarMarketplaceUrl().replace('/municipio/', '');
-            window.open(`${baseUrl}/tour/${tour.slug}`, '_blank');
+            const whatsappNumber = import.meta.env.VITE_RESERVE;
+            
+            if (whatsappNumber) {
+              // Limpar e formatar o número do WhatsApp
+              const cleanNumber = whatsappNumber.replace(/[^\d+]/g, '');
+              
+              // Criar mensagem personalizada com informações do tour
+              const message = encodeURIComponent(`Olá! Tenho interesse no tour "${tour.title}". Gostaria de mais informações e fazer uma reserva.`);
+              const whatsappUrl = `https://wa.me/${cleanNumber}?text=${message}`;
+              window.open(whatsappUrl, '_blank');
+            } else {
+              // Fallback para o comportamento anterior se VITE_RESERVE não estiver configurado
+              const baseUrl = getVarMarketplaceUrl().replace('/municipio/', '');
+              window.open(`${baseUrl}/tour/${tour.slug}`, '_blank');
+            }
           }}>Reservar Agora</ReserveButton>
         </InfoCard>
       </Container>

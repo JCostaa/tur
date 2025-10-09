@@ -50,7 +50,7 @@ const Contact: React.FC = () => {
   
   // Fallback para parâmetros de localização do .env se não houver dados do contexto
   const locationParams = getLocationParams();
-  const city = currentCity?.name || locationParams.city as string || 'Barra do Bugres';
+  const city = currentCity?.name || locationParams.city as string || import.meta.env.VITE_CITY || 'Barra do Bugres';
   const state = currentCity?.state || locationParams.state as string || 'MT';
   
   // Função para tratar valores null/undefined
@@ -142,13 +142,13 @@ const Contact: React.FC = () => {
             }}>
               <TravelExplore sx={{ 
                 fontSize: { xs: 40, md: 56 }, 
-                color: brandColors.primary.teal,
+                color: brandColors.legacy.teal,
                 mr: 2
               }} />
               <Typography
                 variant="h6"
                 sx={{
-                  color: brandColors.primary.teal,
+                  color: brandColors.legacy.teal,
                   fontWeight: 700,
                   letterSpacing: 2,
                   textTransform: 'uppercase',
@@ -294,14 +294,14 @@ const Contact: React.FC = () => {
                         '& .MuiOutlinedInput-root': {
                           borderRadius: 2,
                           '&:hover fieldset': {
-                            borderColor: brandColors.primary.teal,
+                            borderColor: brandColors.legacy.teal,
                           },
                           '&.Mui-focused fieldset': {
-                            borderColor: brandColors.primary.teal,
+                            borderColor: brandColors.legacy.teal,
                           },
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                          color: brandColors.primary.teal,
+                          color: brandColors.legacy.teal,
                         },
                       }}
                     />
@@ -318,14 +318,14 @@ const Contact: React.FC = () => {
                         '& .MuiOutlinedInput-root': {
                           borderRadius: 2,
                           '&:hover fieldset': {
-                            borderColor: brandColors.primary.teal,
+                            borderColor: brandColors.legacy.teal,
                           },
                           '&.Mui-focused fieldset': {
-                            borderColor: brandColors.primary.teal,
+                            borderColor: brandColors.legacy.teal,
                           },
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                          color: brandColors.primary.teal,
+                          color: brandColors.legacy.teal,
                         },
                       }}
                     />
@@ -342,14 +342,14 @@ const Contact: React.FC = () => {
                       '& .MuiOutlinedInput-root': {
                         borderRadius: 2,
                         '&:hover fieldset': {
-                          borderColor: brandColors.primary.teal,
+                          borderColor: brandColors.legacy.teal,
                         },
                         '&.Mui-focused fieldset': {
-                          borderColor: brandColors.primary.teal,
+                          borderColor: brandColors.legacy.teal,
                         },
                       },
                       '& .MuiInputLabel-root.Mui-focused': {
-                        color: brandColors.primary.teal,
+                        color: brandColors.legacy.teal,
                       },
                     }}
                   />
@@ -367,14 +367,14 @@ const Contact: React.FC = () => {
                       '& .MuiOutlinedInput-root': {
                         borderRadius: 2,
                         '&:hover fieldset': {
-                          borderColor: brandColors.primary.teal,
+                          borderColor: brandColors.legacy.teal,
                         },
                         '&.Mui-focused fieldset': {
-                          borderColor: brandColors.primary.teal,
+                          borderColor: brandColors.legacy.teal,
                         },
                       },
                       '& .MuiInputLabel-root.Mui-focused': {
-                        color: brandColors.primary.teal,
+                        color: brandColors.legacy.teal,
                       },
                     }}
                   />
@@ -384,7 +384,7 @@ const Contact: React.FC = () => {
                     size="large"
                     endIcon={<Send />}
                     sx={{
-                      background: `linear-gradient(135deg, ${brandColors.primary.teal} 0%, ${brandColors.primary.fish} 100%)`,
+                      background: `linear-gradient(135deg, ${brandColors.legacy.teal} 0%, ${brandColors.legacy.fish} 100%)`,
                       borderRadius: 3,
                       px: 4,
                       py: 1.5,
@@ -392,7 +392,7 @@ const Contact: React.FC = () => {
                       fontSize: '1.1rem',
                       boxShadow: '0 4px 20px rgba(44,95,45,0.20)',
                       '&:hover': {
-                        background: `linear-gradient(135deg, ${brandColors.primary.fish} 0%, ${brandColors.primary.teal} 100%)`,
+                        background: `linear-gradient(135deg, ${brandColors.legacy.fish} 0%, ${brandColors.legacy.teal} 100%)`,
                         boxShadow: '0 6px 24px rgba(44,95,45,0.25)',
                         transform: 'translateY(-1px)'
                       },
@@ -409,14 +409,14 @@ const Contact: React.FC = () => {
             <Card sx={{
               borderRadius: 4,
               boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-              background: `linear-gradient(135deg, ${brandColors.primary.teal}10 0%, ${brandColors.primary.orange}05 100%)`,
+              background: `linear-gradient(135deg, ${brandColors.legacy.teal}10 0%, ${brandColors.legacy.orange}05 100%)`,
               height: 'fit-content'
             }}>
               <CardContent sx={{ p: { xs: 3, md: 4 } }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                   <Support sx={{ 
                     fontSize: 32, 
-                    color: brandColors.primary.teal,
+                    color: brandColors.legacy.teal,
                     mr: 2
                   }} />
                   <Typography variant="h5" sx={{ 
@@ -431,7 +431,7 @@ const Contact: React.FC = () => {
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                     <Schedule sx={{ 
                       fontSize: 20, 
-                      color: brandColors.primary.teal,
+                      color: brandColors.legacy.teal,
                       mr: 1
                     }} />
                     <Typography variant="h6" sx={{ 
@@ -560,10 +560,10 @@ const Contact: React.FC = () => {
             position: 'fixed',
             right: { xs: 16, md: 32 },
             bottom: { xs: 16, md: 32 },
-            background: `linear-gradient(135deg, ${brandColors.primary.teal} 0%, ${brandColors.primary.fish} 100%)`,
+            background: `linear-gradient(135deg, ${brandColors.legacy.teal} 0%, ${brandColors.legacy.fish} 100%)`,
             color: 'white',
             '&:hover': {
-              background: `linear-gradient(135deg, ${brandColors.primary.fish} 0%, ${brandColors.primary.teal} 100%)`,
+              background: `linear-gradient(135deg, ${brandColors.legacy.fish} 0%, ${brandColors.legacy.teal} 100%)`,
               transform: 'scale(1.1)'
             },
             transition: 'all 0.2s'

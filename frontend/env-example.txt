@@ -1,3 +1,37 @@
+# ===== CONFIGURAÇÕES DE CORES PERSONALIZADAS =====
+
+# Cores primárias (usadas para botões principais, links, destaques)
+VITE_PRIMARY_COLOR=#2e7d32
+VITE_PRIMARY_LIGHT=#4caf50
+VITE_PRIMARY_DARK=#1b5e20
+
+# Cores secundárias (usadas para header, navegação, fundos)
+VITE_SECONDARY_COLOR=#0277bd
+VITE_SECONDARY_LIGHT=#29b6f6
+VITE_SECONDARY_DARK=#01579b
+
+# Cor de fundo padrão (opcional)
+VITE_BACKGROUND_COLOR=#f1f8e9
+
+# Cor do texto principal (opcional)
+VITE_TEXT_COLOR=#1b5e20
+
+# ===== CONFIGURAÇÕES ESPECÍFICAS DA CUNIÃ =====
+
+# Nome do negócio
+VITE_BUSINESS_NAME=RESEX Cuniã
+
+# Logo personalizada
+VITE_CUSTOM_LOGO=/images/cunia/logo.jpg
+
+# Cores adicionais da paleta Cuniã
+VITE_ACCENT_COLOR=#ff8f00
+VITE_SUCCESS_COLOR=#2e7d32
+VITE_WARNING_COLOR=#ff8f00
+VITE_ERROR_COLOR=#d32f2f
+
+# ===== CONFIGURAÇÕES DE API =====
+
 # Spotify API Configuration
 # Para usar a API oficial do Spotify, você precisa:
 # 1. Criar uma conta de desenvolvedor no Spotify: https://developer.spotify.com/
@@ -9,3 +43,8 @@ VITE_SPOTIFY_CLIENT_SECRET=your_spotify_client_secret_here
 
 # API Base URL (opcional - para fallback)
 VITE_API_URL=http://localhost:3001
+
+# ===== CONFIGURAÇÕES DE RESERVA =====
+
+# Número do WhatsApp para reservas (formato: 5569981111054 - apenas números, sem espaços ou caracteres especiais)
+VITE_RESERVE=5569981111054

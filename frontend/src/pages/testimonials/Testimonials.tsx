@@ -564,7 +564,7 @@ const Testimonials: React.FC = () => {
                   Portal de Depoimentos
                 </HeroTitle>
                 <HeroSubtitle>
-                  Descubra as experiências reais de quem visitou Barra do Bugres. 
+                  Descubra as experiências reais de quem visitou {import.meta.env.VITE_CITY || 'Barra do Bugres'}. 
                   Histórias autênticas de aventuras, gastronomia e hospitalidade pantaneira.
                 </HeroSubtitle>
                 <StatsContainer>

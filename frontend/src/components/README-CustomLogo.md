@@ -15,8 +15,8 @@ Adicione estas variáveis no arquivo `.env` do frontend:
 ```bash
 # ===== CONFIGURAÇÕES DE LOGO CUSTOMIZADA =====
 
-# URL da logo customizada (opcional - padrão: /images/teste.png)
-VITE_CUSTOM_LOGO_URL=/images/teste.png
+# URL da logo customizada (opcional - padrão: /images/cunia/logo.jpg)
+VITE_CUSTOM_LOGO_URL=/images/cunia/logo.jpg
 
 # Nome do negócio/empresa (obrigatório)
 VITE_BUSINESS_NAME=Viva Barra do Bugres

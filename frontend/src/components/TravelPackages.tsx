@@ -340,14 +340,15 @@ const LocationIconStyled = styled(LocationIcon)(() => ({
 
 // Função para formatar localização sem duplicações
 const formatLocation = (location: string): string => {
-  if (!location) return 'Local não informado';
+const cityName = import.meta.env.VITE_BUSINESS_NAME;
+  if (!location) return import.meta.env.VITE_BUSINESS_NAME || cityName;
   
   // Remove vírgulas extras e espaços
   const cleanLocation = location.replace(/,\s*,/g, ',').replace(/,\s*$/, '').trim();
   
-  // Se contém "Barra do Bugres" e "Mato Grosso", formata especificamente
-  if (cleanLocation.includes('Barra do Bugres') && cleanLocation.includes('Mato Grosso')) {
-    return 'Barra do Bugres - Mato Grosso';
+  // Se contém a cidade do .env e "Mato Grosso", formata especificamente
+  if (cleanLocation.includes(cityName) && cleanLocation.includes('Mato Grosso')) {
+    return `${cityName} - ${import.meta.env.VITE_STATE}`;
   }
   
   // Para outros casos, remove duplicações comuns

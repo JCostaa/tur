@@ -6,26 +6,26 @@ import { brandColors } from '../config/colors';
  * @param customColors - Cores personalizadas do .env ou cores padrão
  */
 export const createCustomTheme = (customColors?: any) => {
-  // Se não há cores personalizadas, usar cores padrão
+  // Se não há cores personalizadas, usar cores reais da logo Cuniã
   const colors = customColors || {
     primary: {
-      main: brandColors.primary.orange,
-      light: brandColors.secondary.lightOrange,
-      dark: brandColors.secondary.darkOrange,
+      main: brandColors.primary.green,
+      light: brandColors.primary.greenLight,
+      dark: brandColors.primary.greenDark,
       contrastText: brandColors.neutral.white,
     },
     secondary: {
-      main: brandColors.primary.teal,
-      light: brandColors.secondary.lightTeal,
-      dark: brandColors.secondary.mutedTeal,
+      main: brandColors.primary.gold,
+      light: brandColors.primary.goldLight,
+      dark: brandColors.primary.goldDark,
       contrastText: brandColors.neutral.white,
     },
     background: {
-      default: brandColors.neutral.lightGray,
+      default: '#F5F5DC', // Fundo bege claro
       paper: brandColors.neutral.white,
     },
     text: {
-      primary: brandColors.neutral.darkGray,
+      primary: brandColors.primary.greenDark,
       secondary: brandColors.neutral.gray,
     },
     success: {
@@ -36,6 +36,9 @@ export const createCustomTheme = (customColors?: any) => {
     },
     error: {
       main: brandColors.states.error,
+    },
+    info: {
+      main: brandColors.states.info,
     },
   };
 

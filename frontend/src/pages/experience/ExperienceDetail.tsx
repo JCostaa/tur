@@ -128,7 +128,7 @@ const ExperienceDetail: React.FC = () => {
 
   // Mapeamento dos campos para exibição
   const descriptionHtml = experience?.description || '';
-  const location = 'Barra do Bugres - MT'; // Valor padrão
+  const location = `${import.meta.env.VITE_CITY || 'Barra do Bugres'} - MT`; // Valor padrão
   const duration = '2-4 horas'; // Valor padrão
   const rating = 5;
   const people = 2;
@@ -352,7 +352,7 @@ const ExperienceDetail: React.FC = () => {
               Sobre esta experiência:
             </Typography>
             <Typography sx={{ color: '#555', mb: 1, fontSize: '1.15rem', lineHeight: 1.6 }}>
-              {experience?.subtitle || 'Uma experiência única que combina aventura, cultura e natureza em Barra do Bugres e região.'}
+              {experience?.subtitle || `Uma experiência única que combina aventura, cultura e natureza em ${import.meta.env.VITE_CITY || 'Barra do Bugres'} e região.`}
             </Typography>
           </Box>
 

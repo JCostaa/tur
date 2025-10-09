@@ -110,10 +110,10 @@ const Home: React.FC = () => {
       <Layout>
         <Box sx={{ minHeight: '100vh' }}>
           <Header />
-          <Box id="inicio">
+          {/* <Box id="inicio">
             <HeroBanner />
-          </Box>
-        <Box id="servicos">
+          </Box> */}
+        <Box id="servicos" sx={{ mt: 10 }}>
           <Services />
         </Box>
         <SectionDivider sectionIndex={1} />
@@ -174,9 +174,9 @@ const Home: React.FC = () => {
           { minHeight: 300 }
         )}
         
-        <Box id="podcast">
+        {/* <Box id="podcast">
           <PodcastSection />
-        </Box>
+        </Box> */}
         <SectionDivider sectionIndex={11} />
         
         <Box id="noticias">

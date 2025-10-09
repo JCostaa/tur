@@ -205,7 +205,7 @@ const NewsSection: React.FC<NewsSectionProps> = ({
             Portal de Notícias
           </SectionSubtitle>
           <SectionDescription>
-            Fique por dentro das últimas novidades do turismo em Barra do Bugres, 
+            Fique por dentro das últimas novidades do turismo em {import.meta.env.VITE_CITY || 'Barra do Bugres'}, 
             eventos especiais e descobertas incríveis na nossa região.
           </SectionDescription>
         </SectionHeader>

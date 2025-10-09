@@ -37,13 +37,13 @@ interface MenuItem {
 }
 
 const HeaderContainer = styled(AppBar)(() => ({
-  background: `rgba(${brandColors.primary.teal}, 0.95)`,
+  background: `rgba(51, 102, 51, 0.95)`, // Verde real da logo Cuniã
   backdropFilter: 'blur(10px)',
   boxShadow: '0 2px 20px rgba(0,0,0,0.2)',
   borderBottom: '1px solid rgba(255,255,255,0.1)',
   transition: 'all 0.3s ease',
   '&:hover': {
-    background: `rgba(${brandColors.primary.teal}, 0.98)`,
+    background: `rgba(51, 102, 51, 0.98)`, // Verde real da logo Cuniã mais opaco
     boxShadow: '0 4px 30px rgba(0,0,0,0.3)',
   },
 }));
@@ -60,7 +60,7 @@ const NavLink = styled(RouterLink)(({ theme }) => ({
   position: 'relative',
   '&:hover': {
     color: '#fff', // Manter branco no hover
-    backgroundColor: alpha(brandColors.primary.orange, 0.1),
+    backgroundColor: alpha(brandColors.primary.gold, 0.1),
     transform: 'translateY(-2px)',
   },
   '&::after': {
@@ -70,7 +70,7 @@ const NavLink = styled(RouterLink)(({ theme }) => ({
     left: '50%',
     width: 0,
     height: 2,
-    background: brandColors.primary.orange,
+    background: brandColors.primary.gold,
     transition: 'all 0.3s ease',
     transform: 'translateX(-50%)',
   },
@@ -80,7 +80,7 @@ const NavLink = styled(RouterLink)(({ theme }) => ({
 }));
 
 const ContactButton = styled(Button)(({ theme }) => ({
-  background: brandColors.primary.orange,
+  background: brandColors.primary.gold,
   color: brandColors.neutral.white,
   borderRadius: 8,
   padding: theme.spacing(1, 3),
@@ -90,7 +90,7 @@ const ContactButton = styled(Button)(({ theme }) => ({
   transition: 'all 0.3s ease',
   boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
   '&:hover': {
-    background: brandColors.secondary.darkOrange,
+    background: brandColors.primary.goldDark,
     transform: 'translateY(-2px)',
     boxShadow: '0 6px 20px rgba(0,0,0,0.15)',
   },
@@ -100,9 +100,9 @@ const SocialIcon = styled(IconButton)(() => ({
   color: '#fff',
   transition: 'all 0.3s ease',
   '&:hover': {
-    color: brandColors.primary.orange,
+    color: brandColors.primary.gold,
     transform: 'scale(1.1) rotate(5deg)',
-    backgroundColor: alpha(brandColors.primary.orange, 0.1),
+    backgroundColor: alpha(brandColors.primary.gold, 0.1),
   },
 }));
 
@@ -199,8 +199,8 @@ const Header: React.FC = () => {
             alignItems: 'center',
             borderBottom: arr && idx !== arr.length - 1 && parent ? '1px solid #f0f0f0' : 'none',
             '&:hover': {
-              color: parent ? brandColors.primary.orange : '#fff', // Laranja nos submenus, branco no menu principal
-              backgroundColor: parent ? alpha(brandColors.primary.orange, 0.13) : alpha(brandColors.primary.orange, 0.1),
+              color: parent ? brandColors.primary.gold : '#fff', // Ouro nos submenus, branco no menu principal
+              backgroundColor: parent ? alpha(brandColors.primary.gold, 0.13) : alpha(brandColors.primary.gold, 0.1),
               fontWeight: 500,
             },
           }}
@@ -245,7 +245,7 @@ const Header: React.FC = () => {
             borderBottom: arr && idx !== arr.length - 1 && parent ? '1px solid #f0f0f0' : 'none',
             '&:hover': {
               color: parent ? '#333' : '#fff', // Escuro nos submenus, branco no menu principal
-              backgroundColor: parent ? '#f7f7f7' : alpha(brandColors.primary.orange, 0.1),
+              backgroundColor: parent ? '#f7f7f7' : alpha(brandColors.primary.gold, 0.1),
               fontWeight: 500,
             },
           }}

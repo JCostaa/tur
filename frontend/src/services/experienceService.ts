@@ -26,7 +26,7 @@ class ExperienceService {
           id: index + 1, // Gerar ID sequencial já que a API não retorna
           title: exp.name,
           subtitle: '',
-          description: `Descubra ${categoryName.toLowerCase()} em Barra do Bugres e região.`,
+          description: `Descubra ${categoryName.toLowerCase()} em ${import.meta.env.VITE_CITY || 'Barra do Bugres'} e região.`,
           image: {
             url: exp.image,
             path: exp.image
