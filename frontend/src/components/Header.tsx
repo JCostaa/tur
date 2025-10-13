@@ -123,7 +123,7 @@ const menuItems = [
   },
   {
     text: 'Fornecedores',
-    href: '/#provedores',
+    href: '/#fornecedores-atrativos',
     children: [
       { text: 'Condutores', href: '/#drivers' },
       { text: 'Guia de Viagem', href: '/#guides' },
