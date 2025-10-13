@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
 import type { BoxProps } from '@mui/material/Box';
+import { useEffect, useRef, useState } from 'react';
 
 interface AnimatedGifProps extends Omit<BoxProps, 'component'> {
   src: string;
