@@ -286,7 +286,7 @@ const Footer: React.FC = () => {
             <FooterLink href="/#servicos">Serviços</FooterLink>
             <FooterLink href="/#experiencias">Experiências</FooterLink>
             <FooterLink href="/#eventos">Eventos</FooterLink>
-            <FooterLink href="/news">Notícias</FooterLink>
+            <FooterLink href="/#noticias">Notícias</FooterLink>
             <FooterLink href="/#tours">Promoções</FooterLink>
             <FooterLink href="/#fornecedores-atrativos">Fornecedores</FooterLink>
             <FooterLink href={getVarMarketplaceUrl()} target="_blank" rel="noopener noreferrer">Var Marketplace</FooterLink>
