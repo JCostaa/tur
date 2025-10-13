@@ -1,0 +1,11 @@
+{
+    "rootDirectory": "packages/frontend",
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
+    "framework": "vite",
+    "functions": {
+      "api/proxy.ts": {
+        "maxDuration": 30
+      }
+    }
+  }
