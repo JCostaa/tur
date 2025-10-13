@@ -4,7 +4,7 @@ import { Box, CssBaseline } from '@mui/material';
 import Header from './Header';
 import { FaArrowUp } from 'react-icons/fa';
 import Footer from './Footer';
-//import GifSection from './GifSection';
+//import GifSection from './GifSection'; 
 
 interface LayoutProps {
   children: React.ReactNode;
