@@ -36,6 +36,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useNavigate } from 'react-router-dom';
+import { decodeHtmlEntities } from '../../utils/decodeHtml';
 
 const HeaderSection = styled(Box)(({ theme }) => ({
   background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
@@ -234,7 +235,7 @@ const GuideDetails: React.FC = () => {
               
               <Box sx={{ flex: 1 }}>
                 <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#1976d2' }}>
-                  {guide.title || guide.name || 'Guia'}
+                  {decodeHtmlEntities(guide.title || guide.name) || 'Guia'}
                 </Typography>
                 
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
@@ -247,7 +248,7 @@ const GuideDetails: React.FC = () => {
                   />
                   <Chip 
                     icon={<LocationOn />} 
-                    label={guide.location || 'Local não informado'} 
+                    label={decodeHtmlEntities(guide.location) || 'Local não informado'} 
                     variant="outlined" 
                     size="small"
                   />
@@ -261,7 +262,7 @@ const GuideDetails: React.FC = () => {
                 </Box>
 
                 <Typography variant="body1" sx={{ color: '#666', lineHeight: 1.6 }}>
-                  {guide.content || guide.description || 'Descrição não disponível'}
+                  {decodeHtmlEntities(guide.content || guide.description) || 'Descrição não disponível'}
                 </Typography>
               </Box>
 
@@ -300,22 +301,22 @@ const GuideDetails: React.FC = () => {
             
             <DataRow>
               <DataLabel>Nome Completo</DataLabel>
-              <DataValue>{guide.title || guide.name || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(guide.title || guide.name) || 'Não informado'}</DataValue>
             </DataRow>
             
             <DataRow>
               <DataLabel>Localização</DataLabel>
-              <DataValue>{guide.location || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(guide.location) || 'Não informado'}</DataValue>
             </DataRow>
             
             <DataRow>
               <DataLabel>CNPJ</DataLabel>
-              <DataValue>{guide.cnpj || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(guide.cnpj) || 'Não informado'}</DataValue>
             </DataRow>
             
             <DataRow>
               <DataLabel>Cadastur</DataLabel>
-              <DataValue>{guide.cadastur || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(guide.cadastur) || 'Não informado'}</DataValue>
             </DataRow>
           </InfoSection>
 
@@ -338,18 +339,18 @@ const GuideDetails: React.FC = () => {
             <DataRow>
               <DataLabel>WhatsApp</DataLabel>
               <DataValue>
-                {guide.social_media.whatsapp || 'Não informado'}
+                {decodeHtmlEntities(guide.social_media.whatsapp) || 'Não informado'}
               </DataValue>
             </DataRow>
             
             <DataRow>
               <DataLabel>Facebook</DataLabel>
-              <DataValue>{guide.social_media.facebook || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(guide.social_media.facebook) || 'Não informado'}</DataValue>
             </DataRow>
             
             <DataRow>
               <DataLabel>TikTok</DataLabel>
-              <DataValue>{guide.social_media.tiktok || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(guide.social_media.tiktok) || 'Não informado'}</DataValue>
             </DataRow>
           </InfoSection>
 
@@ -362,22 +363,22 @@ const GuideDetails: React.FC = () => {
             
             <DataRow>
               <DataLabel>Telefone</DataLabel>
-              <DataValue>{guide.phone || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(guide.phone) || 'Não informado'}</DataValue>
             </DataRow>
             
             <DataRow>
               <DataLabel>Email</DataLabel>
-              <DataValue>{guide.email || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(guide.email) || 'Não informado'}</DataValue>
             </DataRow>
             
             <DataRow>
               <DataLabel>WhatsApp</DataLabel>
-              <DataValue>{guide.social_media.whatsapp || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(guide.social_media.whatsapp) || 'Não informado'}</DataValue>
             </DataRow>
             
             <DataRow>
               <DataLabel>Horário de Atendimento</DataLabel>
-              <DataValue>{guide.schedule || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(guide.schedule) || 'Não informado'}</DataValue>
             </DataRow>
           </InfoSection>
 

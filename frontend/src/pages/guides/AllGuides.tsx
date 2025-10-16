@@ -50,7 +50,7 @@ const AllGuides: React.FC = () => {
   // Mapeamento para o formato esperado pelo TravelPackages
   const mapGuideToPackage = (guide: any) => ({
     id: guide.id,
-    title: guide.title || guide.name || 'Guia de Viagem',
+    title: guide.title || guide.name || 'Guia de Turismo',
     location: guide.location.city,
     rating: 5, // valor padrão
     duration: guide.duration_description || guide.duration || 'Disponível',
@@ -103,10 +103,10 @@ const AllGuides: React.FC = () => {
         <Container maxWidth="xl">
           <Box sx={{ textAlign: 'center', mb: 4 }}>
             <Typography variant="h2" sx={{ color: theme.palette.primary.main, fontWeight: 800, letterSpacing: 2, fontSize: isMobile ? 28 : 44, mb: 1 }}>
-              Encontre o seu guia de viagem
+              Encontre o seu guia de turismo
             </Typography>
             <Typography variant="h6" sx={{ color: theme.palette.text.secondary, fontWeight: 400 }}>
-              Guias de viagem profissionais para suas viagens
+              Guias de turismo profissionais para suas viagens
             </Typography>
           </Box>
 
@@ -195,7 +195,7 @@ const AllGuides: React.FC = () => {
               ) : isError ? (
                 <Typography align="center" sx={{ mt: 8, color: 'error.main' }}>Erro ao carregar guias de viagem.</Typography>
               ) : allGuides.length === 0 ? (
-                <Typography align="center" sx={{ mt: 8, color: '#888' }}>Nenhum guia de viagem encontrado.</Typography>
+                <Typography align="center" sx={{ mt: 8, color: '#888' }}>Nenhum guia de turismo encontrado.</Typography>
               ) : (
                 <TravelPackages customPackages={mappedPackages} hideTitle showArrows={false} onCardClick={handleGuideCardClick} />
               )}

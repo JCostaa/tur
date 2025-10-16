@@ -126,7 +126,7 @@ const menuItems = [
     href: '/#fornecedores-atrativos',
     children: [
       { text: 'Condutores', href: '/#drivers' },
-      { text: 'Guia de Viagem', href: '/#guides' },
+      { text: 'Guia de Turismo', href: '/#guides' },
       { text: 'Agência de Viagem', href: '/#agencies' },
     ],
   },

@@ -22,8 +22,8 @@ import { useCity } from '../hooks/useCity';
 import { getVarMarketplaceUrl, getCityName } from '../utils/varMarketplace';
 
 // Importe os logos disponíveis. Use placeholders para os que não existem.
-import logoCentelha from '../../public/images/footer/centelha.png'; // Placeholder
-import logoFapemat from '../../public/images/footer/fapemat.png'; // Placeholder
+import logoCentelha from '../../public/images/footer/sebrae.png'; // Placeholder
+import logoFapemat from '../../public/images/footer/porto-velho.png'; // Placeholder
 import logoConfap from '../../public/images/footer/confap.png'; // Placeholder
 import logoCNPq from '../../public/images/footer/cnpq.png'; // Placeholder
 import logoCerti from '../../public/images/footer/certi.png'; // Placeholder

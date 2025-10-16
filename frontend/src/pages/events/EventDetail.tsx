@@ -11,6 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Slide from '@mui/material/Slide';
+import { decodeHtmlEntities } from '../../utils/decodeHtml';
 
 const BackgroundImage = styled(Box)(({ theme }) => ({
   width: '100%',
@@ -193,9 +194,9 @@ const EventDetail: React.FC = () => {
       </BackgroundImage>
       <Container maxWidth="lg">
         <InfoCard>
-          <Title>{event.title}</Title>
+          <Title>{decodeHtmlEntities(event.title)}</Title>
           <Subtitle>
-            <LocationOn sx={{ mr: 1, fontSize: 22 }} /> {location}
+            <LocationOn sx={{ mr: 1, fontSize: 22 }} /> {decodeHtmlEntities(location)}
           </Subtitle>
           <ChipsRow>
             <Chip icon={<Star sx={{ color: '#FFD700' }} />} label={`${rating} estrelas`} />
@@ -359,19 +360,25 @@ const EventDetail: React.FC = () => {
           {howItWorks && (
             <Box sx={{ mb: 2 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Como funciona:</Typography>
-              <Typography sx={{ color: '#555', mb: 1 }}>{howItWorks}</Typography>
+              <Box sx={{ color: '#555', mb: 1, '& p': { margin: '0.5em 0' }, '& span': { fontSize: '1rem' } }}>
+                <span dangerouslySetInnerHTML={{ __html: howItWorks }} />
+              </Box>
             </Box>
           )}
           {essentialInfo && (
             <Box sx={{ mb: 2 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Informações essenciais:</Typography>
-              <Typography sx={{ color: '#555', mb: 1 }}>{essentialInfo}</Typography>
+              <Box sx={{ color: '#555', mb: 1, '& p': { margin: '0.5em 0' }, '& span': { fontSize: '1rem' } }}>
+                <span dangerouslySetInnerHTML={{ __html: essentialInfo }} />
+              </Box>
             </Box>
           )}
           {insuranceInfo && (
             <Box sx={{ mb: 2 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Seguro:</Typography>
-              <Typography sx={{ color: '#555', mb: 1 }}>{insuranceInfo}</Typography>
+              <Box sx={{ color: '#555', mb: 1, '& p': { margin: '0.5em 0' }, '& span': { fontSize: '1rem' } }}>
+                <span dangerouslySetInnerHTML={{ __html: insuranceInfo }} />
+              </Box>
             </Box>
           )}
           {/* Inclui / Não inclui */}
@@ -380,13 +387,17 @@ const EventDetail: React.FC = () => {
               {include && (
                 <Box sx={{ flex: 1, mb: { xs: 2, md: 0 } }}>
                   <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Inclui:</Typography>
-                  <Typography sx={{ color: '#555', mb: 1 }}>{include}</Typography>
+                  <Box sx={{ color: '#555', mb: 1, '& p': { margin: '0.5em 0' }, '& span': { fontSize: '1rem' } }}>
+                    <span dangerouslySetInnerHTML={{ __html: include }} />
+                  </Box>
                 </Box>
               )}
               {exclude && (
                 <Box sx={{ flex: 1 }}>
                   <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Não inclui:</Typography>
-                  <Typography sx={{ color: '#555', mb: 1 }}>{exclude}</Typography>
+                  <Box sx={{ color: '#555', mb: 1, '& p': { margin: '0.5em 0' }, '& span': { fontSize: '1rem' } }}>
+                    <span dangerouslySetInnerHTML={{ __html: exclude }} />
+                  </Box>
                 </Box>
               )}
             </Box>
@@ -395,24 +406,24 @@ const EventDetail: React.FC = () => {
           {Object.values(info).some(Boolean) && (
             <Box sx={{ mb: 2 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Informações adicionais:</Typography>
-              <ul style={{ color: '#555', fontSize: '1.05rem', paddingLeft: 20 }}>
-                {info.how_to_get_there && <li><b>Como chegar:</b> {info.how_to_get_there}</li>}
-                {info.how_to_visit && <li><b>Como visitar:</b> {info.how_to_visit}</li>}
-                {info.operation && <li><b>Funcionamento:</b> {info.operation}</li>}
-                {info.track_level && <li><b>Nível da trilha:</b> {info.track_level}</li>}
-                {info.general_info && <li><b>Informações gerais:</b> {info.general_info}</li>}
-              </ul>
+              <Box component="ul" sx={{ color: '#555', fontSize: '1.05rem', paddingLeft: 3, '& p': { display: 'inline', margin: 0 }, '& span': { fontSize: '1.05rem' } }}>
+                {info.how_to_get_there && <li><b>Como chegar:</b> <span dangerouslySetInnerHTML={{ __html: info.how_to_get_there }} /></li>}
+                {info.how_to_visit && <li><b>Como visitar:</b> <span dangerouslySetInnerHTML={{ __html: info.how_to_visit }} /></li>}
+                {info.operation && <li><b>Funcionamento:</b> <span dangerouslySetInnerHTML={{ __html: info.operation }} /></li>}
+                {info.track_level && <li><b>Nível da trilha:</b> <span dangerouslySetInnerHTML={{ __html: info.track_level }} /></li>}
+                {info.general_info && <li><b>Informações gerais:</b> <span dangerouslySetInnerHTML={{ __html: info.general_info }} /></li>}
+              </Box>
             </Box>
           )}
           {/* FAQ */}
           {faq.length > 0 && (
             <Box sx={{ mb: 2 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Perguntas frequentes:</Typography>
-              <ul style={{ color: '#555', fontSize: '1.05rem', paddingLeft: 20 }}>
+              <Box component="ul" sx={{ color: '#555', fontSize: '1.05rem', paddingLeft: 3, '& p': { display: 'inline', margin: 0 }, '& span': { fontSize: '1.05rem' } }}>
                 {faq.map((item: any, idx: number) => (
-                  <li key={idx}>{item}</li>
+                  <li key={idx}><span dangerouslySetInnerHTML={{ __html: item }} /></li>
                 ))}
-              </ul>
+              </Box>
             </Box>
           )}
           <Divider sx={{ my: 2 }} />
@@ -421,9 +432,9 @@ const EventDetail: React.FC = () => {
               <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
                 Destaques do evento:
               </Typography>
-              <Box component="ul" sx={{ pl: 3, color: '#555', fontSize: '1.05rem' }}>
+              <Box component="ul" sx={{ pl: 3, color: '#555', fontSize: '1.05rem', '& p': { display: 'inline', margin: 0 }, '& span': { fontSize: '1.05rem' } }}>
                 {highlights.map((item: string, idx: number) => (
-                  <li key={idx}>{item}</li>
+                  <li key={idx}><span dangerouslySetInnerHTML={{ __html: item }} /></li>
                 ))}
               </Box>
             </Box>

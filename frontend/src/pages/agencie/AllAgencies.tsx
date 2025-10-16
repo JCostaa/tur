@@ -103,10 +103,10 @@ const AllAgencies: React.FC = () => {
         <Container maxWidth="xl">
           <Box sx={{ textAlign: 'center', mb: 4 }}>
             <Typography variant="h2" sx={{ color: theme.palette.primary.main, fontWeight: 800, letterSpacing: 2, fontSize: isMobile ? 28 : 44, mb: 1 }}>
-              Encontre o seu guia de viagem
+              Encontre o seu guia de turismo
             </Typography>
             <Typography variant="h6" sx={{ color: theme.palette.text.secondary, fontWeight: 400 }}>
-              Guias de viagem profissionais para suas viagens
+              Guias de turimsmo profissionais para suas viagens
             </Typography>
           </Box>
 

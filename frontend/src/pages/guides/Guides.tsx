@@ -86,7 +86,7 @@ const Guides: React.FC = () => {
         <div style={{ textAlign: 'center', margin: '40px 0', color: 'red' }}>Erro ao carregar guias de viagem.</div>
       ) : allDrivers.length === 0 ? (
         <div style={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>
-          <div style={{ fontSize: '18px', fontWeight: 500 }}>Nenhum guia de viagem encontrado</div>
+          <div style={{ fontSize: '18px', fontWeight: 500 }}>Nenhum guia de turismo encontrado</div>
           <div style={{ fontSize: '14px', marginTop: '8px', opacity: 0.7 }}>
             Não há guias de viagem disponíveis no momento.
           </div>

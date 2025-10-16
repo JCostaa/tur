@@ -36,6 +36,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useNavigate } from 'react-router-dom';
+import { decodeHtmlEntities } from '../../utils/decodeHtml';
 
 const HeaderSection = styled(Box)(({ theme }) => ({
   background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
@@ -234,7 +235,7 @@ const AgencyDetails: React.FC = () => {
               
               <Box sx={{ flex: 1 }}>
                 <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#1976d2' }}>
-                  {agency.title || agency.name || 'Agência'}
+                  {decodeHtmlEntities(agency.title || agency.name) || 'Agência'}
                 </Typography>
                 
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
@@ -247,7 +248,7 @@ const AgencyDetails: React.FC = () => {
                   />
                   <Chip 
                     icon={<LocationOn />} 
-                    label={agency.location || 'Local não informado'} 
+                    label={decodeHtmlEntities(agency.location) || 'Local não informado'} 
                     variant="outlined" 
                     size="small"
                   />
@@ -261,7 +262,7 @@ const AgencyDetails: React.FC = () => {
                 </Box>
 
                 <Typography variant="body1" sx={{ color: '#666', lineHeight: 1.6 }}>
-                  {agency.content || agency.description || 'Descrição não disponível'}
+                  {decodeHtmlEntities(agency.content || agency.description) || 'Descrição não disponível'}
                 </Typography>
               </Box>
 
@@ -287,22 +288,22 @@ const AgencyDetails: React.FC = () => {
             
             <DataRow>
               <DataLabel>Nome Completo</DataLabel>
-              <DataValue>{agency.title || agency.name || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(agency.title || agency.name) || 'Não informado'}</DataValue>
             </DataRow>
             
             <DataRow>
               <DataLabel>Localização</DataLabel>
-              <DataValue>{agency.location || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(agency.location) || 'Não informado'}</DataValue>
             </DataRow>
             
             <DataRow>
               <DataLabel>CNPJ</DataLabel>
-              <DataValue>{agency.cnpj || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(agency.cnpj) || 'Não informado'}</DataValue>
             </DataRow>
             
             <DataRow>
               <DataLabel>Cadastur</DataLabel>
-              <DataValue>{agency.cadastur || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(agency.cadastur) || 'Não informado'}</DataValue>
             </DataRow>
           </InfoSection>
 
@@ -325,18 +326,18 @@ const AgencyDetails: React.FC = () => {
             <DataRow>
               <DataLabel>WhatsApp</DataLabel>
               <DataValue>
-                {agency.social_media.whatsapp || 'Não informado'}
+                {decodeHtmlEntities(agency.social_media.whatsapp) || 'Não informado'}
               </DataValue>
             </DataRow>
             
             <DataRow>
               <DataLabel>Facebook</DataLabel>
-              <DataValue>{agency.social_media.facebook || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(agency.social_media.facebook) || 'Não informado'}</DataValue>
             </DataRow>
             
             <DataRow>
               <DataLabel>TikTok</DataLabel>
-              <DataValue>{agency.social_media.tiktok || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(agency.social_media.tiktok) || 'Não informado'}</DataValue>
             </DataRow>
           </InfoSection>
 
@@ -349,22 +350,22 @@ const AgencyDetails: React.FC = () => {
             
             <DataRow>
               <DataLabel>Telefone</DataLabel>
-              <DataValue>{agency.phone || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(agency.phone) || 'Não informado'}</DataValue>
             </DataRow>
             
             <DataRow>
               <DataLabel>Email</DataLabel>
-              <DataValue>{agency.email || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(agency.email) || 'Não informado'}</DataValue>
             </DataRow>
             
             <DataRow>
               <DataLabel>WhatsApp</DataLabel>
-              <DataValue>{agency.social_media.whatsapp || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(agency.social_media.whatsapp) || 'Não informado'}</DataValue>
             </DataRow>
             
             <DataRow>
               <DataLabel>Horário de Atendimento</DataLabel>
-              <DataValue>{agency.schedule || 'Não informado'}</DataValue>
+              <DataValue>{decodeHtmlEntities(agency.schedule) || 'Não informado'}</DataValue>
             </DataRow>
           </InfoSection>
 

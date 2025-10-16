@@ -16,6 +16,7 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useAutoSlide } from '../hooks/useAutoSlide';
+import { decodeHtmlEntities } from '../utils/decodeHtml';
 
 const SectionWrapper = styled(Box)(({ theme }) => ({
   padding: theme.spacing(8, 0),
@@ -665,12 +666,12 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                     </ImageContainer>
                     <CardContentStyled>
                       <PackageTitle>
-                        {pkg.title}
+                        {decodeHtmlEntities(pkg.title)}
                       </PackageTitle>
                       <PackageLocation>
                         <LocationIconStyled />
                         <Typography variant="body2">
-                          {formatLocation(pkg.location)}
+                          {decodeHtmlEntities(formatLocation(pkg.location))}
                         </Typography>
                       </PackageLocation>
                       {/* Tags como chips/badges */}
@@ -695,12 +696,12 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
                               whiteSpace: 'nowrap'
-                            }}>{tag}</Box>
+                            }}>{decodeHtmlEntities(tag)}</Box>
                           ))}
                         </Box>
                       )}
                       <PackageDescription>
-                        {pkg.description}
+                        {decodeHtmlEntities(pkg.description)}
                       </PackageDescription>
                       {!hidePeopleAndPrice && (
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
@@ -799,12 +800,12 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
               </ImageContainer>
               <CardContentStyled>
                 <PackageTitle>
-                  {pkg.title}
+                  {decodeHtmlEntities(pkg.title)}
                 </PackageTitle>
                 <PackageLocation>
                   <LocationIconStyled />
                   <Typography variant="body2">
-                      {formatLocation(pkg.location)}
+                      {decodeHtmlEntities(formatLocation(pkg.location))}
                   </Typography>
                 </PackageLocation>
                 {/* Tags como chips/badges */}
@@ -829,12 +830,12 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap'
-                      }}>{tag}</Box>
+                      }}>{decodeHtmlEntities(tag)}</Box>
                     ))}
                   </Box>
                 )}
                 <PackageDescription>
-                  {pkg.description}
+                  {decodeHtmlEntities(pkg.description)}
                 </PackageDescription>
                 {!hidePeopleAndPrice && (
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
