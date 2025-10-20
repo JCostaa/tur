@@ -558,7 +558,7 @@ const Contact: React.FC = () => {
           onClick={handleScrollTop}
           sx={{
             position: 'fixed',
-            right: { xs: 16, md: 32 },
+            left: { xs: 16, md: 32 },
             bottom: { xs: 16, md: 32 },
             background: `linear-gradient(135deg, ${brandColors.legacy.teal} 0%, ${brandColors.legacy.fish} 100%)`,
             color: 'white',

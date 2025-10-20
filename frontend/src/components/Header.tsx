@@ -127,7 +127,7 @@ const menuItems = [
     children: [
       { text: 'Condutores', href: '/#drivers' },
       { text: 'Guia de Turismo', href: '/#guides' },
-      { text: 'Agência de Viagem', href: '/#agencies' },
+      { text: 'Agência de Turismo', href: '/#agencies' },
     ],
   },
 ];

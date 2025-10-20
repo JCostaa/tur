@@ -36,24 +36,34 @@ const AllRestaurants: React.FC = () => {
   });
 
   // Mapeamento para o formato esperado pelo TravelPackages
-  const mapRestaurantToPackage = (restaurant: any) => ({
-    id: restaurant.id,
-    title: restaurant.title || restaurant.name || 'Restaurante',
-    location: restaurant.location?.city || restaurant.location?.address || restaurant.location || 'Local não informado',
-    rating: restaurant.rating || 5,
-    duration: restaurant.duration_description || restaurant.duration || 'Almoço/Jantar',
-    price: restaurant.price || 'R$ 0',
-    image: restaurant.image,
-    people: restaurant.people || 2,
-    gallery: restaurant.gallery || [],
-    provider: restaurant.provider || {},
-    // Tags: atributos lançados como tags (array de string)
-    tags: Array.isArray(restaurant.attributes)
-      ? restaurant.attributes.flatMap((attr: any) => Array.isArray(attr.items) ? attr.items : [attr.name || attr])
-      : [],
-    // Descrição: usar content ou description, limitado a 120 caracteres
-    description: (restaurant.content || restaurant.description || '').replace(/<[^>]+>/g, '').slice(0, 120) + '...',
-  });
+  const mapRestaurantToPackage = (restaurant: any) => {
+    // Garantir que location sempre seja uma string
+    let locationStr = 'Local não informado';
+    if (typeof restaurant.location === 'string') {
+      locationStr = restaurant.location;
+    } else if (typeof restaurant.location === 'object' && restaurant.location !== null) {
+      locationStr = restaurant.location.city || restaurant.location.address || 'Local não informado';
+    }
+
+    return {
+      id: restaurant.id,
+      title: restaurant.title || restaurant.name || 'Restaurante',
+      location: locationStr,
+      rating: restaurant.rating || 5,
+      duration: restaurant.duration_description || restaurant.duration || 'Almoço/Jantar',
+      price: restaurant.price || 'R$ 0',
+      image: restaurant.image,
+      people: restaurant.people || 2,
+      gallery: restaurant.gallery || [],
+      provider: restaurant.provider || {},
+      // Tags: atributos lançados como tags (array de string)
+      tags: Array.isArray(restaurant.attributes)
+        ? restaurant.attributes.flatMap((attr: any) => Array.isArray(attr.items) ? attr.items : [attr.name || attr])
+        : [],
+      // Descrição: usar content ou description, limitado a 120 caracteres
+      description: (restaurant.content || restaurant.description || '').replace(/<[^>]+>/g, '').slice(0, 120) + '...',
+    };
+  };
   const allRestaurants = Array.isArray(restaurantsData?.data?.restaurants)
     ? restaurantsData.data.restaurants.map(mapRestaurantToPackage)
     : Array.isArray(restaurantsData)
