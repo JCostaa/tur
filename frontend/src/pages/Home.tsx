@@ -110,9 +110,9 @@ const Home: React.FC = () => {
       <Layout>
         <Box sx={{ minHeight: '100vh' }}>
           <Header />
-          {/* <Box id="inicio">
+          <Box id="inicio">
             <HeroBanner />
-          </Box> */}
+          </Box>
         <Box id="servicos" sx={{ mt: 10 }}>
           <Services />
         </Box>

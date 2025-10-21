@@ -1,4 +1,4 @@
-
+import React from 'react';
 import { Box, Container, Typography, Link, Button, Tooltip, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { 
@@ -116,6 +116,31 @@ const Footer: React.FC = () => {
   const { currentCity } = useCity();
   const touristSupport = currentCity?.tourist_support_agency;
 
+  // useEffect para carregar o script do Calendly
+  React.useEffect(() => {
+    // Verifica se o script já foi carregado
+    const existingScript = document.querySelector('script[src="https://assets.calendly.com/assets/external/widget.js"]');
+    
+    if (!existingScript) {
+      const script = document.createElement('script');
+      script.src = 'https://assets.calendly.com/assets/external/widget.js';
+      script.async = true;
+      script.onload = () => {
+        console.log('Calendly script loaded successfully');
+      };
+      script.onerror = () => {
+        console.error('Failed to load Calendly script');
+      };
+      document.head.appendChild(script);
+    } else {
+      console.log('Calendly script already loaded');
+    }
+
+    return () => {
+      // Cleanup não é necessário para o script, mas pode ser útil remover o widget ao desmontar
+    };
+  }, []);
+
   // Função para renderizar ícone social com tooltip
   const renderSocialIcon = (
     icon: React.ReactNode,
@@ -187,6 +212,24 @@ const Footer: React.FC = () => {
               <LogoImg src={logoFinep} alt="Finep" />
               <LogoImg src={logoMCTI} alt="MCTI" />
             </Box>
+          </Box>
+        </Box>
+
+        {/* Calendly Widget */}
+        <Box sx={{ mt: 8, mb: 4 }}>
+          <SectionTitle sx={{ mb: 4 }}>Agende sua Visita</SectionTitle>
+          <Box sx={{ 
+            width: '100%',
+            minHeight: '700px',
+            backgroundColor: 'white',
+            borderRadius: 2,
+            overflow: 'hidden'
+          }}>
+            <div 
+              className="calendly-inline-widget" 
+              data-url="https://calendly.com/resexcunia/30min" 
+              style={{ minWidth: '320px', height: '700px', width: '100%' }}
+            />
           </Box>
         </Box>
       </Container>
