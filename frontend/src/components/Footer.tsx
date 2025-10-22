@@ -222,7 +222,7 @@ const Footer: React.FC = () => {
 
         {/* Calendly Widget */}
         <Box sx={{ mt: 8, mb: 4 }}>
-          <SectionTitle sx={{ mb: 4 }}>Agende sua Visita</SectionTitle>
+          <SectionTitle sx={{ mb: 4 }}>Agende o seu turismo virtual</SectionTitle>
           <Box sx={{ 
             width: '100%',
             minHeight: '700px',
