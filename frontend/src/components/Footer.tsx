@@ -30,6 +30,11 @@ import logoCerti from '../../public/images/footer/certi.png'; // Placeholder
 import logoFNDCT from '../../public/images/footer/fndct.png'; // Placeholder
 import logoFinep from '../../public/images/footer/finep.png'; // Placeholder
 import logoMCTI from '../../public/images/footer/ministerio.png'; // Placeholder
+import logoSebrae from '../../public/images/cunia/sebrae.png'; // Placeholder
+import logoICMBio from '../../public/images/cunia/icm.png'; // Placeholder
+import logoPGA from '../../public/images/cunia/pga.png'; // Placeholder
+import logoFeco from '../../public/images/cunia/feco.png'; // Placeholder
+
 
 const LogoImg = styled('img')({
   maxHeight: 60, // tamanho intermediário
@@ -191,26 +196,26 @@ const Footer: React.FC = () => {
           <Box flex={1} sx={{ mb: { xs: 4, md: 0 } }}>
             <SectionTitle>Apoio</SectionTitle>
             <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
-              <LogoImg src={logoCentelha} alt="Centelha" />
+              <LogoImg src={logoSebrae} alt="Centelha" />
               <LogoImg src={logoFapemat} alt="Fapemat" />
             </Box>
           </Box>
           {/* Parceria */}
-          <Box flex={1} sx={{ mb: { xs: 4, md: 0 } }}>
+          {/* <Box flex={1} sx={{ mb: { xs: 4, md: 0 } }}>
             <SectionTitle>Parceria</SectionTitle>
             <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
               <LogoImg src={logoConfap} alt="Confap" />
               <LogoImg src={logoCNPq} alt="CNPq" />
               <LogoImg src={logoCerti} alt="Certi" />
             </Box>
-          </Box>
+          </Box> */}
           {/* Realização */}
           <Box flex={1}>
             <SectionTitle>Realização</SectionTitle>
             <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
-              <LogoImg src={logoFNDCT} alt="FNDCT" />
-              <LogoImg src={logoFinep} alt="Finep" />
-              <LogoImg src={logoMCTI} alt="MCTI" />
+              <LogoImg src={logoICMBio} alt="ICM" />
+              <LogoImg src={logoFeco} alt="Feco" />
+              <LogoImg src={logoPGA} alt="PPGA" />
             </Box>
           </Box>
         </Box>
