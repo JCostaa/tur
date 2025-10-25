@@ -19,6 +19,7 @@ import TestimonialsSectionHome from '../components/TestimonialsSectionHome';
 import Preloader from '../components/Preloader';
 import SectionDivider from '../components/SectionDivider';
 import PodcastSection from '../components/PodcastSection';
+import PromoSection from '../components/PromoSection';
 import { useQuery } from '@tanstack/react-query';
 import { getNews } from '../services/news';
 import { getTestimonials } from '../services/testimonials';
@@ -196,6 +197,11 @@ const Home: React.FC = () => {
             onTestimonialClick={handleTestimonialClick}
             onViewAllClick={handleViewAllTestimonials}
           />
+        </Box>
+        <SectionDivider sectionIndex={101} />
+        
+        <Box id="promocao">
+          <PromoSection />
         </Box>
        
         {/* <ImageAccordion />

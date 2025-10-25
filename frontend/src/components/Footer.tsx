@@ -20,6 +20,7 @@ import { SiPix, SiTiktok } from 'react-icons/si';
 import brandColors from '../config/colors';
 import { useCity } from '../hooks/useCity';
 import { getVarMarketplaceUrl, getCityName } from '../utils/varMarketplace';
+import CurvedDivider from './CurvedDivider';
 
 // Importe os logos disponíveis. Use placeholders para os que não existem.
 import logoCentelha from '../../public/images/footer/sebrae.png'; // Placeholder
@@ -192,6 +193,16 @@ const Footer: React.FC = () => {
             py: { xs: 2, md: 3 },
           }}
         >
+           {/* Realização */}
+        
+            <Box flex={1}>
+            <SectionTitle>Realização</SectionTitle>
+            <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
+              <LogoImg src={logoICMBio} alt="ICM" />
+              <LogoImg src={logoFeco} alt="Feco" />
+              <LogoImg src={logoPGA} alt="PPGA" />
+            </Box>
+          </Box>
           {/* Apoio */}
           <Box flex={1} sx={{ mb: { xs: 4, md: 0 } }}>
             <SectionTitle>Apoio</SectionTitle>
@@ -209,19 +220,14 @@ const Footer: React.FC = () => {
               <LogoImg src={logoCerti} alt="Certi" />
             </Box>
           </Box> */}
-          {/* Realização */}
-          <Box flex={1}>
-            <SectionTitle>Realização</SectionTitle>
-            <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
-              <LogoImg src={logoICMBio} alt="ICM" />
-              <LogoImg src={logoFeco} alt="Feco" />
-              <LogoImg src={logoPGA} alt="PPGA" />
-            </Box>
-          </Box>
+         
         </Box>
 
         {/* Calendly Widget */}
-        <Box sx={{ mt: 8, mb: 4 }}>
+        <Box sx={{ my: 6 }}>
+          <CurvedDivider height={80} backgroundColor="#FF8C00" />
+        </Box>
+        <Box sx={{ mt: 4, mb: 4 }}>
           <SectionTitle sx={{ mb: 4 }}>Agende o seu turismo virtual</SectionTitle>
           <Box sx={{ 
             width: '100%',
