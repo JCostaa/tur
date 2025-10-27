@@ -33,7 +33,7 @@ export const env = {
   VITE_BLACK_COLOR: "#263238",          // Preto com tom verde escuro
 
   VITE_BUSINESS_NAME: "Cuniã Porto Velho",
-  VITE_SHOW_BUSINESS_NAME: "true",      // Mostrar nome do negócio junto com o logo
+  VITE_SHOW_BUSINESS_NAME: "false",     // Mostrar nome do negócio junto com o logo (desabilitado)
   
   // ===== CONFIGURAÇÕES DE LOCALIZAÇÃO =====
   VITE_REGION: "Norte",                 // Região do Brasil
