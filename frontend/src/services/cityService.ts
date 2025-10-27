@@ -1,4 +1,5 @@
 import skoobturApi from './skoobtur';
+import { env } from '../env';
 
 export interface TouristSupportAgency {
   name: string | null;
@@ -86,11 +87,11 @@ class CityService {
    */
   async getCityFromEnv(): Promise<City | null> {
     try {
-      const envCity = import.meta.env.VITE_CITY;
-      console.log('🌍 VITE_CITY do .env:', envCity);
+      const envCity = env.VITE_CITY;
+      console.log('🌍 VITE_CITY do env.ts:', envCity);
       
       if (!envCity) {
-        console.warn('❌ VITE_CITY não está configurada no .env');
+        console.warn('❌ VITE_CITY não está configurada no env.ts');
         return null;
       }
 

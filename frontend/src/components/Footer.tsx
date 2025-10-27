@@ -21,6 +21,7 @@ import brandColors from '../config/colors';
 import { useCity } from '../hooks/useCity';
 import { getVarMarketplaceUrl, getCityName } from '../utils/varMarketplace';
 import CurvedDivider from './CurvedDivider';
+import { env } from '../env';
 
 // Importe os logos disponíveis. Use placeholders para os que não existem.
 import logoCentelha from '../../public/images/footer/sebrae.png'; // Placeholder
@@ -409,7 +410,7 @@ const Footer: React.FC = () => {
             </Box>
             <Box sx={{ textAlign: 'right' }}>
               <img 
-                src={import.meta.env.VITE_CUSTOM_LOGO_URL || 'RESEX Cuniã'}
+                src={env.VITE_CUSTOM_LOGO_URL || 'RESEX Cuniã'}
                 alt="RESEX Cuniã" 
                 style={{ height: 250, opacity: 0.8, width: 250 }}
               />

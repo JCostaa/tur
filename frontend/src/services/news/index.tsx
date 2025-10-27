@@ -1,4 +1,5 @@
 import { fetchVarBlogPosts, fetchVarBlogPostById, searchVarBlogPosts, mapVarBlogPostToNewsItem, type NewsItem } from '../varBlog';
+import { env } from '../../env';
 
 // Re-exportar NewsItem para compatibilidade
 export type { NewsItem };
@@ -29,8 +30,8 @@ const mockNews: NewsItem[] = [
   {
     id: 1,
     title: "Nova Trilha Ecológica Inaugurada no Parque Municipal",
-    summary: `Uma nova trilha de 2km foi aberta ao público, oferecendo vistas deslumbrantes da fauna e flora local de ${import.meta.env.VITE_CITY || 'Barra do Bugres'}.`,
-    content: `A Prefeitura de ${import.meta.env.VITE_CITY || 'Barra do Bugres'} inaugurou ontem uma nova trilha ecológica no Parque Municipal, proporcionando aos visitantes uma experiência única em contato com a natureza. A trilha, com extensão de 2 quilômetros, foi projetada para ser acessível a visitantes de todas as idades...`,
+    summary: `Uma nova trilha de 2km foi aberta ao público, oferecendo vistas deslumbrantes da fauna e flora local de ${env.VITE_CITY || 'Barra do Bugres'}.`,
+    content: `A Prefeitura de ${env.VITE_CITY || 'Barra do Bugres'} inaugurou ontem uma nova trilha ecológica no Parque Municipal, proporcionando aos visitantes uma experiência única em contato com a natureza. A trilha, com extensão de 2 quilômetros, foi projetada para ser acessível a visitantes de todas as idades...`,
     image: "",
     author: "Maria Silva",
     publishedAt: "2024-01-15T10:00:00Z",
@@ -44,7 +45,7 @@ const mockNews: NewsItem[] = [
     id: 2,
     title: "Festival de Pesca Esportiva Movimenta a Região",
     summary: "O tradicional festival anual de pesca esportiva trouxe centenas de participantes para as águas do Rio Paraguai.",
-    content: `Durante o fim de semana, ${import.meta.env.VITE_CITY || 'Barra do Bugres'} recebeu pescadores de todo o estado para o Festival de Pesca Esportiva, realizado nas margens do Rio Paraguai...`,
+    content: `Durante o fim de semana, ${env.VITE_CITY || 'Barra do Bugres'} recebeu pescadores de todo o estado para o Festival de Pesca Esportiva, realizado nas margens do Rio Paraguai...`,
     image: "/images/browse-2.jpg",
     author: "João Santos",
     publishedAt: "2024-01-14T08:30:00Z",
@@ -58,7 +59,7 @@ const mockNews: NewsItem[] = [
     id: 3,
     title: "Novo Roteiro Gastronômico Destaca Culinária Local",
     summary: "Restaurantes locais se unem para criar roteiro que valoriza ingredientes e pratos típicos da região pantaneira.",
-    content: `A Associação de Restaurantes de ${import.meta.env.VITE_CITY || 'Barra do Bugres'} lançou um novo roteiro gastronômico que destaca os sabores únicos da culinária pantaneira...`,
+    content: `A Associação de Restaurantes de ${env.VITE_CITY || 'Barra do Bugres'} lançou um novo roteiro gastronômico que destaca os sabores únicos da culinária pantaneira...`,
     image: "/images/browse-3.jpg",
     author: "Ana Costa",
     publishedAt: "2024-01-13T14:20:00Z",
@@ -72,7 +73,7 @@ const mockNews: NewsItem[] = [
     id: 4,
     title: "Temporada de Observação de Aves Atrai Turistas",
     summary: "A diversidade de espécies de aves na região tem atraído cada vez mais turistas especializados em birdwatching.",
-    content: `Com mais de 200 espécies catalogadas, ${import.meta.env.VITE_CITY || 'Barra do Bugres'} se consolida como destino preferido para observação de aves...`,
+    content: `Com mais de 200 espécies catalogadas, ${env.VITE_CITY || 'Barra do Bugres'} se consolida como destino preferido para observação de aves...`,
     image: "/images/browse-4.jpg",
     author: "Carlos Oliveira",
     publishedAt: "2024-01-12T09:15:00Z",
@@ -114,7 +115,7 @@ const mockNews: NewsItem[] = [
     id: 7,
     title: "Turismo Rural Ganha Força na Região",
     summary: "Fazendas locais abrem portões para turistas interessados em experiências autênticas do campo.",
-    content: `O turismo rural em ${import.meta.env.VITE_CITY || 'Barra do Bugres'} tem crescido significativamente, com fazendas oferecendo hospedagem e atividades...`,
+    content: `O turismo rural em ${env.VITE_CITY || 'Barra do Bugres'} tem crescido significativamente, com fazendas oferecendo hospedagem e atividades...`,
     image: "/images/header-2.jpg",
     author: "Fernanda Lima",
     publishedAt: "2024-01-09T13:20:00Z",

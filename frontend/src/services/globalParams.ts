@@ -2,6 +2,7 @@
  * Configuração centralizada para parâmetros globais que devem ser 
  * adicionados automaticamente a todas as requisições HTTP GET
  */
+import { env } from '../env';
 
 export interface GlobalParams {
   [key: string]: string | number | boolean;
@@ -40,14 +41,14 @@ const ENV_TO_PARAMS_MAP = {
 
 /**
  * Função para obter parâmetros globais que devem ser adicionados a todas as requests GET
- * Automaticamente pega valores das variáveis de ambiente definidas no mapeamento
+ * Automaticamente pega valores do env.ts definidas no mapeamento
  */
 export const getGlobalParams = (): GlobalParams => {
   const params: GlobalParams = {};
   
-  // Iterar sobre o mapeamento e adicionar parâmetros que existem no .env
+  // Iterar sobre o mapeamento e adicionar parâmetros que existem no env.ts
   Object.entries(ENV_TO_PARAMS_MAP).forEach(([envKey, paramKey]) => {
-    const envValue = import.meta.env[envKey];
+    const envValue = (env as any)[envKey];
     
     if (envValue !== undefined && envValue !== null && envValue !== '') {
       // Converter valores numéricos
@@ -75,22 +76,22 @@ export const debugGlobalParams = (): void => {
   const params = getGlobalParams();
   console.log('🔍 Parâmetros Globais Atuais:', params);
   
-  // Mostrar também quais variáveis de ambiente estão definidas
+  // Mostrar também quais variáveis estão definidas no env.ts
   const definedEnvVars = Object.keys(ENV_TO_PARAMS_MAP).filter(
-    envKey => import.meta.env[envKey] !== undefined && 
-              import.meta.env[envKey] !== null && 
-              import.meta.env[envKey] !== ''
+    envKey => (env as any)[envKey] !== undefined && 
+              (env as any)[envKey] !== null && 
+              (env as any)[envKey] !== ''
   );
   
-  console.log('📋 Variáveis de ambiente definidas:', definedEnvVars);
+  console.log('📋 Variáveis definidas no env.ts:', definedEnvVars);
   console.log('🔧 Mapeamento completo:', ENV_TO_PARAMS_MAP);
 };
 
 /**
- * Função para obter uma variável de ambiente específica
+ * Função para obter uma variável do env.ts específica
  */
 export const getEnvParam = (envKey: keyof typeof ENV_TO_PARAMS_MAP): string | undefined => {
-  return import.meta.env[envKey];
+  return (env as any)[envKey];
 };
 
 /**

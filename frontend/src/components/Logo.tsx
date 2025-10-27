@@ -51,15 +51,17 @@ const LogoText = styled(Typography)<{ customvariant?: string }>(({ theme, custom
   },
 }));
 
+import { env } from '../env';
+
 const Logo: React.FC<LogoProps> = ({ 
   height = 80, 
   width, 
   variant = 'default',
   className 
 }) => {
-  // Buscar configurações do .env (mesmo sistema do CustomLogo)
-  const logoUrl = import.meta.env.VITE_CUSTOM_LOGO_URL;
-  const businessName = import.meta.env.VITE_BUSINESS_NAME || 'Sistema de Turismo';
+  // Buscar configurações do env.ts (mesmo sistema do CustomLogo)
+  const logoUrl = env.VITE_CUSTOM_LOGO_URL;
+  const businessName = env.VITE_BUSINESS_NAME || 'Sistema de Turismo';
   
   console.log('🏷️ Logo (antigo) - Configurações:', {
     logoUrl,

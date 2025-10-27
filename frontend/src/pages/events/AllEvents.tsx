@@ -69,6 +69,31 @@ const AllEvents: React.FC = () => {
       ? data.map(mapEventToPackage)
       : [];
 
+  // Se não houver eventos após o carregamento, redireciona imediatamente
+  React.useEffect(() => {
+    if (!isLoading && (isError || allEvents.length === 0)) {
+      navigate('/', { replace: true });
+    }
+  }, [isLoading, isError, allEvents.length, navigate]);
+
+  // Se está carregando, mostra loading
+  if (isLoading) {
+    return (
+      <Box sx={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
+        <Box sx={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px' }}>
+          <Box sx={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>
+            <Typography>Carregando eventos...</Typography>
+          </Box>
+        </Box>
+      </Box>
+    );
+  }
+
+  // Se houver erro ou não houver eventos, não renderiza nada (o useEffect redireciona)
+  if (isError || allEvents.length === 0) {
+    return null;
+  }
+
   return (
     <Box sx={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
       <Box sx={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px' }}>
@@ -89,27 +114,13 @@ const AllEvents: React.FC = () => {
           </Typography>
         </Box>
         
-        {isLoading ? (
-          <Box sx={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>
-            <Typography>Carregando eventos...</Typography>
-          </Box>
-        ) : isError ? (
-          <Box sx={{ textAlign: 'center', margin: '40px 0', color: 'red' }}>
-            <Typography>Erro ao carregar eventos.</Typography>
-          </Box>
-        ) : allEvents.length === 0 ? (
-          <Box sx={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>
-            <Typography>Nenhum evento encontrado.</Typography>
-          </Box>
-        ) : (
-          <TravelPackages 
-            customPackages={allEvents} 
-            hideTitle 
-            onCardClick={handleEventCardClick}
-            enableAutoSlide={true}
-            autoSlideInterval={4500}
-          />
-        )}
+        <TravelPackages 
+          customPackages={allEvents} 
+          hideTitle 
+          onCardClick={handleEventCardClick}
+          enableAutoSlide={true}
+          autoSlideInterval={4500}
+        />
       </Box>
     </Box>
   );

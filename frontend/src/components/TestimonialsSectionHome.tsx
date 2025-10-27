@@ -324,10 +324,38 @@ const TestimonialsSectionHome: React.FC<TestimonialsSectionHomeProps> = ({
     },
   };
 
-  // Sempre renderiza a seção, mesmo sem dados
+  // Se está carregando, mostra loading
+  if (isLoading) {
+    return (
+      <div style={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
+        <div style={{ textAlign: 'center', marginBottom: 24 }}>
+          <h3 style={{ 
+            color: theme.palette.primary.main, 
+            fontWeight: 600, 
+            letterSpacing: 2, 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            gap: 8 
+          }}>
+            <Star style={{ fontSize: 18 }} />
+            DEPOIMENTOS
+          </h3>
+        </div>
+        <div style={{ padding: '0 20px' }}>
+          <LoadingSkeleton />
+        </div>
+      </div>
+    );
+  }
+
+  // Se não houver depoimentos, esconde a seção completamente
+  if (testimonials.length === 0) {
+    return null;
+  }
 
   return (
-    <div style={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
+    <div style={{ padding: '40px 0', background: theme.palette.background.default }}>
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
         <h3 style={{ 
           color: theme.palette.primary.main, 
@@ -351,11 +379,7 @@ const TestimonialsSectionHome: React.FC<TestimonialsSectionHomeProps> = ({
         </h1>
       </div>
 
-      {isLoading ? (
-        <div style={{ padding: '0 20px' }}>
-          <LoadingSkeleton />
-        </div>
-      ) : testimonials.length > 0 ? (
+      {testimonials.length > 0 && (
         <>
           {/* Setas de navegação Mobile - acima dos cards */}
           {isMobile && testimonials.length > cardsPerView && (
@@ -486,54 +510,32 @@ const TestimonialsSectionHome: React.FC<TestimonialsSectionHomeProps> = ({
             </div>
           </CarouselContainer>
         </>
-      ) : (
-        // Estado vazio - seguindo o padrão das agências
-        <div style={{ 
-          textAlign: 'center', 
-          padding: '80px 20px',
-          maxWidth: '600px',
-          margin: '0 auto'
-        }}>
-          <h2 style={{ 
-            fontSize: '2rem',
-            fontWeight: 600,
-            color: '#9e9e9e',
-            marginBottom: '16px'
-          }}>
-            Nenhum depoimento encontrado
-          </h2>
-          <p style={{ 
-            fontSize: '1.1rem',
-            color: '#757575',
-            marginBottom: '32px'
-          }}>
-            Não há depoimentos disponíveis no momento.
-          </p>
-        </div>
       )}
 
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
-        <button
-          style={{
-            background: theme.palette.primary.main,
-            color: theme.palette.primary.contrastText,
-            border: 'none',
-            borderRadius: 8,
-            padding: '12px 32px',
-            fontSize: 16,
-            fontWeight: 600,
-            cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8
-          }}
-          onClick={handleViewAllClick}
-        >
-          Ver mais depoimentos
-          <ArrowForward style={{ fontSize: 18 }} />
-        </button>
-      </div>
+      {testimonials.length > 3 && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
+          <button
+            style={{
+              background: theme.palette.primary.main,
+              color: theme.palette.primary.contrastText,
+              border: 'none',
+              borderRadius: 8,
+              padding: '12px 32px',
+              fontSize: 16,
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8
+            }}
+            onClick={handleViewAllClick}
+          >
+            Ver mais depoimentos
+            <ArrowForward style={{ fontSize: 18 }} />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

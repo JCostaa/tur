@@ -18,7 +18,6 @@ import NewsSectionHome from '../components/NewsSectionHome';
 import TestimonialsSectionHome from '../components/TestimonialsSectionHome';
 import Preloader from '../components/Preloader';
 import SectionDivider from '../components/SectionDivider';
-import PodcastSection from '../components/PodcastSection';
 import PromoSection from '../components/PromoSection';
 import { useQuery } from '@tanstack/react-query';
 import { getNews } from '../services/news';
@@ -86,19 +85,63 @@ const Home: React.FC = () => {
     navigate('/testimonials');
   };
 
-  // Função para renderizar seções sempre (independente de ter dados)
-  const renderSectionWithDivider = (
-    sectionId: string,
-    SectionComponent: React.ComponentType,
-    sectionIndex: number,
-    boxSx?: object
-  ) => {
+  // Componente auxiliar para renderizar seções com divider
+  const SectionWithDivider = ({ 
+    sectionId, 
+    SectionComponent, 
+    sectionIndex, 
+    boxSx 
+  }: { 
+    sectionId: string; 
+    SectionComponent: React.ComponentType; 
+    sectionIndex: number; 
+    boxSx?: object 
+  }) => {
+    const [hasContent, setHasContent] = React.useState(true); // Começa true para renderizar
+    const containerRef = React.useRef<HTMLDivElement>(null);
+    
+    React.useEffect(() => {
+      if (!containerRef.current) return;
+      
+      const checkContent = () => {
+        if (containerRef.current) {
+          const children = containerRef.current.children;
+          const hasValidContent = children.length > 0;
+          setHasContent(hasValidContent);
+        }
+      };
+      
+      // Observer para detectar mudanças no DOM
+      const observer = new MutationObserver(() => {
+        checkContent();
+      });
+      
+      observer.observe(containerRef.current, {
+        childList: true,
+        subtree: true,
+      });
+      
+      // Verificação inicial com delay
+      const timer = setTimeout(checkContent, 1000);
+      
+      return () => {
+        observer.disconnect();
+        clearTimeout(timer);
+      };
+    }, []);
+    
     return (
       <>
-        <Box id={sectionId} sx={boxSx}>
-          <SectionComponent />
+        <Box 
+          id={sectionId} 
+          sx={boxSx}
+          style={{ display: hasContent ? 'block' : 'none' }}
+        >
+          <div ref={containerRef}>
+            <SectionComponent />
+          </div>
         </Box>
-        <SectionDivider sectionIndex={sectionIndex} />
+        {hasContent && <SectionDivider sectionIndex={sectionIndex} />}
       </>
     );
   };
@@ -119,86 +162,92 @@ const Home: React.FC = () => {
         </Box>
         <SectionDivider sectionIndex={1} />
         
-        {renderSectionWithDivider(
-          "experiencias",
-          Experiences,
-          2
-        )}
+        <SectionWithDivider
+          sectionId="experiencias"
+          SectionComponent={Experiences}
+          sectionIndex={2}
+        />
         
-        {renderSectionWithDivider(
-          "tours",
-          Tours,
-          3
-        )}
+        <SectionWithDivider
+          sectionId="tours"
+          SectionComponent={Tours}
+          sectionIndex={3}
+        />
         
-        {renderSectionWithDivider(
-          "eventos",
-          Events,
-          4
-        )}
+        <SectionWithDivider
+          sectionId="eventos"
+          SectionComponent={Events}
+          sectionIndex={4}
+        />
         
-        {renderSectionWithDivider(
-          "fornecedores-atrativos",
-          AttractionsProviders,
-          5
-        )}
+        <SectionWithDivider
+          sectionId="fornecedores-atrativos"
+          SectionComponent={AttractionsProviders}
+          sectionIndex={5}
+        />
         
-        {renderSectionWithDivider(
-          "accommodations",
-          Accommodation,
-          6
-        )}
+        <SectionWithDivider
+          sectionId="accommodations"
+          SectionComponent={Accommodation}
+          sectionIndex={6}
+        />
         
-        {renderSectionWithDivider(
-          "restaurants",
-          Restaurants,
-          7
-        )}
+        <SectionWithDivider
+          sectionId="restaurants"
+          SectionComponent={Restaurants}
+          sectionIndex={7}
+        />
         
-        {renderSectionWithDivider(
-          "agencies",
-          Agencies,
-          8
-        )}
+        <SectionWithDivider
+          sectionId="agencies"
+          SectionComponent={Agencies}
+          sectionIndex={8}
+        />
         
-        {renderSectionWithDivider(
-          "guides",
-          Guides,
-          9,
-          { minHeight: 300 }
-        )}
+        <SectionWithDivider
+          sectionId="guides"
+          SectionComponent={Guides}
+          sectionIndex={9}
+          boxSx={{ minHeight: 300 }}
+        />
         
-        {renderSectionWithDivider(
-          "drivers",
-          Drivers,
-          10,
-          { minHeight: 300 }
-        )}
+        <SectionWithDivider
+          sectionId="drivers"
+          SectionComponent={Drivers}
+          sectionIndex={10}
+          boxSx={{ minHeight: 300 }}
+        />
         
         {/* <Box id="podcast">
           <PodcastSection />
         </Box> */}
         <SectionDivider sectionIndex={11} />
         
-        <Box id="noticias">
-          <NewsSectionHome 
-            news={newsData?.data || []}
-            isLoading={newsLoading}
-            onNewsClick={handleNewsClick}
-            onViewAllClick={handleViewAllNews}
-          />
-        </Box>
-        <SectionDivider sectionIndex={100} />
+        <SectionWithDivider
+          sectionId="noticias"
+          SectionComponent={() => (
+            <NewsSectionHome 
+              news={newsData?.data || []}
+              isLoading={newsLoading}
+              onNewsClick={handleNewsClick}
+              onViewAllClick={handleViewAllNews}
+            />
+          )}
+          sectionIndex={100}
+        />
         
-        <Box id="depoimentos">
-          <TestimonialsSectionHome 
-            testimonials={testimonialsData?.data || []}
-            isLoading={testimonialsLoading}
-            onTestimonialClick={handleTestimonialClick}
-            onViewAllClick={handleViewAllTestimonials}
-          />
-        </Box>
-        <SectionDivider sectionIndex={101} />
+        <SectionWithDivider
+          sectionId="depoimentos"
+          SectionComponent={() => (
+            <TestimonialsSectionHome 
+              testimonials={testimonialsData?.data || []}
+              isLoading={testimonialsLoading}
+              onTestimonialClick={handleTestimonialClick}
+              onViewAllClick={handleViewAllTestimonials}
+            />
+          )}
+          sectionIndex={101}
+        />
         
         <Box id="promocao">
           <PromoSection />

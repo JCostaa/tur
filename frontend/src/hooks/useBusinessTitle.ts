@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
+import { env } from '../env';
 
 /**
- * Hook para atualizar o título da página com o nome do negócio do .env
+ * Hook para atualizar o título da página com o nome do negócio do env.ts
  */
 export const useBusinessTitle = () => {
   useEffect(() => {
-    const businessName = import.meta.env.VITE_BUSINESS_NAME || 'RESEX Cuniã';
-    const city = import.meta.env.VITE_CITY || 'Barra do Bugres';
+    const businessName = env.VITE_BUSINESS_NAME || 'RESEX Cuniã';
+    const city = env.VITE_CITY || 'Barra do Bugres';
     
     // Atualiza o título da página
     document.title = `${businessName} - Turismo`;

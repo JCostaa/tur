@@ -13,6 +13,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Slide from '@mui/material/Slide';
 import { getVarMarketplaceUrl } from '../../utils/varMarketplace';
 import { decodeHtmlEntities } from '../../utils/decodeHtml';
+import { env } from '../../env';
 
 const BackgroundImage = styled(Box)(({ theme }) => ({
   width: '100%',
@@ -143,8 +144,8 @@ const TourDetail: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: toursData, isLoading, isError } = useQuery({
-    queryKey: ['tours'],
-    queryFn: getTours,
+    queryKey: ['tours', 'all'],
+    queryFn: () => getTours({ limit: 1000 }), // Buscar até 1000 tours para garantir que encontramos o tour
   });
   const tour = React.useMemo(() => {
     const allTours = Array.isArray(toursData?.data?.tours) ? toursData.data.tours : [];
@@ -477,7 +478,7 @@ const TourDetail: React.FC = () => {
             </ProviderBox>
           )}
           <ReserveButton sx={{ mt: 2 }} onClick={() => {
-            const whatsappNumber = import.meta.env.VITE_RESERVE;
+            const whatsappNumber = env.VITE_RESERVE;
             
             if (whatsappNumber) {
               // Limpar e formatar o número do WhatsApp

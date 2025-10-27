@@ -1,9 +1,10 @@
 import axios from 'axios';
 import type { PodcastApiResponse, PodcastEpisode } from '../types/podcast';
+import { env } from '../env';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-const SPOTIFY_CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID  || '9b006e84c7cd4aa4a12ee8adf0c22dac';
-const SPOTIFY_CLIENT_SECRET = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET || 'e6a01e15656a4448938d20ad71826476';
+const API_BASE_URL = env.VITE_API_URL || 'http://localhost:3001';
+const SPOTIFY_CLIENT_ID = env.VITE_SPOTIFY_CLIENT_ID  || '9b006e84c7cd4aa4a12ee8adf0c22dac';
+const SPOTIFY_CLIENT_SECRET = env.VITE_SPOTIFY_CLIENT_SECRET || 'e6a01e15656a4448938d20ad71826476';
 const SPOTIFY_SHOW_ID = '0Gk72vRhktUvbiYGEcuKCT'; // ID do podcast "Vozes do Turismo"
 
 // Mapeamento de ícones para os episódios

@@ -20,7 +20,7 @@ interface TravelPackage {
   is_featured?: boolean; // Indica se o pacote é destaque
 }
 import Header from '../../components/Header';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { getTours } from '../../services/tours';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -64,9 +64,24 @@ const AllTours: React.FC = () => {
   const [price, setPrice] = useState<number[]>(PRICE_RANGE);
   const [selectedExperiences, setSelectedExperiences] = useState<string[]>([]);
 
-  const { data: toursData, isLoading, isError } = useQuery({
+  // UseInfiniteQuery para paginação progressiva
+  const {
+    data: toursData,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useInfiniteQuery({
     queryKey: ['tours'],
-    queryFn: getTours,
+    queryFn: ({ pageParam = 1 }) => getTours({ page: pageParam, limit: 10 }),
+    getNextPageParam: (lastPage, allPages) => {
+      // Verifica se há mais páginas baseado na resposta da API
+      const tours = lastPage?.data?.tours || [];
+      if (tours.length < 10) return undefined; // Não há mais páginas
+      return allPages.length + 1;
+    },
+    initialPageParam: 1,
   });
 
   // Capturar parâmetro de experiência da URL
@@ -78,8 +93,8 @@ const AllTours: React.FC = () => {
     }
   }, [searchParams]);
 
-  // Obter todos os tours
-  const allTours = Array.isArray(toursData?.data?.tours) ? toursData.data.tours : [];
+  // Combinar todos os tours de todas as páginas carregadas
+  const allTours = toursData?.pages.flatMap(page => page?.data?.tours || []) || [];
 
   // Extrair todas as experiências únicas dos tours
   const allExperiences: string[] = Array.from(new Set(
@@ -126,23 +141,30 @@ const AllTours: React.FC = () => {
   }
 
   // Mapeamento para o formato esperado pelo TravelPackages
-  const mapTourToPackage = (tour: Tour) => ({
-    id: tour.id,
-    title: tour.title,
-    location: tour.location?.city || tour.location?.address || 'Local não informado',
-    rating: 5, // valor padrão
-    duration: tour.duration_description || (tour.duration ? `${tour.duration} min` : 'Duração não informada'),
-    price: tour.price,
-    image: tour.image,
-    people: 2, // valor padrão
-    description: tour.content ? tour.content.replace(/<[^>]+>/g, '') : '', // remove HTML
-    is_featured: tour.is_featured || false, // incluir propriedade is_featured
-  });
+  const mapTourToPackage = (tour: Tour) => {
+    const cleanContent = tour.content ? tour.content.replace(/<[^>]+>/g, '').trim() : '';
+    const description = cleanContent.length > 350 
+      ? cleanContent.substring(0, 350) + '...' 
+      : cleanContent;
+    
+    return {
+      id: tour.id,
+      title: tour.title,
+      location: tour.location?.city || tour.location?.address || 'Local não informado',
+      rating: 5, // valor padrão
+      duration: tour.duration_description || (tour.duration ? `${tour.duration} min` : 'Duração não informada'),
+      price: tour.price,
+      image: tour.image,
+      people: 2, // valor padrão
+      description,
+      is_featured: tour.is_featured || false, // incluir propriedade is_featured
+    };
+  };
   const mappedPackages = filteredTours.map(mapTourToPackage);
 
   // Gerar lista dinâmica de cidades a partir dos dados
   const dynamicLocations: string[] = Array.from(new Set(
-    (toursData?.data?.tours || [])
+    allTours
       .map((tour: Tour) => tour.location?.city)
       .filter((city: string | undefined): city is string => !!city)
   ));
@@ -309,7 +331,40 @@ const AllTours: React.FC = () => {
                   }
                 </Typography>
               ) : (
-                <TravelPackages customPackages={mappedPackages} hideTitle showArrows={false} onCardClick={handleTourCardClick} />
+                <>
+                  <TravelPackages 
+                    customPackages={mappedPackages} 
+                    hideTitle 
+                    showArrows={false} 
+                    onCardClick={handleTourCardClick}
+                  />
+                  {hasNextPage && (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          console.log('🔄 Carregando próxima página de tours...');
+                          fetchNextPage();
+                        }}
+                        disabled={isFetchingNextPage}
+                        sx={{
+                          borderRadius: 3,
+                          px: 4,
+                          py: 1.5,
+                          fontSize: 16,
+                          fontWeight: 600,
+                          textTransform: 'none',
+                          background: theme.palette.primary.main,
+                          '&:hover': {
+                            background: theme.palette.primary.dark,
+                          }
+                        }}
+                      >
+                        {isFetchingNextPage ? 'Carregando...' : `Carregar mais tours (${allTours.length} de ${allTours.length}+)`}
+                      </Button>
+                    </Box>
+                  )}
+                </>
               )}
             </Box>
           </Box>

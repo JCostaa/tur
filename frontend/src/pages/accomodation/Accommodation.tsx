@@ -53,46 +53,59 @@ const Accommodation: React.FC = () => {
     navigate(`/accommodation/${accommodation.id}`, { state: { accommodation } });
   };
 
+  // Se está carregando, mostra loading
+  if (isLoading) {
+    return (
+      <div style={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
+        <div style={{ textAlign: 'center', marginBottom: 24 }}>
+          <h3 style={{ color: theme.palette.primary.main, fontWeight: 600, letterSpacing: 2 }}>HOSPEDAGENS</h3>
+        </div>
+        <div style={{ textAlign: 'center', padding: '40px' }}>Carregando hospedagens...</div>
+      </div>
+    );
+  }
+
+  // Se não houver hospedagens ou houver erro, esconde a seção completamente
+  if (isError || accommodations.length === 0) {
+    return null;
+  }
+
   return (
-    <div style={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
+    <div style={{ padding: '40px 0', background: theme.palette.background.default }}>
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
         <h3 style={{ color: theme.palette.primary.main, fontWeight: 600, letterSpacing: 2 }}>HOSPEDAGENS</h3>
       </div>
-      {isLoading ? (
-        <div style={{ textAlign: 'center', padding: '40px' }}>Carregando hospedagens...</div>
-      ) : isError ? (
-        <div style={{ textAlign: 'center', padding: '40px', color: 'error.main' }}>Erro ao carregar hospedagens.</div>
-      ) : (
-        <TravelPackages 
-          customPackages={accommodations} 
-          hideTitle 
-          detailRoute="accommodation"
-          showArrows={true}
-          hidePeopleAndPrice={true}
-          showReserveButton={false}
-          onCardClick={handleAccommodationCardClick}
-          enableAutoSlide={true}
-          autoSlideInterval={4500}
-        />
+      <TravelPackages 
+        customPackages={accommodations} 
+        hideTitle 
+        detailRoute="accommodation"
+        showArrows={true}
+        hidePeopleAndPrice={true}
+        showReserveButton={false}
+        onCardClick={handleAccommodationCardClick}
+        enableAutoSlide={true}
+        autoSlideInterval={4500}
+      />
+      {accommodations.length > 3 && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
+          <button
+            style={{
+              background: theme.palette.primary.main,
+              color: theme.palette.primary.contrastText,
+              border: 'none',
+              borderRadius: 8,
+              padding: '12px 32px',
+              fontSize: 16,
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+            }}
+            onClick={handleClick}
+          >
+            Ver mais
+          </button>
+        </div>
       )}
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
-        <button
-          style={{
-            background: theme.palette.primary.main,
-            color: theme.palette.primary.contrastText,
-            border: 'none',
-            borderRadius: 8,
-            padding: '12px 32px',
-            fontSize: 16,
-            fontWeight: 600,
-            cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
-          }}
-          onClick={handleClick}
-        >
-          Ver mais
-        </button>
-      </div>
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import React, { useState, useCallback } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { getTours } from '../../services/tours';
 import { theme } from '../../theme/theme';
 import TravelPackages from '../../components/TravelPackages';
@@ -7,14 +7,43 @@ import { useNavigate } from 'react-router-dom';
 
 const Tours: React.FC = () => {
   const navigate = useNavigate();
+  const [hasRequestedMore, setHasRequestedMore] = useState(false);
+  
   const handleClick = () => {
     navigate('/all-tours');
   };
 
-  const { data, isLoading, isError } = useQuery({
+  const {
+    data,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useInfiniteQuery({
     queryKey: ['tours'],
-    queryFn: getTours,
+    queryFn: ({ pageParam = 1 }) => getTours({ page: pageParam, limit: 10 }),
+    getNextPageParam: (lastPage, allPages) => {
+      const tours = lastPage?.data?.tours || [];
+      if (tours.length < 10) return undefined;
+      return allPages.length + 1;
+    },
+    initialPageParam: 1,
   });
+
+  // Callback para quando TravelPackages precisar de mais dados
+  const handleNeedMoreData = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage && !hasRequestedMore) {
+      console.log('🔄 [Tours] Solicitando próxima página...');
+      setHasRequestedMore(true);
+      fetchNextPage().finally(() => {
+        setTimeout(() => setHasRequestedMore(false), 1000);
+      });
+    }
+  }, [hasNextPage, isFetchingNextPage, hasRequestedMore, fetchNextPage]);
+
+  // Combinar todos os tours de todas as páginas carregadas
+  const allToursFromPages = data?.pages.flatMap(page => page?.data?.tours || []) || [];
 
   const handleTourCardClick = (tour: { id: number }) => {
     navigate(`/tour/${tour.id}`, { state: { tour } });
@@ -38,8 +67,24 @@ const Tours: React.FC = () => {
     attributes?: { items?: unknown[]; name?: string }[] | unknown[];
     content?: string;
     description?: string;
+    is_featured?: boolean;
     [key: string]: unknown;
-  }) => {
+  }): {
+    id: number;
+    title: string;
+    location: string;
+    rating: number;
+    duration: string;
+    price: string;
+    sale_price?: string;
+    image: string;
+    people: number;
+    gallery: unknown[];
+    provider: unknown;
+    tags: string[];
+    description: string;
+    is_featured: boolean;
+  } => {
     let location = '';
     if (typeof tour.location === 'string' && tour.location) {
       location = tour.location;
@@ -59,6 +104,13 @@ const Tours: React.FC = () => {
     }
     if (!location) location = 'Local não informado';
 
+    const cleanContent = (tour.content || tour.description || '')
+      .replace(/<[^>]+>/g, '')
+      .trim();
+    const description = cleanContent.length > 350 
+      ? cleanContent.substring(0, 350) + '...' 
+      : cleanContent;
+
     return {
       id: tour.id,
       title: tour.title || tour.name || 'Tour',
@@ -67,7 +119,7 @@ const Tours: React.FC = () => {
       duration: tour.duration_description || tour.duration || '1h',
       price: tour.price || 'R$ 0',
       sale_price: tour.sale_price,
-      image: tour.image,
+      image: tour.image || '/images/browse-3.jpg',
       people: tour.people || 2,
       gallery: tour.gallery || [],
       provider: tour.provider || {},
@@ -78,19 +130,12 @@ const Tours: React.FC = () => {
               : [typeof attr === 'object' && attr !== null && 'name' in attr ? String(attr.name) : String(attr)]
           )
         : [],
-      description:
-        (tour.content || tour.description || '')
-          .replace(/<[^>]+>/g, '')
-          .slice(0, 120) + '...',
+      description,
       is_featured: tour.is_featured || false, // incluir propriedade is_featured
     };
   };
 
-  const allTours = Array.isArray(data?.data?.tours)
-    ? data.data.tours.map(mapTourToPackage)
-    : Array.isArray(data)
-      ? data.map(mapTourToPackage)
-      : [];
+  const allTours = allToursFromPages.map(mapTourToPackage);
 
   return (
     <div style={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
@@ -108,6 +153,7 @@ const Tours: React.FC = () => {
           onCardClick={handleTourCardClick}
           enableAutoSlide={true}
           autoSlideInterval={5000}
+          onNeedMoreData={handleNeedMoreData}
         />
       )}
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>

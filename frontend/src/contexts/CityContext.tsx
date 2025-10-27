@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { City } from '../services/cityService';
 import { cityService } from '../services/cityService';
+import { env } from '../env';
 
 interface CityContextData {
   currentCity: City | null;
@@ -39,17 +40,17 @@ export const CityProvider: React.FC<CityProviderProps> = ({ children }) => {
         console.log('🏙️ Cidade carregada da API:', city);
         console.log('🔍 tourist_support_agency da API:', city.tourist_support_agency);
       } else {
-        // Se não encontrar a cidade na API, criar um objeto com os dados do .env
-        const envCity = import.meta.env.VITE_CITY;
-        const envState = import.meta.env.VITE_STATE;
+        // Se não encontrar a cidade na API, criar um objeto com os dados do env.ts
+        const envCity = env.VITE_CITY;
+        const envState = env.VITE_STATE;
         
         if (envCity && envState) {
           const fallbackCity: City = {
             id: 0, // ID temporário
             name: envCity.trim(),
             state: envState.trim(),
-            region: import.meta.env.VITE_REGION || '',
-            country: import.meta.env.VITE_COUNTRY || 'BR',
+            region: env.VITE_REGION || '',
+            country: env.VITE_COUNTRY || 'BR',
             tourist_support_agency: {
               name: null,
               address: null,

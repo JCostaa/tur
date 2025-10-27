@@ -1,9 +1,21 @@
 import api from '../skoobtur';
 
-export const getTours = async () => {
+export interface ToursParams {
+  page?: number;
+  limit?: number;
+  [key: string]: any;
+}
+
+export const getTours = async (params?: ToursParams) => {
   try {
-    console.log('🎯 [TOURS] Fazendo requisição para /tours');
-    const response = await api.get('/tours');
+    const queryParams = {
+      page: params?.page || 1,
+      limit: params?.limit || 10,
+      ...params
+    };
+    
+    console.log('🎯 [TOURS] Fazendo requisição para /tours com params:', queryParams);
+    const response = await api.get('/tours', { params: queryParams });
     console.log('✅ [TOURS] Resposta recebida:', response.data);
     return response.data;
   } catch (error) {

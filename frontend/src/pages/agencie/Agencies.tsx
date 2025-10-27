@@ -75,51 +75,57 @@ const Agencies: React.FC = () => {
       ? data.map(mapAgencyToPackage)
       : [];
 
+  // Se está carregando, mostra loading
+  if (isLoading) {
+    return (
+      <div style={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
+        <div style={{ textAlign: 'center', marginBottom: 24 }}>
+          <h3 style={{ color: theme.palette.primary.main, fontWeight: 600, letterSpacing: 2 }}>AGÊNCIA DE TURISMO</h3>
+        </div>
+        <div style={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>Carregando agências...</div>
+      </div>
+    );
+  }
+
+  // Se não houver agências ou houver erro, esconde a seção completamente
+  if (isError || allAgencies.length === 0) {
+    return null;
+  }
+
   return (
-    <div style={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
+    <div style={{ padding: '40px 0', background: theme.palette.background.default }}>
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
         <h3 style={{ color: theme.palette.primary.main, fontWeight: 600, letterSpacing: 2 }}>AGÊNCIA DE TURISMO</h3>
       </div>
-      {isLoading ? (
-        <div style={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>Carregando agências...</div>
-      ) : isError ? (
-        <div style={{ textAlign: 'center', margin: '40px 0', color: 'red' }}>Erro ao carregar agências.</div>
-      ) : allAgencies.length === 0 ? (
-        <div style={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>
-          <div style={{ fontSize: '18px', fontWeight: 500 }}>Nenhuma agência encontrada</div>
-          <div style={{ fontSize: '14px', marginTop: '8px', opacity: 0.7 }}>
-            Não há agências disponíveis no momento.
-          </div>
+      <TravelPackages 
+        customPackages={allAgencies} 
+        hideTitle 
+        onCardClick={handleAgencyCardClick} 
+        showReserveButton={false}  
+        hidePeopleAndPrice
+        enableAutoSlide={true}
+        autoSlideInterval={4500}
+      />
+      {allAgencies.length > 3 && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
+          <button
+            style={{
+              background: theme.palette.primary.main,
+              color: theme.palette.primary.contrastText,
+              border: 'none',
+              borderRadius: 8,
+              padding: '12px 32px',
+              fontSize: 16,
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+            }}
+            onClick={handleClick}
+          >
+            Ver Todos as Agências
+          </button>
         </div>
-      ) : (
-        <TravelPackages 
-          customPackages={allAgencies} 
-          hideTitle 
-          onCardClick={handleAgencyCardClick} 
-          showReserveButton={false}  
-          hidePeopleAndPrice
-          enableAutoSlide={true}
-          autoSlideInterval={4500}
-        />
       )}
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
-        <button
-          style={{
-            background: theme.palette.primary.main,
-            color: theme.palette.primary.contrastText,
-            border: 'none',
-            borderRadius: 8,
-            padding: '12px 32px',
-            fontSize: 16,
-            fontWeight: 600,
-            cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
-          }}
-          onClick={handleClick}
-        >
-          Ver Todos as Agências
-        </button>
-      </div>
     </div>
   );
 };

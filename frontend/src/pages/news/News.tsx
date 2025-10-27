@@ -42,6 +42,7 @@ import Layout from '../../components/Layout';
 import { getNews, getNewsCategories } from '../../services/news';
 import type { NewsFilters } from '../../services/news';
 import { theme } from '../../theme/theme';
+import { env } from '../../env';
 
 const PageContainer = styled(Box)({
   background: '#f8fafb',
@@ -545,7 +546,7 @@ const News: React.FC = () => {
                   Portal de Notícias
                 </HeroTitle>
                 <HeroSubtitle>
-                  Fique por dentro de todas as novidades do turismo em {import.meta.env.VITE_CITY || 'Barra do Bugres'}. 
+                  Fique por dentro de todas as novidades do turismo em {env.VITE_CITY || 'Barra do Bugres'}. 
                   Descubra eventos especiais, novas atrações e as melhores experiências da nossa região.
                 </HeroSubtitle>
                 <StatsContainer>

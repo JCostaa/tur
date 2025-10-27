@@ -36,6 +36,7 @@ import Layout from '../../components/Layout';
 import { getTestimonials, getTestimonialExperiences } from '../../services/testimonials';
 import type { TestimonialFilters } from '../../services/testimonials';
 import { theme } from '../../theme/theme';
+import { env } from '../../env';
 
 const PageContainer = styled(Box)({
   background: '#f8fafb',
@@ -564,7 +565,7 @@ const Testimonials: React.FC = () => {
                   Portal de Depoimentos
                 </HeroTitle>
                 <HeroSubtitle>
-                  Descubra as experiências reais de quem visitou {import.meta.env.VITE_CITY || 'Barra do Bugres'}. 
+                  Descubra as experiências reais de quem visitou {env.VITE_CITY || 'Barra do Bugres'}. 
                   Histórias autênticas de aventuras, gastronomia e hospitalidade pantaneira.
                 </HeroSubtitle>
                 <StatsContainer>

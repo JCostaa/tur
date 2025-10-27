@@ -1,25 +1,26 @@
 import { useMemo } from 'react';
 import { brandColors } from '../config/colors';
+import { env } from '../env';
 
 /**
- * Hook personalizado para obter cores personalizadas do .env
- * Similar ao sistema de logo customizada, permite definir cores via variáveis de ambiente
+ * Hook personalizado para obter cores personalizadas do env.ts
+ * Similar ao sistema de logo customizada, permite definir cores via configuração
  */
 export const useCustomColors = () => {
   const customColors = useMemo(() => {
-    // Cores primárias do .env (fallback para cores reais da logo Cuniã)
-    const primaryColor = import.meta.env.VITE_PRIMARY_COLOR || brandColors.primary.green;
-    const primaryLight = import.meta.env.VITE_PRIMARY_LIGHT || brandColors.primary.greenLight;
-    const primaryDark = import.meta.env.VITE_PRIMARY_DARK || brandColors.primary.greenDark;
+    // Cores primárias do env.ts (fallback para cores reais da logo Cuniã)
+    const primaryColor = env.VITE_PRIMARY_COLOR || brandColors.primary.green;
+    const primaryLight = env.VITE_PRIMARY_LIGHT || brandColors.primary.greenLight;
+    const primaryDark = env.VITE_PRIMARY_DARK || brandColors.primary.greenDark;
 
-    // Cores secundárias do .env (fallback para cores reais da logo Cuniã)
-    const secondaryColor = import.meta.env.VITE_SECONDARY_COLOR || brandColors.primary.gold;
-    const secondaryLight = import.meta.env.VITE_SECONDARY_LIGHT || brandColors.primary.goldLight;
-    const secondaryDark = import.meta.env.VITE_SECONDARY_DARK || brandColors.primary.goldDark;
+    // Cores secundárias do env.ts (fallback para cores reais da logo Cuniã)
+    const secondaryColor = env.VITE_SECONDARY_COLOR || brandColors.primary.gold;
+    const secondaryLight = env.VITE_SECONDARY_LIGHT || brandColors.primary.goldLight;
+    const secondaryDark = env.VITE_SECONDARY_DARK || brandColors.primary.goldDark;
 
     // Cores opcionais
-    const backgroundColor = import.meta.env.VITE_BACKGROUND_COLOR || '#F5F5DC';
-    const textColor = import.meta.env.VITE_TEXT_COLOR || brandColors.primary.greenDark;
+    const backgroundColor = env.VITE_BACKGROUND_COLOR || '#F5F5DC';
+    const textColor = env.VITE_TEXT_COLOR || brandColors.primary.greenDark;
 
     // Debug logs apenas em desenvolvimento
     if (import.meta.env.DEV) {
@@ -36,8 +37,8 @@ export const useCustomColors = () => {
         },
         background: backgroundColor,
         text: textColor,
-        hasCustomPrimary: !!import.meta.env.VITE_PRIMARY_COLOR,
-        hasCustomSecondary: !!import.meta.env.VITE_SECONDARY_COLOR,
+        hasCustomPrimary: !!env.VITE_PRIMARY_COLOR,
+        hasCustomSecondary: !!env.VITE_SECONDARY_COLOR,
       });
     }
 
@@ -83,8 +84,8 @@ export const useCustomColors = () => {
  */
 export const useHasCustomColors = () => {
   return useMemo(() => {
-    const hasCustomPrimary = !!import.meta.env.VITE_PRIMARY_COLOR;
-    const hasCustomSecondary = !!import.meta.env.VITE_SECONDARY_COLOR;
+    const hasCustomPrimary = !!env.VITE_PRIMARY_COLOR;
+    const hasCustomSecondary = !!env.VITE_SECONDARY_COLOR;
     
     return {
       hasCustomPrimary,

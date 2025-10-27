@@ -93,44 +93,57 @@ const AttractionsProviders: React.FC = () => {
       ? data.map(mapAttractionToPackage)
       : [];
 
+  // Se está carregando, mostra loading
+  if (isLoading) {
+    return (
+      <div style={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
+        <div style={{ textAlign: 'center', marginBottom: 24 }}>
+          <h3 style={{ color: theme.palette.primary.main, fontWeight: 600, letterSpacing: 2 }}>FORNECEDORES DE ATRATIVOS</h3>
+        </div>
+        <div style={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>Carregando fornecedores de atrativos...</div>
+      </div>
+    );
+  }
+
+  // Se não houver fornecedores ou houver erro, esconde a seção completamente
+  if (isError || allAttractions.length === 0) {
+    return null;
+  }
+
   return (
-    <div style={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
+    <div style={{ padding: '40px 0', background: theme.palette.background.default }}>
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
         <h3 style={{ color: theme.palette.primary.main, fontWeight: 600, letterSpacing: 2 }}>FORNECEDORES DE ATRATIVOS</h3>
       </div>
-      {isLoading ? (
-        <div style={{ textAlign: 'center', margin: '40px 0', color: '#888' }}>Carregando fornecedores de atrativos...</div>
-      ) : isError ? (
-        <div style={{ textAlign: 'center', margin: '40px 0', color: 'red' }}>Erro ao carregar fornecedores de atrativos.</div>
-      ) : (
-        <TravelPackages 
-          customPackages={allAttractions} 
-          hideTitle  
-          hidePeopleAndPrice={true}
-          showReserveButton={false}
-          onCardClick={handleAttractionCardClick}
-          enableAutoSlide={true}
-          autoSlideInterval={5000}
-        />
+      <TravelPackages 
+        customPackages={allAttractions} 
+        hideTitle  
+        hidePeopleAndPrice={true}
+        showReserveButton={false}
+        onCardClick={handleAttractionCardClick}
+        enableAutoSlide={true}
+        autoSlideInterval={5000}
+      />
+      {allAttractions.length > 3 && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
+          <button
+            style={{
+              background: theme.palette.primary.main,
+              color: theme.palette.primary.contrastText,
+              border: 'none',
+              borderRadius: 8,
+              padding: '12px 32px',
+              fontSize: 16,
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+            }}
+            onClick={handleClick}
+          >
+            Ver mais
+          </button>
+        </div>
       )}
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
-        <button
-          style={{
-            background: theme.palette.primary.main,
-            color: theme.palette.primary.contrastText,
-            border: 'none',
-            borderRadius: 8,
-            padding: '12px 32px',
-            fontSize: 16,
-            fontWeight: 600,
-            cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
-          }}
-          onClick={handleClick}
-        >
-          Ver mais
-        </button>
-      </div>
     </div>
   );
 };

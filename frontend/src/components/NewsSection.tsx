@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import { ArrowForward, TrendingUp } from '@mui/icons-material';
 import NewsCard from './NewsCard';
 import { theme } from '../theme/theme';
+import { env } from '../env';
 
 interface NewsItem {
   id: number;
@@ -205,7 +206,7 @@ const NewsSection: React.FC<NewsSectionProps> = ({
             Portal de Notícias
           </SectionSubtitle>
           <SectionDescription>
-            Fique por dentro das últimas novidades do turismo em {import.meta.env.VITE_CITY || 'Barra do Bugres'}, 
+            Fique por dentro das últimas novidades do turismo em {env.VITE_CITY || 'Barra do Bugres'}, 
             eventos especiais e descobertas incríveis na nossa região.
           </SectionDescription>
         </SectionHeader>

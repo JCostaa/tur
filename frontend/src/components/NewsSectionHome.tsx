@@ -260,12 +260,38 @@ const NewsSectionHome: React.FC<NewsSectionHomeProps> = ({
     },
   };
 
-  if (!news.length && !isLoading) {
+  // Se está carregando, mostra loading
+  if (isLoading) {
+    return (
+      <div style={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
+        <div style={{ textAlign: 'center', marginBottom: 24 }}>
+          <h3 style={{ 
+            color: theme.palette.primary.main, 
+            fontWeight: 600, 
+            letterSpacing: 2, 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            gap: 8 
+          }}>
+            <TrendingUp style={{ fontSize: 18 }} />
+            NOTÍCIAS
+          </h3>
+        </div>
+        <div style={{ padding: '0 20px' }}>
+          <LoadingSkeleton />
+        </div>
+      </div>
+    );
+  }
+
+  // Se não houver notícias, esconde a seção completamente
+  if (news.length === 0) {
     return null;
   }
 
   return (
-    <div style={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
+    <div style={{ padding: '40px 0', background: theme.palette.background.default }}>
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
         <h3 style={{ 
           color: theme.palette.primary.main, 
@@ -281,11 +307,7 @@ const NewsSectionHome: React.FC<NewsSectionHomeProps> = ({
         </h3>
       </div>
 
-      {isLoading ? (
-        <div style={{ padding: '0 20px' }}>
-          <LoadingSkeleton />
-        </div>
-      ) : (
+      {news.length > 0 && (
         <>
           {/* Setas de navegação Mobile - acima dos cards */}
           {isMobile && news.length > cardsPerView && (
@@ -383,28 +405,30 @@ const NewsSectionHome: React.FC<NewsSectionHomeProps> = ({
         </>
       )}
 
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
-        <button
-          style={{
-            background: theme.palette.primary.main,
-            color: theme.palette.primary.contrastText,
-            border: 'none',
-            borderRadius: 8,
-            padding: '12px 32px',
-            fontSize: 16,
-            fontWeight: 600,
-            cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8
-          }}
-          onClick={handleViewAllClick}
-        >
-          Ver mais notícias
-          <ArrowForward style={{ fontSize: 18 }} />
-        </button>
-      </div>
+      {news.length > 3 && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
+          <button
+            style={{
+              background: theme.palette.primary.main,
+              color: theme.palette.primary.contrastText,
+              border: 'none',
+              borderRadius: 8,
+              padding: '12px 32px',
+              fontSize: 16,
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8
+            }}
+            onClick={handleViewAllClick}
+          >
+            Ver mais notícias
+            <ArrowForward style={{ fontSize: 18 }} />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

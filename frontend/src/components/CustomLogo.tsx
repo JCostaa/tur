@@ -1,6 +1,7 @@
 import React from 'react';
 import { styled, keyframes } from '@mui/material/styles';
 import { Typography, Box } from '@mui/material';
+import { env } from '../env';
 
 // Animação de zoom suave (pulso)
 const zoomPulse = keyframes`
@@ -169,10 +170,10 @@ const CustomLogo: React.FC<CustomLogoProps> = ({
   className,
   showText = true
 }) => {
-  // Buscar configurações do .env
-  const logoUrl = import.meta.env.VITE_CUSTOM_LOGO_URL;
-  const businessName = import.meta.env.VITE_BUSINESS_NAME || 'Sistema de Turismo';
-  const showBusinessName = import.meta.env.VITE_SHOW_BUSINESS_NAME === 'true';
+  // Buscar configurações do env.ts
+  const logoUrl = env.VITE_CUSTOM_LOGO_URL;
+  const businessName = env.VITE_BUSINESS_NAME || 'Sistema de Turismo';
+  const showBusinessName = env.VITE_SHOW_BUSINESS_NAME === 'true';
   
   // Debug logs (apenas em desenvolvimento)
   if (import.meta.env.DEV) {

@@ -51,44 +51,48 @@ const Experiences: React.FC = () => {
     title: e.title
   })));
 
+  // Se está carregando, mostra loading
+  if (isLoading) {
+    return (
+      <div style={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
+        <div style={{ textAlign: 'center', marginBottom: 24 }}>
+          <h3 style={{ color: theme.palette.primary.main, fontWeight: 600, letterSpacing: 2 }}>
+            TODAS AS EXPERIÊNCIAS
+          </h3>
+        </div>
+        <div style={{ textAlign: 'center', padding: '40px' }}>Carregando experiências...</div>
+      </div>
+    );
+  }
+
+  // Se não houver experiências ou houver erro, esconde a seção completamente
+  if (isError || filtered.length === 0) {
+    return null;
+  }
+
   return (
-    <div style={{ padding: '40px 0', minHeight: '100vh', background: theme.palette.background.default }}>
+    <div style={{ padding: '40px 0', background: theme.palette.background.default }}>
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
         <h3 style={{ color: theme.palette.primary.main, fontWeight: 600, letterSpacing: 2 }}>
           TODAS AS EXPERIÊNCIAS
         </h3>
       </div>
-      {/* Filtros por badges - funcionam localmente sem atualizar URL */}
-     
-      {isLoading ? (
-        <div style={{ textAlign: 'center', padding: '40px' }}>Carregando experiências...</div>
-      ) : isError ? (
-        <div style={{ textAlign: 'center', padding: '40px', color: 'red' }}>Erro ao carregar experiências.</div>
-      ) : filtered.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '40px 0', color: '#888' }}>
-          <div style={{ fontSize: '18px', fontWeight: 500 }}>Nenhuma experiência encontrada</div>
-          <div style={{ fontSize: '14px', marginTop: '8px', opacity: 0.7 }}>
-            Não há experiências disponíveis no momento.
-          </div>
-        </div>
-      ) : (
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: 32,
-          maxWidth: 1200,
-          margin: '0 auto',
-          padding: '0 20px',
-        }}>
-        {filtered.map((exp, idx) => (
-          <ExperienceCard
-            key={exp.id || idx}
-            experience={exp}
-            onClick={() => handleExperienceClick(exp)}
-          />
-        ))}
-        </div>
-      )}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+        gap: 32,
+        maxWidth: 1200,
+        margin: '0 auto',
+        padding: '0 20px',
+      }}>
+      {filtered.map((exp, idx) => (
+        <ExperienceCard
+          key={exp.id || idx}
+          experience={exp}
+          onClick={() => handleExperienceClick(exp)}
+        />
+      ))}
+      </div>
     </div>
   );
 };

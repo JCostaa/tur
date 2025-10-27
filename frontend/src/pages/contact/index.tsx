@@ -28,6 +28,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { getLocationParams } from '../../services/globalParams';
 import { useCity } from '../../hooks/useCity';
+import { env } from '../../env';
 
 const Contact: React.FC = () => {
   const theme = useTheme();
@@ -48,9 +49,9 @@ const Contact: React.FC = () => {
   console.log('📞 touristSupport:', touristSupport);
   console.log('🔍 currentCity?.tourist_support_agency:', currentCity?.tourist_support_agency);
   
-  // Fallback para parâmetros de localização do .env se não houver dados do contexto
+  // Fallback para parâmetros de localização do env.ts se não houver dados do contexto
   const locationParams = getLocationParams();
-  const city = currentCity?.name || locationParams.city as string || import.meta.env.VITE_CITY || 'Barra do Bugres';
+  const city = currentCity?.name || locationParams.city as string || env.VITE_CITY || 'Barra do Bugres';
   const state = currentCity?.state || locationParams.state as string || 'MT';
   
   // Função para tratar valores null/undefined

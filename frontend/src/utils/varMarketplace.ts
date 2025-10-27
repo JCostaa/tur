@@ -1,6 +1,7 @@
 /**
  * Utilitário para gerar URLs dinâmicas do Var Marketplace
  */
+import { env } from '../env';
 
 /**
  * Converte o nome da cidade para o formato slug usado na URL
@@ -18,14 +19,14 @@ export const cityToSlug = (cityName: string): string => {
 };
 
 /**
- * Gera a URL dinâmica do Var Marketplace baseada na cidade configurada no .env
+ * Gera a URL dinâmica do Var Marketplace baseada na cidade configurada no env.ts
  * Formato: https://skoobtur.com/municipio/{city-slug}
  */
 export const getVarMarketplaceUrl = (): string => {
-  const cityName = import.meta.env.VITE_CITY;
+  const cityName = env.VITE_CITY;
   
   if (!cityName) {
-    console.warn('VITE_CITY não está configurada no .env, usando URL padrão');
+    console.warn('VITE_CITY não está configurada no env.ts, usando URL padrão');
     return 'https://www.skoobtur.com/';
   }
   
@@ -41,8 +42,8 @@ export const useVarMarketplaceUrl = (): string => {
 };
 
 /**
- * Obtém o nome da cidade configurada no .env
+ * Obtém o nome da cidade configurada no env.ts
  */
 export const getCityName = (): string => {
-  return import.meta.env.VITE_CITY || 'Cidade';
+  return env.VITE_CITY || 'Cidade';
 };
