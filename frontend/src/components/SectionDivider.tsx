@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import CurvedDivider from './CurvedDivider';
+import { env } from '../env';
 
 interface SectionDividerProps {
   /** Índice da seção para determinar se deve mostrar o divisor */
@@ -16,30 +17,38 @@ interface SectionDividerProps {
 const SectionDivider: React.FC<SectionDividerProps> = ({ 
   sectionIndex, 
   inverted = false,
-  height = 80,
-  color = '#FF8C00' // Laranja padrão
+  height = 120,
+  color
 }) => {
-  // Determina se deve mostrar o divisor baseado no índice da seção
-  // Mostra o divisor nas seções ímpares (1, 3, 5, etc.)
-  const shouldShowDivider = sectionIndex % 2 === 1;
+  // Cores da paleta da Cuniã Porto Velho
+  const colors = [
+    env.VITE_PRIMARY_COLOR,      // Amarelo dourado
+    env.VITE_SECONDARY_COLOR,    // Verde floresta
+    env.VITE_PRIMARY_LIGHT,      // Amarelo claro
+    env.VITE_ACCENT_COLOR,       // Laranja vibrante
+    env.VITE_SECONDARY_LIGHT,    // Verde claro
+  ];
 
-  if (!shouldShowDivider) {
-    return null;
-  }
+  // Varia a cor baseado no índice da seção
+  const selectedColor = color || colors[sectionIndex % colors.length];
+  
+  // Varia o estilo da onda (1-5) baseado no índice
+  const waveVariant = ((sectionIndex % 5) + 1) as 1 | 2 | 3 | 4 | 5;
 
   return (
     <Box
       sx={{
         position: 'relative',
         zIndex: 1,
-        marginTop: inverted ? 0 : '-1px', // Remove pequenas gaps
-        marginBottom: inverted ? '-1px' : 0,
+        marginTop: '-2px', // Remove gaps
+        marginBottom: '-2px',
       }}
     >
       <CurvedDivider 
         height={height}
         inverted={inverted}
-        backgroundColor={color}
+        backgroundColor={selectedColor}
+        variant={waveVariant}
       />
     </Box>
   );
