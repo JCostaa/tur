@@ -17,12 +17,16 @@ const PromoImageContainer = styled(Box)(({ theme }) => ({
   margin: '0 auto',
   borderRadius: theme.spacing(2),
   overflow: 'hidden',
-  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+  boxShadow: '0 8px 32px rgba(255, 140, 0, 0.2)',
   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
   cursor: 'pointer',
+  border: '3px solid transparent',
+  backgroundImage: 'linear-gradient(white, white), linear-gradient(135deg, #FFD700, #FFA500, #FF8C00)',
+  backgroundOrigin: 'border-box',
+  backgroundClip: 'padding-box, border-box',
   '&:hover': {
     transform: 'translateY(-8px)',
-    boxShadow: '0 16px 48px rgba(0, 0, 0, 0.18)',
+    boxShadow: '0 16px 48px rgba(255, 140, 0, 0.35)',
   },
   [theme.breakpoints.down('md')]: {
     borderRadius: theme.spacing(1),
@@ -61,22 +65,22 @@ const Overlay = styled(Box)(({ theme }) => ({
 }));
 
 const CallToAction = styled(Button)(({ theme }) => ({
-  backgroundColor: brandColors.primary.gold,
+  background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%)',
   color: 'white',
   fontWeight: 700,
   padding: theme.spacing(1.8, 5),
   fontSize: '1.2rem',
   borderRadius: theme.spacing(3),
   textTransform: 'none',
-  boxShadow: '0 8px 30px rgba(255, 140, 0, 0.5)',
+  boxShadow: '0 8px 30px rgba(255, 165, 0, 0.6)',
   transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-  border: '2px solid rgba(255, 255, 255, 0.3)',
+  border: '2px solid rgba(255, 255, 255, 0.4)',
   backdropFilter: 'blur(8px)',
   '&:hover': {
-    backgroundColor: brandColors.primary.goldDark,
-    boxShadow: '0 12px 40px rgba(255, 140, 0, 0.7)',
+    background: 'linear-gradient(135deg, #FFA500 0%, #FF8C00 50%, #FF6B35 100%)',
+    boxShadow: '0 12px 40px rgba(255, 140, 0, 0.8)',
     transform: 'scale(1.08) translateY(-4px)',
-    border: '2px solid rgba(255, 255, 255, 0.6)',
+    border: '2px solid rgba(255, 255, 255, 0.7)',
   },
   [theme.breakpoints.down('sm')]: {
     fontSize: '1rem',
@@ -99,7 +103,10 @@ const SectionTitle = styled(Typography)(({ theme }) => ({
   fontSize: '2.5rem',
   fontWeight: 700,
   textAlign: 'center',
-  color: brandColors.primary.green,
+  background: 'linear-gradient(135deg, #FFA500 0%, #FF8C00 100%)',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  backgroundClip: 'text',
   marginBottom: theme.spacing(1),
   [theme.breakpoints.down('md')]: {
     fontSize: '2rem',
@@ -112,7 +119,8 @@ const SectionTitle = styled(Typography)(({ theme }) => ({
 const SectionSubtitle = styled(Typography)(({ theme }) => ({
   fontSize: '1.2rem',
   textAlign: 'center',
-  color: brandColors.neutral.darkGray,
+  color: '#FF8C00',
+  fontWeight: 500,
   marginBottom: theme.spacing(6),
   [theme.breakpoints.down('md')]: {
     fontSize: '1.1rem',

@@ -27,7 +27,6 @@ import {
   ExpandMore
 } from '@mui/icons-material';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
-import { brandColors } from '../config/colors';
 import CustomLogo from './CustomLogo';
 
 interface MenuItem {
@@ -37,14 +36,14 @@ interface MenuItem {
 }
 
 const HeaderContainer = styled(AppBar)(() => ({
-  background: `rgba(51, 102, 51, 0.95)`, // Verde real da logo Cuniã
+  background: `linear-gradient(135deg, rgba(255, 165, 0, 0.95) 0%, rgba(255, 140, 0, 0.95) 100%)`, // Gradiente laranja da logo
   backdropFilter: 'blur(10px)',
-  boxShadow: '0 2px 20px rgba(0,0,0,0.2)',
-  borderBottom: '1px solid rgba(255,255,255,0.1)',
+  boxShadow: '0 2px 20px rgba(255, 140, 0, 0.3)',
+  borderBottom: '1px solid rgba(255, 215, 0, 0.2)',
   transition: 'all 0.3s ease',
   '&:hover': {
-    background: `rgba(51, 102, 51, 0.98)`, // Verde real da logo Cuniã mais opaco
-    boxShadow: '0 4px 30px rgba(0,0,0,0.3)',
+    background: `linear-gradient(135deg, rgba(255, 165, 0, 0.98) 0%, rgba(255, 140, 0, 0.98) 100%)`, // Gradiente laranja mais opaco
+    boxShadow: '0 4px 30px rgba(255, 140, 0, 0.4)',
   },
 }));
 
@@ -60,7 +59,7 @@ const NavLink = styled(RouterLink)(({ theme }) => ({
   position: 'relative',
   '&:hover': {
     color: '#fff', // Manter branco no hover
-    backgroundColor: alpha(brandColors.primary.gold, 0.1),
+    backgroundColor: alpha('#FFD700', 0.2), // Amarelo dourado translúcido
     transform: 'translateY(-2px)',
   },
   '&::after': {
@@ -70,7 +69,7 @@ const NavLink = styled(RouterLink)(({ theme }) => ({
     left: '50%',
     width: 0,
     height: 2,
-    background: brandColors.primary.gold,
+    background: '#FFD700', // Amarelo dourado
     transition: 'all 0.3s ease',
     transform: 'translateX(-50%)',
   },
@@ -80,19 +79,21 @@ const NavLink = styled(RouterLink)(({ theme }) => ({
 }));
 
 const ContactButton = styled(Button)(({ theme }) => ({
-  background: brandColors.primary.gold,
-  color: brandColors.neutral.white,
+  background: 'linear-gradient(135deg, #FFD700 0%, #FFC107 100%)', // Gradiente amarelo dourado
+  color: '#663300', // Marrom escuro para contraste
   borderRadius: 8,
   padding: theme.spacing(1, 3),
-  fontWeight: 600,
+  fontWeight: 700,
   textTransform: 'uppercase',
   letterSpacing: 1,
   transition: 'all 0.3s ease',
-  boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+  boxShadow: '0 4px 15px rgba(255, 215, 0, 0.4)',
+  border: '2px solid rgba(255, 255, 255, 0.3)',
   '&:hover': {
-    background: brandColors.primary.goldDark,
+    background: 'linear-gradient(135deg, #FFC107 0%, #FFB300 100%)', // Gradiente âmbar
     transform: 'translateY(-2px)',
-    boxShadow: '0 6px 20px rgba(0,0,0,0.15)',
+    boxShadow: '0 6px 20px rgba(255, 215, 0, 0.6)',
+    border: '2px solid rgba(255, 255, 255, 0.5)',
   },
 }));
 
@@ -100,9 +101,9 @@ const SocialIcon = styled(IconButton)(() => ({
   color: '#fff',
   transition: 'all 0.3s ease',
   '&:hover': {
-    color: brandColors.primary.gold,
+    color: '#FFD700', // Amarelo dourado
     transform: 'scale(1.1) rotate(5deg)',
-    backgroundColor: alpha(brandColors.primary.gold, 0.1),
+    backgroundColor: alpha('#FFD700', 0.2), // Amarelo dourado translúcido
   },
 }));
 
@@ -199,8 +200,8 @@ const Header: React.FC = () => {
             alignItems: 'center',
             borderBottom: arr && idx !== arr.length - 1 && parent ? '1px solid #f0f0f0' : 'none',
             '&:hover': {
-              color: parent ? brandColors.primary.gold : '#fff', // Ouro nos submenus, branco no menu principal
-              backgroundColor: parent ? alpha(brandColors.primary.gold, 0.13) : alpha(brandColors.primary.gold, 0.1),
+              color: parent ? '#FF8C00' : '#fff', // Laranja nos submenus, branco no menu principal
+              backgroundColor: parent ? alpha('#FFD700', 0.13) : alpha('#FFD700', 0.2),
               fontWeight: 500,
             },
           }}
@@ -245,7 +246,7 @@ const Header: React.FC = () => {
             borderBottom: arr && idx !== arr.length - 1 && parent ? '1px solid #f0f0f0' : 'none',
             '&:hover': {
               color: parent ? '#333' : '#fff', // Escuro nos submenus, branco no menu principal
-              backgroundColor: parent ? '#f7f7f7' : alpha(brandColors.primary.gold, 0.1),
+              backgroundColor: parent ? '#f7f7f7' : alpha('#FFD700', 0.2),
               fontWeight: 500,
             },
           }}

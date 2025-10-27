@@ -19,10 +19,13 @@ import TestimonialsSectionHome from '../components/TestimonialsSectionHome';
 import Preloader from '../components/Preloader';
 import SectionDivider from '../components/SectionDivider';
 import PodcastSection from '../components/PodcastSection';
-import PromoSection from '../components/PromoSection';
+// import PromoSection from '../components/PromoSection';
 import { useQuery } from '@tanstack/react-query';
 import { getNews } from '../services/news';
 import { getTestimonials } from '../services/testimonials';
+import StatsSection from '../components/StatsSection';
+import VideoSection from '../components/VideoSection';
+import ImageAccordion from '../components/ImageAccordion';
 
 const Home: React.FC = () => {
   const location = useLocation();
@@ -175,9 +178,9 @@ const Home: React.FC = () => {
           { minHeight: 300 }
         )}
         
-        {/* <Box id="podcast">
+        <Box id="podcast">
           <PodcastSection />
-        </Box> */}
+        </Box>
         <SectionDivider sectionIndex={11} />
         
         <Box id="noticias">
@@ -200,9 +203,9 @@ const Home: React.FC = () => {
         </Box>
         <SectionDivider sectionIndex={101} />
         
-        <Box id="promocao">
+        {/* <Box id="promocao">
           <PromoSection />
-        </Box>
+        </Box> */}
        
         {/* <ImageAccordion />
         <StatsSection />

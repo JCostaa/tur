@@ -1,20 +1,22 @@
 # ===== CONFIGURAÇÕES DE CORES PERSONALIZADAS =====
 
 # Cores primárias (usadas para botões principais, links, destaques)
-VITE_PRIMARY_COLOR=#2e7d32
-VITE_PRIMARY_LIGHT=#4caf50
-VITE_PRIMARY_DARK=#1b5e20
+# Baseadas na logo "É de LIVRAMENTO" - tons de amarelo/laranja
+VITE_PRIMARY_COLOR=#FFA500
+VITE_PRIMARY_LIGHT=#FFD700
+VITE_PRIMARY_DARK=#FF8C00
 
 # Cores secundárias (usadas para header, navegação, fundos)
-VITE_SECONDARY_COLOR=#0277bd
-VITE_SECONDARY_LIGHT=#29b6f6
-VITE_SECONDARY_DARK=#01579b
+# Tom laranja mais intenso para destaques
+VITE_SECONDARY_COLOR=#FF8C00
+VITE_SECONDARY_LIGHT=#FFC107
+VITE_SECONDARY_DARK=#FF6B35
 
 # Cor de fundo padrão (opcional)
-VITE_BACKGROUND_COLOR=#f1f8e9
+VITE_BACKGROUND_COLOR=#FFF8E7
 
 # Cor do texto principal (opcional)
-VITE_TEXT_COLOR=#1b5e20
+VITE_TEXT_COLOR=#663300
 
 # ===== CONFIGURAÇÕES ESPECÍFICAS DA CUNIÃ =====
 
@@ -24,11 +26,12 @@ VITE_BUSINESS_NAME=RESEX Cuniã
 # Logo personalizada
 VITE_CUSTOM_LOGO=/images/cunia/logo.jpg
 
-# Cores adicionais da paleta Cuniã
-VITE_ACCENT_COLOR=#ff8f00
-VITE_SUCCESS_COLOR=#2e7d32
-VITE_WARNING_COLOR=#ff8f00
-VITE_ERROR_COLOR=#d32f2f
+# Cores adicionais da paleta (baseadas na logo amarela/laranja)
+VITE_ACCENT_COLOR=#FFD700
+VITE_SUCCESS_COLOR=#FFA500
+VITE_WARNING_COLOR=#FF8C00
+VITE_ERROR_COLOR=#FF6B35
+VITE_INFO_COLOR=#FFC107
 
 # ===== CONFIGURAÇÕES DE API =====
 

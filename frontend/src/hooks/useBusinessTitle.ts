@@ -5,7 +5,7 @@ import { useEffect } from 'react';
  */
 export const useBusinessTitle = () => {
   useEffect(() => {
-    const businessName = import.meta.env.VITE_BUSINESS_NAME || 'RESEX Cuniã';
+    const businessName = import.meta.env.VITE_BUSINESS_NAME || 'Livramento Cuniã';
     const city = import.meta.env.VITE_CITY || 'Barra do Bugres';
     
     // Atualiza o título da página
