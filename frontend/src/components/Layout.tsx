@@ -28,7 +28,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         onClick={handleScrollTop}
         style={{
           position: 'fixed',
-          left: 32,
+          right: 32,
           bottom: 32,
           background: '#E7A400', // Ouro da logo Cuniã
           color: '#fff',

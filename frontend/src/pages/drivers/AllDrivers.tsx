@@ -10,7 +10,7 @@ import { getDrivers } from '../../services/drivers';
 import { useNavigate } from 'react-router-dom';
 
 const LOCATIONS = [
-  'Barra de São Miguel',
+  'Resex Cuniã',
   'Praia do Gunga',
   'Praia do Francês',
 ];

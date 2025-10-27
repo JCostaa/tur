@@ -4,7 +4,7 @@ export const MOCK_TOURS = [
   {
     id: 1,
     title: 'Passeio de Barco na Lagoa',
-    location: 'Barra de São Miguel',
+    location: 'Resex Cuniã',
     rating: 4.8,
     duration: '3h',
     price: 'R$ 120',
@@ -15,7 +15,7 @@ export const MOCK_TOURS = [
   {
     id: 2,
     title: 'Trilha Ecológica',
-    location: 'Barra de São Miguel',
+    location: 'Resex Cuniã',
     rating: 4.6,
     duration: '2h',
     price: 'R$ 80',
@@ -37,7 +37,7 @@ export const MOCK_TOURS = [
   {
     id: 4,
     title: 'Mergulho com Cilindro',
-    location: 'Barra de São Miguel',
+    location: 'Resex Cuniã',
     rating: 4.7,
     duration: '1h',
     price: 'R$ 250',

@@ -186,65 +186,33 @@ const Footer: React.FC = () => {
         <Box
           sx={{
             display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' },
+            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            gap: { xs: 4, md: 6 },
             textAlign: 'center',
             py: { xs: 2, md: 3 },
           }}
         >
-            {/* Apoio */}
-            <Box flex={1} sx={{ mb: { xs: 4, md: 0 } }}>
-            <SectionTitle>Relização</SectionTitle>
+          {/* Parceiros */}
+          <Box sx={{ width: '100%' }}>
+            <SectionTitle>Parceiros</SectionTitle>
             <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
-              <LogoImg src={logoSebrae} alt="Centelha" />
-              <LogoImg src={logoFapemat} alt="Fapemat" />
-            </Box>
-          </Box>
-           {/* Realização */}
-        
-            <Box flex={1}>
-            <SectionTitle>Apoio</SectionTitle>
-            <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
-              <LogoImg src={logoICMBio} alt="ICM" />
-              <LogoImg src={logoFeco} alt="Feco" />
-              <LogoImg src={logoPGA} alt="PPGA" />
-            </Box>
-          </Box>
-        
-          {/* Parceria */}
-          {/* <Box flex={1} sx={{ mb: { xs: 4, md: 0 } }}>
-            <SectionTitle>Parceria</SectionTitle>
-            <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
+              <LogoImg src={logoCentelha} alt="Sebrae" />
+              <LogoImg src={logoFapemat} alt="Porto Velho" />
               <LogoImg src={logoConfap} alt="Confap" />
               <LogoImg src={logoCNPq} alt="CNPq" />
               <LogoImg src={logoCerti} alt="Certi" />
+              <LogoImg src={logoFNDCT} alt="FNDCT" />
+              <LogoImg src={logoFinep} alt="Finep" />
             </Box>
-          </Box> */}
-         
+          </Box>
         </Box>
 
         {/* Calendly Widget */}
         <Box sx={{ my: 6 }}>
           <CurvedDivider height={80} backgroundColor="#FF8C00" />
         </Box>
-        <Box sx={{ mt: 4, mb: 4 }}>
-          <SectionTitle sx={{ mb: 4 }}>Agende o seu turismo virtual</SectionTitle>
-          <Box sx={{ 
-            width: '100%',
-            minHeight: '700px',
-            backgroundColor: 'white',
-            borderRadius: 2,
-            overflow: 'hidden'
-          }}>
-            <div 
-              className="calendly-inline-widget" 
-              data-url="https://calendly.com/resexcunia/30min" 
-              style={{ minWidth: '320px', height: '700px', width: '100%' }}
-            />
-          </Box>
-        </Box>
+     
       </Container>
     </Box>
 

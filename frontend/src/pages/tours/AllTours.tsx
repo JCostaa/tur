@@ -214,7 +214,7 @@ const AllTours: React.FC = () => {
             <Typography variant="h5" sx={{ color: theme.palette.text.secondary, fontWeight: 400, fontSize: isMobile ? 16 : 22 }}>
               {selectedExperiences.length > 0
                 ? `Mostrando tours que oferecem: ${selectedExperiences.join(', ')}`
-                : 'Descubra experiências incríveis em Barra de São Miguel e região'
+                : 'Descubra experiências incríveis em Resex Cuniã e região'
               }
             </Typography>
           </Box>
