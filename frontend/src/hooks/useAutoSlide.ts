@@ -25,6 +25,34 @@ export const useAutoSlide = ({
 }: UseAutoSlideProps): UseAutoSlideReturn => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const prevTotalItemsRef = useRef(totalItems);
+  const isFirstRenderRef = useRef(true);
+
+  // Quando totalItems muda, ajusta o currentIndex apenas se estiver fora dos limites
+  useEffect(() => {
+    // Ignora a primeira renderização
+    if (isFirstRenderRef.current) {
+      isFirstRenderRef.current = false;
+      prevTotalItemsRef.current = totalItems;
+      return;
+    }
+
+    // Só atualiza se o total realmente mudou E se aumentou (mais dados carregados)
+    if (prevTotalItemsRef.current !== totalItems && totalItems > prevTotalItemsRef.current) {
+      prevTotalItemsRef.current = totalItems;
+      // NÃO precisamos ajustar o currentIndex - ele já está válido e será mantido automaticamente
+    } else if (totalItems < prevTotalItemsRef.current) {
+      // Se o total diminuiu (caso raro), ajusta o índice se necessário
+      prevTotalItemsRef.current = totalItems;
+      setCurrentIndex(prev => {
+        if (prev >= totalItems) {
+          const lastValidIndex = Math.max(0, Math.floor((totalItems - 1) / itemsPerView) * itemsPerView);
+          return lastValidIndex;
+        }
+        return prev;
+      });
+    }
+  }, [totalItems, itemsPerView, currentIndex]);
 
   // Calcula se pode avançar ou voltar
   const canGoNext = currentIndex + itemsPerView < totalItems;

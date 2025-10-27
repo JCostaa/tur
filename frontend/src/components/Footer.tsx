@@ -194,24 +194,25 @@ const Footer: React.FC = () => {
             py: { xs: 2, md: 3 },
           }}
         >
+            {/* Apoio */}
+            <Box flex={1} sx={{ mb: { xs: 4, md: 0 } }}>
+            <SectionTitle>Relização</SectionTitle>
+            <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
+              <LogoImg src={logoSebrae} alt="Centelha" />
+              <LogoImg src={logoFapemat} alt="Fapemat" />
+            </Box>
+          </Box>
            {/* Realização */}
         
             <Box flex={1}>
-            <SectionTitle>Realização</SectionTitle>
+            <SectionTitle>Apoio</SectionTitle>
             <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
               <LogoImg src={logoICMBio} alt="ICM" />
               <LogoImg src={logoFeco} alt="Feco" />
               <LogoImg src={logoPGA} alt="PPGA" />
             </Box>
           </Box>
-          {/* Apoio */}
-          <Box flex={1} sx={{ mb: { xs: 4, md: 0 } }}>
-            <SectionTitle>Apoio</SectionTitle>
-            <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
-              <LogoImg src={logoSebrae} alt="Centelha" />
-              <LogoImg src={logoFapemat} alt="Fapemat" />
-            </Box>
-          </Box>
+        
           {/* Parceria */}
           {/* <Box flex={1} sx={{ mb: { xs: 4, md: 0 } }}>
             <SectionTitle>Parceria</SectionTitle>

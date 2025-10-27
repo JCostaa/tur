@@ -424,6 +424,7 @@ interface TravelPackage {
 
 interface TravelPackagesProps {
   customPackages?: TravelPackage[];
+  totalItems?: number; // novo: total de itens da API (para calcular páginas corretamente)
   hideTitle?: boolean;
   detailRoute?: string; // new prop
   showArrows?: boolean; // novo: controla exibição das setas
@@ -479,6 +480,7 @@ const defaultPackages = [
 
 const TravelPackages: React.FC<TravelPackagesProps> = ({ 
   customPackages, 
+  totalItems,
   hideTitle, 
   detailRoute = 'restaurant', 
   showArrows = true, 
@@ -494,6 +496,9 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
   const packages = customPackages || defaultPackages;
   const navigate = useNavigate();
   const cardsPerView = isMobile ? 1 : 3;
+  
+  // Usa o total da API se disponível, senão usa o tamanho do array
+  const totalItemsCount = totalItems || packages.length;
 
   // Hook para slide automático (apenas quando showArrows é true)
   const {
@@ -518,11 +523,11 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
       
       // Se precisa de mais cards do que tem disponível, solicita mais dados
       if (cardsNeeded > totalCards) {
-        console.log('📊 [TravelPackages] Solicitando mais dados da API... (atual:', totalCards, 'necessário:', cardsNeeded, 'página visual:', currentViewPage + 1, ')');
         onNeedMoreData();
       }
     }
   }, [startIndex, packages.length, cardsPerView, onNeedMoreData]);
+
 
   // Calcular o translateX para o efeito de scroll suave
   const cardWidth = isMobile ? 280 : 350;
@@ -623,7 +628,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
               minWidth: 80,
               textAlign: 'center'
             }}>
-              {Math.min(Math.floor(startIndex / cardsPerView) + 1, Math.ceil(packages.length / cardsPerView))} de {Math.ceil(packages.length / cardsPerView)}
+              {Math.min(Math.floor(startIndex / cardsPerView) + 1, Math.ceil(totalItemsCount / cardsPerView))} de {Math.ceil(totalItemsCount / cardsPerView)}
             </Box>
             
             <button

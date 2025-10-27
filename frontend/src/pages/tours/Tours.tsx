@@ -34,7 +34,6 @@ const Tours: React.FC = () => {
   // Callback para quando TravelPackages precisar de mais dados
   const handleNeedMoreData = useCallback(() => {
     if (hasNextPage && !isFetchingNextPage && !hasRequestedMore) {
-      console.log('🔄 [Tours] Solicitando próxima página...');
       setHasRequestedMore(true);
       fetchNextPage().finally(() => {
         setTimeout(() => setHasRequestedMore(false), 1000);
@@ -44,6 +43,9 @@ const Tours: React.FC = () => {
 
   // Combinar todos os tours de todas as páginas carregadas
   const allToursFromPages = data?.pages.flatMap(page => page?.data?.tours || []) || [];
+  
+  // Pegar o total de registros da primeira página da API
+  const totalItemsFromApi = data?.pages[0]?.data?.total || allToursFromPages.length;
 
   const handleTourCardClick = (tour: { id: number }) => {
     navigate(`/tour/${tour.id}`, { state: { tour } });
@@ -149,6 +151,7 @@ const Tours: React.FC = () => {
       ) : (
         <TravelPackages 
           customPackages={allTours} 
+          totalItems={totalItemsFromApi}
           hideTitle  
           onCardClick={handleTourCardClick}
           enableAutoSlide={true}
