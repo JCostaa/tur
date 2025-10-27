@@ -1,16 +1,16 @@
-// Configuração de cores baseada na logo RESEX Cuniã
+// Configuração de cores baseada na logo de Livramento
 // Cores extraídas diretamente da logo oficial
 export const brandColors = {
-  // Cores principais da logo Cuniã (extraídas da logo real)
+  // Cores principais da logo Livramento (extraídas da logo real)
   primary: {
-    green: '#336633', // Verde - Réptil e vegetação
-    greenLight: '#4A7C4A', // Verde claro
-    greenDark: '#1A331A', // Verde escuro
-    gold: '#E7A400', // Laranja/Ouro - Água e barco
-    goldLight: '#FFCC00', // Ouro claro
-    goldDark: '#B8860B', // Ouro escuro
-    red: '#CC3333', // Vermelho - Calça da figura
-    black: '#000000', // Preto - Contornos e aves
+    green: '#43A047', // Verde - elemento do brasão
+    greenLight: '#66BB6A', // Verde claro
+    greenDark: '#2E7D32', // Verde escuro
+    gold: '#FFC107', // Amarelo vibrante - cor dominante do logo
+    goldLight: '#FFD54F', // Amarelo claro brilhante
+    goldDark: '#FF8F00', // Laranja dourado do gradiente
+    red: '#D84315', // Laranja terracota - produtos artesanais
+    black: '#3E2723', // Marrom escuro - letras "LIVRAMENTO"
   },
   
   // Cores da logo original (mantidas para compatibilidade)
@@ -23,19 +23,19 @@ export const brandColors = {
     leafOrange: '#ff8c00', // Laranja da folha com padrão
   },
   
-  // Cores derivadas da Cuniã (baseadas nas cores reais da logo)
+  // Cores derivadas de Livramento (baseadas nas cores reais da logo)
   secondary: {
     // Cores derivadas do verde
-    greenMuted: '#5A8A5A', // Verde suave
-    greenDeep: '#2D4A2D', // Verde profundo
+    greenMuted: '#66BB6A', // Verde suave
+    greenDeep: '#1B5E20', // Verde profundo
     
-    // Cores derivadas do ouro
-    goldMuted: '#F4D03F', // Ouro suave
-    goldDeep: '#D4AF37', // Ouro profundo
+    // Cores derivadas do amarelo/laranja
+    goldMuted: '#FFEB3B', // Amarelo suave
+    goldDeep: '#F57C00', // Laranja profundo
     
-    // Cores derivadas do vermelho
-    redLight: '#E57373', // Vermelho claro
-    redDark: '#A52A2A', // Vermelho escuro
+    // Cores derivadas do laranja terracota
+    redLight: '#FF8A65', // Laranja claro
+    redDark: '#BF360C', // Laranja escuro/terracota
     
     // Cores legadas (mantidas para compatibilidade)
     lightTeal: '#4a7c59',
@@ -53,25 +53,25 @@ export const brandColors = {
     gray: '#666666',
   },
   
-  // Gradientes da Cuniã (baseados nas cores reais da logo)
+  // Gradientes de Livramento (baseados nas cores reais da logo)
   gradients: {
-    // Gradiente principal - verde para ouro (natureza para água)
-    primary: 'linear-gradient(135deg, #336633 0%, #E7A400 100%)',
+    // Gradiente principal - amarelo para laranja (logo principal)
+    primary: 'linear-gradient(135deg, #FFC107 0%, #FF8F00 100%)',
     
-    // Gradiente secundário - ouro para verde claro
-    secondary: 'linear-gradient(135deg, #E7A400 0%, #4A7C4A 100%)',
+    // Gradiente secundário - amarelo para laranja terracota
+    secondary: 'linear-gradient(135deg, #FFD54F 0%, #D84315 100%)',
     
-    // Gradiente hero - verde escuro para ouro
-    hero: 'linear-gradient(135deg, #1A331A 0%, #E7A400 100%)',
+    // Gradiente hero - amarelo vibrante para laranja dourado
+    hero: 'linear-gradient(135deg, #FFC107 0%, #F57C00 100%)',
     
-    // Gradiente sunset - ouro para vermelho
-    sunset: 'linear-gradient(135deg, #E7A400 0%, #CC3333 100%)',
+    // Gradiente sunset - amarelo para laranja escuro
+    sunset: 'linear-gradient(135deg, #FFD54F 0%, #BF360C 100%)',
     
-    // Gradiente natural - verde claro para verde escuro
-    natural: 'linear-gradient(135deg, #4A7C4A 0%, #1A331A 100%)',
+    // Gradiente natural - amarelo para verde
+    natural: 'linear-gradient(135deg, #FFC107 0%, #43A047 100%)',
     
-    // Gradiente aquático - ouro claro para ouro escuro
-    aquatic: 'linear-gradient(135deg, #FFCC00 0%, #B8860B 100%)',
+    // Gradiente aquático - amarelo claro para amarelo escuro
+    aquatic: 'linear-gradient(135deg, #FFD54F 0%, #FF8F00 100%)',
     
     // Gradientes legados (mantidos para compatibilidade)
     legacyPrimary: 'linear-gradient(135deg, #ff6b35 0%, #ff8c00 100%)',
@@ -80,39 +80,39 @@ export const brandColors = {
     legacySunset: 'linear-gradient(135deg, #ffd700 0%, #ff6b35 100%)',
   },
   
-  // Cores de estado da Cuniã (baseadas nas cores reais da logo)
+  // Cores de estado de Livramento (baseadas nas cores reais da logo)
   states: {
-    hover: '#4A7C4A', // Verde claro para hover
-    active: '#1A331A', // Verde escuro para estado ativo
+    hover: '#FFD54F', // Amarelo claro para hover
+    active: '#FF8F00', // Laranja para estado ativo
     disabled: '#cccccc',
-    success: '#336633', // Verde principal para sucesso
-    warning: '#E7A400', // Ouro para avisos
-    error: '#CC3333', // Vermelho para erros
-    info: '#336633', // Verde para informações
+    success: '#43A047', // Verde para sucesso
+    warning: '#FB8C00', // Laranja para avisos
+    error: '#D32F2F', // Vermelho para erros
+    info: '#1565C0', // Azul do brasão para informações
   }
 };
 
-// Tema Material-UI baseado nas cores reais da logo Cuniã
+// Tema Material-UI baseado nas cores reais da logo de Livramento
 export const themeColors = {
   palette: {
     primary: {
-      main: brandColors.primary.green,
-      light: brandColors.primary.greenLight,
-      dark: brandColors.primary.greenDark,
-      contrastText: brandColors.neutral.white,
-    },
-    secondary: {
       main: brandColors.primary.gold,
       light: brandColors.primary.goldLight,
       dark: brandColors.primary.goldDark,
       contrastText: brandColors.neutral.white,
     },
+    secondary: {
+      main: brandColors.primary.red,
+      light: brandColors.secondary.redLight,
+      dark: brandColors.secondary.redDark,
+      contrastText: brandColors.neutral.white,
+    },
     background: {
-      default: '#F5F5DC', // Fundo bege claro
+      default: '#FFF9E6', // Amarelo claríssimo
       paper: brandColors.neutral.white,
     },
     text: {
-      primary: brandColors.primary.greenDark,
+      primary: '#5D4037', // Marrom para texto
       secondary: brandColors.neutral.gray,
     },
     success: {

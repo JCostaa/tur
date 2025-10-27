@@ -37,13 +37,13 @@ interface MenuItem {
 }
 
 const HeaderContainer = styled(AppBar)(() => ({
-  background: `rgba(51, 102, 51, 0.95)`, // Verde real da logo Cuniã
+  background: `rgba(216, 67, 21, 0.95)`, // Laranja terracota de Livramento
   backdropFilter: 'blur(10px)',
   boxShadow: '0 2px 20px rgba(0,0,0,0.2)',
   borderBottom: '1px solid rgba(255,255,255,0.1)',
   transition: 'all 0.3s ease',
   '&:hover': {
-    background: `rgba(51, 102, 51, 0.98)`, // Verde real da logo Cuniã mais opaco
+    background: `rgba(216, 67, 21, 0.98)`, // Laranja terracota mais opaco
     boxShadow: '0 4px 30px rgba(0,0,0,0.3)',
   },
 }));

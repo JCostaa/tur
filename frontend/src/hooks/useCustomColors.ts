@@ -8,19 +8,19 @@ import { env } from '../env';
  */
 export const useCustomColors = () => {
   const customColors = useMemo(() => {
-    // Cores primárias do env.ts (fallback para cores reais da logo Cuniã)
-    const primaryColor = env.VITE_PRIMARY_COLOR || brandColors.primary.green;
-    const primaryLight = env.VITE_PRIMARY_LIGHT || brandColors.primary.greenLight;
-    const primaryDark = env.VITE_PRIMARY_DARK || brandColors.primary.greenDark;
+    // Cores primárias do env.ts (fallback para cores reais da logo de Livramento)
+    const primaryColor = env.VITE_PRIMARY_COLOR || brandColors.primary.gold;
+    const primaryLight = env.VITE_PRIMARY_LIGHT || brandColors.primary.goldLight;
+    const primaryDark = env.VITE_PRIMARY_DARK || brandColors.primary.goldDark;
 
-    // Cores secundárias do env.ts (fallback para cores reais da logo Cuniã)
-    const secondaryColor = env.VITE_SECONDARY_COLOR || brandColors.primary.gold;
-    const secondaryLight = env.VITE_SECONDARY_LIGHT || brandColors.primary.goldLight;
-    const secondaryDark = env.VITE_SECONDARY_DARK || brandColors.primary.goldDark;
+    // Cores secundárias do env.ts (fallback para cores reais da logo de Livramento)
+    const secondaryColor = env.VITE_SECONDARY_COLOR || brandColors.primary.red;
+    const secondaryLight = env.VITE_SECONDARY_LIGHT || brandColors.secondary.redLight;
+    const secondaryDark = env.VITE_SECONDARY_DARK || brandColors.secondary.redDark;
 
     // Cores opcionais
-    const backgroundColor = env.VITE_BACKGROUND_COLOR || '#F5F5DC';
-    const textColor = env.VITE_TEXT_COLOR || brandColors.primary.greenDark;
+    const backgroundColor = env.VITE_BACKGROUND_COLOR || '#FFF9E6';
+    const textColor = env.VITE_TEXT_COLOR || '#5D4037';
 
     // Debug logs apenas em desenvolvimento
     if (import.meta.env.DEV) {

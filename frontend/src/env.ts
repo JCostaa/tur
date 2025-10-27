@@ -3,36 +3,36 @@ export const env = {
     VITE_API_URL: "https://tur-production.up.railway.app",
     VITE_SKOOBTUR_API_URL: "https://www.skoobtur.com/api/public",
     VITE_SKOOBTUR_API_KEY: "Jnw6M615NguH3eo1b5MFGifPLVR62WdaY1bab6KUtv8ZrQJnlHb8LQxF6djjo699NCfm8i83Pnr1Gg8tZtUi7xEnOh9MGi6MpuSt",
-    VITE_CITY: "Porto Velho",
+    VITE_CITY: "Livramento",
     VITE_STATE: "Rondônia",
-    VITE_CUSTOM_LOGO_URL: "/images/cunia/logo.png",
+    VITE_CUSTOM_LOGO_URL: "/images/livramento/logo.png",
     VITE_RESERVE: "+55 69 98111-1054",
   
-    // ===== CONFIGURAÇÕES DE CORES PERSONALIZADAS - RESEX CUNIÃ - PORTO VELHO =====
-    // Baseado no logo: Amarelo dourado (predominante - rio/água), Verde (floresta), Vermelho (barco)
-    VITE_PRIMARY_COLOR: "#F9A825",        // Amarelo dourado forte (rio/água) - cor principal
-    VITE_PRIMARY_LIGHT: "#FDD835",        // Amarelo claro vibrante
-    VITE_PRIMARY_DARK: "#F57F17",         // Amarelo mais escuro/laranja
+    // ===== CONFIGURAÇÕES DE CORES PERSONALIZADAS - LIVRAMENTO =====
+    // Baseado no logo: Amarelo vibrante (predominante), Laranja (gradiente), Marrom (artesanato)
+    VITE_PRIMARY_COLOR: "#FFC107",        // Amarelo vibrante (cor principal do logo)
+    VITE_PRIMARY_LIGHT: "#FFD54F",        // Amarelo claro brilhante
+    VITE_PRIMARY_DARK: "#FF8F00",         // Laranja dourado (parte inferior do gradiente)
   
-    VITE_SECONDARY_COLOR: "#2E7D32",      // Verde floresta amazônica
-    VITE_SECONDARY_LIGHT: "#66BB6A",      // Verde claro
-    VITE_SECONDARY_DARK: "#1B5E20",       // Verde escuro profundo
+    VITE_SECONDARY_COLOR: "#D84315",      // Laranja terracota (produtos artesanais)
+    VITE_SECONDARY_LIGHT: "#FF6F00",      // Laranja vibrante
+    VITE_SECONDARY_DARK: "#BF360C",       // Laranja escuro/terracota
   
-    VITE_BACKGROUND_COLOR: "#FFFEF5",     // Bege claríssimo (fundo do logo)
-    VITE_TEXT_COLOR: "#1B5E20",           // Verde escuro para texto (contraste)
+    VITE_BACKGROUND_COLOR: "#FFF9E6",     // Amarelo claríssimo (base do logo)
+    VITE_TEXT_COLOR: "#5D4037",           // Marrom para texto (contraste com artesanato)
   
-    // ===== CONFIGURAÇÕES ESPECÍFICAS DA CUNIÃ - PORTO VELHO =====
-    VITE_CUSTOM_LOGO: "/images/cunia/logo.png",
-    VITE_ACCENT_COLOR: "#FF6F00",         // Laranja vibrante (detalhes do logo)
-    VITE_SUCCESS_COLOR: "#388E3C",        // Verde sucesso
+    // ===== CONFIGURAÇÕES ESPECÍFICAS DE LIVRAMENTO =====
+    VITE_CUSTOM_LOGO: "/images/livramento/logo.png",
+    VITE_ACCENT_COLOR: "#FF6F00",         // Laranja vibrante (destaque)
+    VITE_SUCCESS_COLOR: "#43A047",        // Verde (elemento do brasão)
     VITE_WARNING_COLOR: "#FB8C00",        // Laranja aviso
     VITE_ERROR_COLOR: "#D32F2F",          // Vermelho erro
-    VITE_INFO_COLOR: "#0277BD",           // Azul (pássaros)
+    VITE_INFO_COLOR: "#1565C0",           // Azul (brasão no topo)
   
-    VITE_RED_COLOR: "#C62828",            // Vermelho do barco
-  VITE_BLACK_COLOR: "#263238",          // Preto com tom verde escuro
+    VITE_RED_COLOR: "#C62828",            // Vermelho vibrante
+  VITE_BLACK_COLOR: "#3E2723",          // Marrom escuro (letras "LIVRAMENTO")
 
-  VITE_BUSINESS_NAME: "Cuniã Porto Velho",
+  VITE_BUSINESS_NAME: "Livramento",
   VITE_SHOW_BUSINESS_NAME: "false",     // Mostrar nome do negócio junto com o logo (desabilitado)
   
   // ===== CONFIGURAÇÕES DE LOCALIZAÇÃO =====

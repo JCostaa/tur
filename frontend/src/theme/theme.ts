@@ -6,26 +6,26 @@ import { brandColors } from '../config/colors';
  * @param customColors - Cores personalizadas do .env ou cores padrão
  */
 export const createCustomTheme = (customColors?: any) => {
-  // Se não há cores personalizadas, usar cores reais da logo Cuniã
+  // Se não há cores personalizadas, usar cores reais da logo de Livramento
   const colors = customColors || {
     primary: {
-      main: brandColors.primary.green,
-      light: brandColors.primary.greenLight,
-      dark: brandColors.primary.greenDark,
-      contrastText: brandColors.neutral.white,
-    },
-    secondary: {
       main: brandColors.primary.gold,
       light: brandColors.primary.goldLight,
       dark: brandColors.primary.goldDark,
       contrastText: brandColors.neutral.white,
     },
+    secondary: {
+      main: brandColors.primary.red,
+      light: brandColors.secondary.redLight,
+      dark: brandColors.secondary.redDark,
+      contrastText: brandColors.neutral.white,
+    },
     background: {
-      default: '#F5F5DC', // Fundo bege claro
+      default: '#FFF9E6', // Amarelo claríssimo
       paper: brandColors.neutral.white,
     },
     text: {
-      primary: brandColors.primary.greenDark,
+      primary: '#5D4037', // Marrom para texto
       secondary: brandColors.neutral.gray,
     },
     success: {
