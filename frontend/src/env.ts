@@ -3,10 +3,10 @@ export const env = {
     VITE_API_URL: "https://tur-production.up.railway.app",
     VITE_SKOOBTUR_API_URL: "https://www.skoobtur.com/api/public",
     VITE_SKOOBTUR_API_KEY: "Jnw6M615NguH3eo1b5MFGifPLVR62WdaY1bab6KUtv8ZrQJnlHb8LQxF6djjo699NCfm8i83Pnr1Gg8tZtUi7xEnOh9MGi6MpuSt",
-    VITE_CITY: "Livramento",
-    VITE_STATE: "Rondônia",
+    VITE_CITY: "NOSSA SENHORA DO LIVRAMENTO",
+    VITE_STATE: "Mato Grosso",
     VITE_CUSTOM_LOGO_URL: "/images/livramento/logo.png",
-    VITE_RESERVE: "+55 69 98111-1054",
+    VITE_RESERVE: false,
   
     // ===== CONFIGURAÇÕES DE CORES PERSONALIZADAS - LIVRAMENTO =====
     // Baseado no logo: Amarelo vibrante (predominante), Laranja (gradiente), Marrom (artesanato)
@@ -32,7 +32,7 @@ export const env = {
     VITE_RED_COLOR: "#C62828",            // Vermelho vibrante
   VITE_BLACK_COLOR: "#3E2723",          // Marrom escuro (letras "LIVRAMENTO")
 
-  VITE_BUSINESS_NAME: "Livramento",
+  VITE_BUSINESS_NAME: "Nossa Senhora do Livramento",
   VITE_SHOW_BUSINESS_NAME: "false",     // Mostrar nome do negócio junto com o logo (desabilitado)
   
   // ===== CONFIGURAÇÕES DE LOCALIZAÇÃO =====

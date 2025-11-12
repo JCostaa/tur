@@ -16,6 +16,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useAutoSlide } from '../hooks/useAutoSlide';
 import { decodeHtmlEntities } from '../utils/decodeHtml';
+import { formatPrice } from '../utils/formatPrice';
 import { env } from '../env';
 
 const SectionWrapper = styled(Box)(({ theme }) => ({
@@ -548,6 +549,13 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
     }
   };
 
+  const handleReserveClick = (e: React.MouseEvent, pkg: TravelPackage) => {
+    e.stopPropagation();
+    
+    // Mesmo comportamento do card click - navega para a página de detalhes
+    handleCardClick(pkg);
+  };
+
 
   return (
     <SectionWrapper style={{ position: 'relative' }}>
@@ -759,7 +767,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                           {pkg.sale_price && calculateDiscount(pkg.price, pkg.sale_price).discount > 0 ? (
                             <>
                               <PackagePrice sx={{ color: theme.palette.primary.main, marginBottom: 0 }}>
-                                {pkg.sale_price}
+                                {formatPrice(pkg.sale_price)}
                               </PackagePrice>
                               <Box sx={{ 
                                 background: '#ff4444', 
@@ -776,12 +784,12 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                                 color: '#999', 
                                 fontSize: 12 
                               }}>
-                                {pkg.price}
+                                {formatPrice(pkg.price)}
                               </Typography>
                             </>
                           ) : (
                             <PackagePrice sx={{ marginBottom: 0 }}>
-                              {pkg.price}
+                              {formatPrice(pkg.price)}
                             </PackagePrice>
                           )}
                         </Box>
@@ -793,7 +801,10 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                           onClick={e => { e.stopPropagation(); handleCardClick(pkg); }}
                         >Leia Mais</ActionButton>
                         {showReserveButton && (
-                          <ActionButton variant="contained">Reserve Agora</ActionButton>
+                          <ActionButton 
+                            variant="contained"
+                            onClick={e => handleReserveClick(e, pkg)}
+                          >Reserve Agora</ActionButton>
                         )}
                       </CardActionsStyled>
                     </CardContentStyled>
@@ -898,7 +909,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                     {pkg.sale_price && calculateDiscount(pkg.price, pkg.sale_price).discount > 0 ? (
                       <>
                         <PackagePrice sx={{ color: theme.palette.primary.main, marginBottom: 0 }}>
-                          {pkg.sale_price}
+                          {formatPrice(pkg.sale_price)}
                         </PackagePrice>
                         <Box sx={{ 
                           background: '#ff4444', 
@@ -915,12 +926,12 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                           color: '#999', 
                           fontSize: 12 
                         }}>
-                          {pkg.price}
+                          {formatPrice(pkg.price)}
                         </Typography>
                       </>
                     ) : (
                       <PackagePrice sx={{ marginBottom: 0 }}>
-                        {pkg.price}
+                        {formatPrice(pkg.price)}
                       </PackagePrice>
                     )}
                   </Box>
@@ -932,7 +943,10 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                     onClick={e => { e.stopPropagation(); handleCardClick(pkg); }}
                   >Leia Mais</ActionButton>
                   {showReserveButton && (
-                    <ActionButton variant="contained">Reserve Agora</ActionButton>
+                    <ActionButton 
+                      variant="contained"
+                      onClick={e => handleReserveClick(e, pkg)}
+                    >Reserve Agora</ActionButton>
                   )}
                 </CardActionsStyled>
               </CardContentStyled>

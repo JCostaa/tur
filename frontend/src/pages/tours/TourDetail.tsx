@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getTours } from '../../services/tours';
 import { Box, Container, Typography, Card, CardContent, styled, Button, Chip, Divider, Avatar, Link } from '@mui/material';
-import { ArrowBack, Star, LocationOn, AccessTime, Group } from '@mui/icons-material';
+import { ArrowBack, Star, LocationOn, AccessTime, Group, Directions } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
@@ -14,6 +14,7 @@ import Slide from '@mui/material/Slide';
 import { getVarMarketplaceUrl } from '../../utils/varMarketplace';
 import { decodeHtmlEntities } from '../../utils/decodeHtml';
 import { env } from '../../env';
+import { formatPrice } from '../../utils/formatPrice';
 
 const BackgroundImage = styled(Box)(({ theme }) => ({
   width: '100%',
@@ -185,6 +186,11 @@ const TourDetail: React.FC = () => {
   const provider = tour.provider || {};
   const video = tour.video;
   const faq = Array.isArray(tour.faq) ? tour.faq : [];
+  
+  // Coordenadas para Google Maps
+  const latitude = tour.location?.lat || tour.location?.latitude || tour.lat || tour.latitude;
+  const longitude = tour.location?.lng || tour.location?.longitude || tour.lng || tour.longitude;
+  const hasCoordinates = latitude && longitude;
 
   return (
     <Box sx={{ background: '#f8f9fa', minHeight: '100vh', pb: 8 }}>
@@ -200,6 +206,7 @@ const TourDetail: React.FC = () => {
           <Subtitle>
             <LocationOn sx={{ mr: 1, fontSize: 22 }} /> {decodeHtmlEntities(location)}
           </Subtitle>
+          
           <ChipsRow>
             <Chip icon={<Star sx={{ color: '#FFD700' }} />} label={`${rating} estrelas`} />
             <Chip icon={<AccessTime />} label={duration} />
@@ -441,7 +448,7 @@ const TourDetail: React.FC = () => {
               </Box>
             </Box>
           )}
-          <Price>Valor: {price}</Price>
+          <Price>Valor: {formatPrice(price)}</Price>
           {/* Vídeo */}
           {video && typeof video === 'string' && (
             <Box sx={{ mb: 2 }}>
@@ -477,8 +484,9 @@ const TourDetail: React.FC = () => {
               </Box>
             </ProviderBox>
           )}
+          
           <ReserveButton sx={{ mt: 2 }} onClick={() => {
-            const whatsappNumber = env.VITE_RESERVE;
+            const whatsappNumber = (env as any)?.VITE_RESERVE || null;
             
             if (whatsappNumber) {
               // Limpar e formatar o número do WhatsApp
@@ -490,11 +498,41 @@ const TourDetail: React.FC = () => {
               window.open(whatsappUrl, '_blank');
             } else {
               // Fallback para o comportamento anterior se VITE_RESERVE não estiver configurado
-              const baseUrl = getVarMarketplaceUrl().replace('/municipio/', '');
+          
+              const baseUrl = getVarMarketplaceUrl();
+              
               window.open(`${baseUrl}/tour/${tour.slug}`, '_blank');
             }
           }}>Reservar Agora</ReserveButton>
         </InfoCard>
+        
+        {/* Mapa Google Maps */}
+        {hasCoordinates && (
+          <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2, mb: 4 }}>
+            <Box sx={{ maxWidth: 900, width: '100%' }}>
+              <Card sx={{ borderRadius: 3, boxShadow: 2, p: 0 }}>
+                <Box sx={{ p: 3 }}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
+                    <Directions sx={{ mr: 1, verticalAlign: 'middle', color: '#FF5722' }} />
+                    Localização e Rota
+                  </Typography>
+                  <Box sx={{ width: '100%', height: 400, borderRadius: 2, overflow: 'hidden', boxShadow: 1 }}>
+                    <iframe
+                      title="Mapa do tour - Traçar rota"
+                      width="100%"
+                      height="400"
+                      style={{ border: 0 }}
+                      loading="lazy"
+                      allowFullScreen
+                      referrerPolicy="no-referrer-when-downgrade"
+                      src={`https://www.google.com/maps?q=${latitude},${longitude}&output=embed`}
+                    />
+                  </Box>
+                </Box>
+              </Card>
+            </Box>
+          </Container>
+        )}
       </Container>
     </Box>
   );

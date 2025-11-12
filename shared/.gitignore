@@ -1,16 +1,15 @@
 # Dependencies
 node_modules
+
+# Build
 dist
-dist-ssr
 
 # Environment
 .env
 .env.*
 
-# Vercel
-.vercel
-
 # Editor
 .vscode/*
 !.vscode/extensions.json
 .DS_Store
+

@@ -23,6 +23,7 @@ import Header from '../../components/Header';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getTours } from '../../services/tours';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { formatPrice } from '../../utils/formatPrice';
 
 // Tipo básico para tour
 interface Tour {
@@ -153,7 +154,7 @@ const AllTours: React.FC = () => {
       location: tour.location?.city || tour.location?.address || 'Local não informado',
       rating: 5, // valor padrão
       duration: tour.duration_description || (tour.duration ? `${tour.duration} min` : 'Duração não informada'),
-      price: tour.price,
+      price: formatPrice(tour.price),
       image: tour.image,
       people: 2, // valor padrão
       description,

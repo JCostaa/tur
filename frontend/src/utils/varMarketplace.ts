@@ -29,9 +29,7 @@ export const getVarMarketplaceUrl = (): string => {
     console.warn('VITE_CITY não está configurada no env.ts, usando URL padrão');
     return 'https://www.skoobtur.com/';
   }
-  
-  const citySlug = cityToSlug(cityName);
-  return `https://skoobtur.com/municipio/${citySlug}`;
+  return `https://skoobtur.com`;
 };
 
 /**

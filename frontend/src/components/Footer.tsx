@@ -24,18 +24,14 @@ import CurvedDivider from './CurvedDivider';
 import { env } from '../env';
 
 // Importe os logos disponíveis. Use placeholders para os que não existem.
-import logoCentelha from '../../public/images/footer/sebrae.png'; // Placeholder
-import logoFapemat from '../../public/images/footer/porto-velho.png'; // Placeholder
+import logoCentelha from '../../public/images/footer/centelha.png'; // Placeholder  
 import logoConfap from '../../public/images/footer/confap.png'; // Placeholder
 import logoCNPq from '../../public/images/footer/cnpq.png'; // Placeholder
 import logoCerti from '../../public/images/footer/certi.png'; // Placeholder
 import logoFNDCT from '../../public/images/footer/fndct.png'; // Placeholder
 import logoFinep from '../../public/images/footer/finep.png'; // Placeholder
 import logoMCTI from '../../public/images/footer/ministerio.png'; // Placeholder
-import logoSebrae from '../../public/images/cunia/sebrae.png'; // Placeholder
-import logoICMBio from '../../public/images/cunia/icm.png'; // Placeholder
-import logoPGA from '../../public/images/cunia/pga.png'; // Placeholder
-import logoFeco from '../../public/images/cunia/feco.png'; // Placeholder
+import logofapemat from '../../public/images/footer/fapemat.png'; // Placeholder
 
 
 const LogoImg = styled('img')({
@@ -62,16 +58,16 @@ const SectionTitle = styled(Typography)({
 });
 
 const FooterSection = styled(Box)({
-  backgroundColor: brandColors.primary.greenDark, // Verde escuro da logo Cuniã
+  backgroundColor: 'rgba(216, 67, 21, 0.95)', // Laranja terracota igual ao header
   color: 'white',
   padding: '48px 0',
 });
 
 const FooterBottomSection = styled(Box)({
-  backgroundColor: brandColors.primary.black, // Preto da logo Cuniã
-  color: '#B0B0B0',
+  backgroundColor: '#FFFFFF', // Branco
+  color: '#333333',
   padding: '24px 0',
-  borderTop: `1px solid ${brandColors.primary.greenDark}`,
+  borderTop: `1px solid #E0E0E0`,
 });
 
 const SocialIcon = styled(IconButton)<{ disabled?: boolean }>(({ disabled }) => ({
@@ -194,56 +190,39 @@ const Footer: React.FC = () => {
             py: { xs: 2, md: 3 },
           }}
         >
-            {/* Apoio */}
-            <Box flex={1} sx={{ mb: { xs: 4, md: 0 } }}>
-            <SectionTitle>Relização</SectionTitle>
-            <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
-              <LogoImg src={logoSebrae} alt="Centelha" />
-              <LogoImg src={logoFapemat} alt="Fapemat" />
-            </Box>
-          </Box>
-           {/* Realização */}
-        
-            <Box flex={1}>
+          {/* Apoio */}
+          <Box flex={1} sx={{ mb: { xs: 4, md: 0 } }}>
             <SectionTitle>Apoio</SectionTitle>
             <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
-              <LogoImg src={logoICMBio} alt="ICM" />
-              <LogoImg src={logoFeco} alt="Feco" />
-              <LogoImg src={logoPGA} alt="PPGA" />
+              <LogoImg src={logoCentelha} alt="Centelha" />
+              <LogoImg src={logofapemat} alt="Fapemat" />
             </Box>
           </Box>
         
           {/* Parceria */}
-          {/* <Box flex={1} sx={{ mb: { xs: 4, md: 0 } }}>
+          <Box flex={1} sx={{ mb: { xs: 4, md: 0 } }}>
             <SectionTitle>Parceria</SectionTitle>
             <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
               <LogoImg src={logoConfap} alt="Confap" />
               <LogoImg src={logoCNPq} alt="CNPq" />
               <LogoImg src={logoCerti} alt="Certi" />
             </Box>
-          </Box> */}
-         
+          </Box>
+
+          {/* Realização */}
+          <Box flex={1}>
+            <SectionTitle>Realização</SectionTitle>
+            <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
+              <LogoImg src={logoFNDCT} alt="FNDCT" />
+              <LogoImg src={logoFinep} alt="Finep" />
+              <LogoImg src={logoMCTI} alt="MCTI" />
+            </Box>
+          </Box>
         </Box>
 
         {/* Calendly Widget */}
         <Box sx={{ my: 6 }}>
           <CurvedDivider height={80} backgroundColor="#FF8C00" />
-        </Box>
-        <Box sx={{ mt: 4, mb: 4 }}>
-          <SectionTitle sx={{ mb: 4 }}>Agende o seu turismo virtual</SectionTitle>
-          <Box sx={{ 
-            width: '100%',
-            minHeight: '700px',
-            backgroundColor: 'white',
-            borderRadius: 2,
-            overflow: 'hidden'
-          }}>
-            <div 
-              className="calendly-inline-widget" 
-              data-url="https://calendly.com/resexcunia/30min" 
-              style={{ minWidth: '320px', height: '700px', width: '100%' }}
-            />
-          </Box>
         </Box>
       </Container>
     </Box>
@@ -431,12 +410,12 @@ const Footer: React.FC = () => {
           flexDirection: { xs: 'column', md: 'row' },
           gap: 2
         }}>
-          <Typography variant="body2" sx={{ color: '#B0B0B0' }}>
+          <Typography variant="body2" sx={{ color: '#666666' }}>
             ©  {getCityName()}. All right reserved.
           </Typography>
-          <Typography variant="body2" sx={{ color: '#B0B0B0' }}>
-            Desenvolvido Por <Link href="https://bizmd.com.br/2020/" sx={{ color: brandColors.primary.gold }}>BIZ Marketing Digital</Link>. 
-            Com a tecnologia <Link href="https://var.tur.br/" sx={{ color: brandColors.primary.gold }}>VAR - Plataforma de Inteligência Turística</Link>
+          <Typography variant="body2" sx={{ color: '#666666' }}>
+            Desenvolvido Por <Link href="https://bizmd.com.br/2020/" sx={{ color: 'rgba(216, 67, 21, 0.95)' }}>BIZ Marketing Digital</Link>. 
+            Com a tecnologia <Link href="https://var.tur.br/" sx={{ color: 'rgba(216, 67, 21, 0.95)' }}>VAR - Plataforma de Inteligência Turística</Link>
           </Typography>
         </Box>
       </Container>

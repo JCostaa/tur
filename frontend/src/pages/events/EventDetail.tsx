@@ -12,6 +12,8 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Slide from '@mui/material/Slide';
 import { decodeHtmlEntities } from '../../utils/decodeHtml';
+import { env } from '../../env';
+import { getVarMarketplaceUrl } from '../../utils/varMarketplace';
 
 const BackgroundImage = styled(Box)(({ theme }) => ({
   width: '100%',
@@ -476,7 +478,31 @@ const EventDetail: React.FC = () => {
             </ProviderBox>
           )}
           <ReserveButton sx={{ mt: 2 }} onClick={() => {
-            window.open(`https://wa.me/${provider.social.whatsapp}`, '_blank');
+            const whatsappNumber = (env as any)?.VITE_RESERVE || null;
+            
+            if (whatsappNumber) {
+              // Limpar e formatar o número do WhatsApp
+              const cleanNumber = whatsappNumber.replace(/[^\d+]/g, '');
+              
+              // Criar mensagem personalizada com informações do evento
+              const message = encodeURIComponent(`Olá! Tenho interesse no evento "${event.title}". Gostaria de mais informações e fazer uma reserva.`);
+              const whatsappUrl = `https://wa.me/${cleanNumber}?text=${message}`;
+              window.open(whatsappUrl, '_blank');
+            } else {
+              // Fallback: tenta usar o WhatsApp do provider se disponível
+              if (provider.social?.whatsapp) {
+                window.open(`https://wa.me/${provider.social.whatsapp}`, '_blank');
+              } else {
+                // Se não tiver provider WhatsApp, abre no var marketplace
+                const baseUrl = getVarMarketplaceUrl();
+                
+                if (event.slug) {
+                  window.open(`${baseUrl}/event/${event.slug}`, '_blank');
+                } else {
+                  window.open(`${baseUrl}/event/${event.id}`, '_blank');
+                }
+              }
+            }
           }}>Reservar Agora</ReserveButton>
         </InfoCard>
       </Container>

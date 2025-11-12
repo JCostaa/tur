@@ -1,0 +1,25 @@
+# Dependencies
+node_modules
+
+# Environment
+.env
+.env.*
+
+# Database
+*.sqlite
+*.db
+
+# Build
+dist
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+
+# Uploads (if you don't want to track uploaded files)
+# uploads/
+
+# Logs
+*.log
+

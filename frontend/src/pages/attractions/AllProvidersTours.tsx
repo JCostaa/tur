@@ -23,6 +23,7 @@ import Header from '../../components/Header';
 import { useQuery } from '@tanstack/react-query';
 import { getProviders } from '../../services/providers';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { formatPrice } from '../../utils/formatPrice';
 
 // Tipo básico para provider tour
 interface ProviderTour {
@@ -132,7 +133,7 @@ const AllProvidersTours: React.FC = () => {
     location: tour.location?.city || tour.location?.address || 'Local não informado',
     rating: 5, // valor padrão
     duration: '', // Removido para não exibir duração
-    price: tour.price,
+    price: formatPrice(tour.price),
     image: tour.image,
     people: 2, // valor padrão
     description: tour.content ? tour.content.replace(/<[^>]+>/g, '') : '', // remove HTML

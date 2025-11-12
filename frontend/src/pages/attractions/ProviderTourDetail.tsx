@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getProviders } from '../../services/providers';
 import { Box, Container, Typography, Card, styled, Button, Chip, Divider, Avatar, Link, useTheme } from '@mui/material';
-import { ArrowBack, Star, LocationOn } from '@mui/icons-material';
+import { ArrowBack, Star, LocationOn, Directions } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
@@ -12,6 +12,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Slide from '@mui/material/Slide';
 import { decodeHtmlEntities } from '../../utils/decodeHtml';
+import { formatPrice } from '../../utils/formatPrice';
 
 const BackgroundImage = styled(Box)(({ theme }) => ({
   width: '100%',
@@ -118,6 +119,22 @@ const ReserveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
+const RouteButton = styled(Button)(({ theme }) => ({
+  background: '#4285F4',
+  color: '#fff',
+  fontWeight: 600,
+  fontSize: 16,
+  borderRadius: 12,
+  padding: '10px 24px',
+  boxShadow: '0 2px 8px rgba(66,133,244,0.15)',
+  textTransform: 'none',
+  '&:hover': {
+    background: '#3367D6',
+    transform: 'translateY(-2px)',
+    boxShadow: '0 4px 12px rgba(66,133,244,0.25)',
+  },
+}));
+
 const GalleryImage = styled('img')({
   width: 120,
   height: 80,
@@ -178,11 +195,16 @@ const ProviderTourDetail: React.FC = () => {
   // Campos básicos
   const descriptionHtml = tour.content || tour.description || '';
   const location = tour.location?.city || tour.location?.address || tour.location || 'Local não informado';
-  const price = tour.price || tour.sale_price || 'Preço não informado';
+  const price = formatPrice(tour.price || tour.sale_price || 'Preço não informado');
   const image = tour.image;
   const rating = tour.rating || 5;
   const gallery = Array.isArray(tour.gallery) ? tour.gallery.filter((img: Record<string, unknown>) => img && (img.large || img.url || img)) : [];
   const banner = tour.banner || image;
+  
+  // Coordenadas para Google Maps
+  const latitude = tour.location?.lat || tour.location?.latitude || tour.lat || tour.latitude;
+  const longitude = tour.location?.lng || tour.location?.longitude || tour.lng || tour.longitude;
+  const hasCoordinates = latitude && longitude;
   
   // Campos informativos
   const howItWorks = tour.how_it_works;
@@ -229,6 +251,7 @@ const ProviderTourDetail: React.FC = () => {
           <Subtitle>
             <LocationOn sx={{ mr: 1, fontSize: 22 }} /> {decodeHtmlEntities(location)}
           </Subtitle>
+          
           <ChipsRow>
             <Chip icon={<Star sx={{ color: '#FFD700' }} />} label={`${rating} estrelas`} />
           </ChipsRow>
@@ -770,6 +793,7 @@ const ProviderTourDetail: React.FC = () => {
               </Box>
             </Box>
           )}
+          
           {/* Vídeo */}
          
           <ReserveButton sx={{ mt: 2 }} onClick={() => {
@@ -783,6 +807,34 @@ const ProviderTourDetail: React.FC = () => {
             }
           }}>Entrar em Contato</ReserveButton>
         </InfoCard>
+        
+        {/* Mapa Google Maps */}
+        {hasCoordinates && (
+          <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2, mb: 4 }}>
+            <Box sx={{ maxWidth: 900, width: '100%' }}>
+              <Card sx={{ borderRadius: 3, boxShadow: 2, p: 0 }}>
+                <Box sx={{ p: 3 }}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
+                    <Directions sx={{ mr: 1, verticalAlign: 'middle', color: theme.palette.primary.main }} />
+                    Localização e Rota
+                  </Typography>
+                  <Box sx={{ width: '100%', height: 400, borderRadius: 2, overflow: 'hidden', boxShadow: 1 }}>
+                    <iframe
+                      title="Mapa do fornecedor - Traçar rota"
+                      width="100%"
+                      height="400"
+                      style={{ border: 0 }}
+                      loading="lazy"
+                      allowFullScreen
+                      referrerPolicy="no-referrer-when-downgrade"
+                      src={`https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&output=embed`}
+                    />
+                  </Box>
+                </Box>
+              </Card>
+            </Box>
+          </Container>
+        )}
       </Container>
     </Box>
   );

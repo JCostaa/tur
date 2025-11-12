@@ -4,6 +4,7 @@ import { getTours } from '../../services/tours';
 import { theme } from '../../theme/theme';
 import TravelPackages from '../../components/TravelPackages';
 import { useNavigate } from 'react-router-dom';
+import { formatPrice } from '../../utils/formatPrice';
 
 const Tours: React.FC = () => {
   const navigate = useNavigate();
@@ -119,8 +120,8 @@ const Tours: React.FC = () => {
       location,
       rating: tour.rating || 5,
       duration: tour.duration_description || tour.duration || '1h',
-      price: tour.price || 'R$ 0',
-      sale_price: tour.sale_price,
+      price: formatPrice(tour.price || 'R$ 0'),
+      sale_price: tour.sale_price ? formatPrice(tour.sale_price) : undefined,
       image: tour.image || '/images/browse-3.jpg',
       people: tour.people || 2,
       gallery: tour.gallery || [],

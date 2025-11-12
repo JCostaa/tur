@@ -86,16 +86,29 @@ const GifSection: React.FC = () => {
                 }}>
                   SAIBA MAIS
                 </Box>
-                <Box sx={{ 
-                  backgroundColor: 'rgba(255,255,255,0.2)', 
-                  color: 'white', 
-                  px: 2, 
-                  py: 0.5, 
-                  borderRadius: 20,
-                  fontSize: '0.75rem',
-                  border: '1px solid rgba(255,255,255,0.3)'
-                }}>
-                  💻 WWW.TUR.BR
+                <Box 
+                  component="a"
+                  href="https://www.icone.tur.br"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ 
+                    backgroundColor: 'rgba(255,255,255,0.2)', 
+                    color: 'white', 
+                    px: 2, 
+                    py: 0.5, 
+                    borderRadius: 20,
+                    fontSize: '0.75rem',
+                    border: '1px solid rgba(255,255,255,0.3)',
+                    textDecoration: 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255,255,255,0.3)',
+                      transform: 'translateY(-2px)'
+                    }
+                  }}
+                >
+                  💻 WWW.ICONE.TUR.BR
                 </Box>
                 <Box sx={{ 
                   backgroundColor: 'rgba(255,255,255,0.2)', 
@@ -106,7 +119,7 @@ const GifSection: React.FC = () => {
                   fontSize: '0.75rem',
                   border: '1px solid rgba(255,255,255,0.3)'
                 }}>
-                  📞 (65) 99202 0 TURMA)
+                  📞 (65) 4042-3151
                 </Box>
                 <Box sx={{ 
                   backgroundColor: 'rgba(255,255,255,0.2)', 
@@ -236,18 +249,31 @@ const GifSection: React.FC = () => {
                   fontSize: '0.75rem',
                   fontWeight: 600
                 }}>
-                  📱 (65) 9 9642-2740
+                  📱 (65) 4042-2240
                 </Box>
-                <Box sx={{ 
-                  backgroundColor: '#FF9800', 
-                  color: 'white', 
-                  px: 2, 
-                  py: 0.5, 
-                  borderRadius: 20,
-                  fontSize: '0.75rem',
-                  fontWeight: 600
-                }}>
-                  📧 CONTATO@VAR.TUR.BR
+                <Box 
+                  component="a"
+                  href="https://www.var.tur.br"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ 
+                    backgroundColor: '#FF9800', 
+                    color: 'white', 
+                    px: 2, 
+                    py: 0.5, 
+                    borderRadius: 20,
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      backgroundColor: '#F57C00',
+                      transform: 'translateY(-2px)'
+                    }
+                  }}
+                >
+                  💻 WWW.VAR.TUR.BR
                 </Box>
               </Box>
             </Box>

@@ -18,10 +18,11 @@ import NewsSectionHome from '../components/NewsSectionHome';
 import TestimonialsSectionHome from '../components/TestimonialsSectionHome';
 import Preloader from '../components/Preloader';
 import SectionDivider from '../components/SectionDivider';
-import PromoSection from '../components/PromoSection';
+import EconomicStats from '../components/EconomicStats';
 import { useQuery } from '@tanstack/react-query';
 import { getNews } from '../services/news';
 import { getTestimonials } from '../services/testimonials';
+import PodcastSection from '../components/PodcastSection';
 
 const Home: React.FC = () => {
   const location = useLocation();
@@ -162,6 +163,11 @@ const Home: React.FC = () => {
         </Box>
         <SectionDivider sectionIndex={1} />
         
+        <Box id="estatisticas">
+          <EconomicStats />
+        </Box>
+        <SectionDivider sectionIndex={1.5} />
+        
         <SectionWithDivider
           sectionId="experiencias"
           SectionComponent={Experiences}
@@ -218,9 +224,9 @@ const Home: React.FC = () => {
           boxSx={{ minHeight: 300 }}
         />
         
-        {/* <Box id="podcast">
+        <Box id="podcast">
           <PodcastSection />
-        </Box> */}
+        </Box>
         <SectionDivider sectionIndex={11} />
         
         <SectionWithDivider
@@ -248,11 +254,6 @@ const Home: React.FC = () => {
           )}
           sectionIndex={101}
         />
-        
-        <Box id="promocao">
-          <PromoSection />
-        </Box>
-       
         {/* <ImageAccordion />
         <StatsSection />
         <VideoSection /> */}
