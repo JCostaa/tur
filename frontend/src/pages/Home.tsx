@@ -19,6 +19,7 @@ import TestimonialsSectionHome from '../components/TestimonialsSectionHome';
 import Preloader from '../components/Preloader';
 import SectionDivider from '../components/SectionDivider';
 import EconomicStats from '../components/EconomicStats';
+import MapRoutesSection from '../components/MapRoutesSection';
 import { useQuery } from '@tanstack/react-query';
 import { getNews } from '../services/news';
 import { getTestimonials } from '../services/testimonials';
@@ -162,6 +163,11 @@ const Home: React.FC = () => {
           <Services />
         </Box>
         <SectionDivider sectionIndex={1} />
+        
+        <Box id="como-chegar">
+          <MapRoutesSection />
+        </Box>
+        <SectionDivider sectionIndex={1.3} />
         
         <Box id="estatisticas">
           <EconomicStats />

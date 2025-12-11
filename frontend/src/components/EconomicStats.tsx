@@ -439,7 +439,10 @@ const EconomicStats: React.FC = () => {
           setIsVisible(true);
         }
       },
-      { threshold: 0.2 }
+      { 
+        threshold: 0.05, // Reduzido para funcionar melhor no mobile
+        rootMargin: '50px 0px' // Adiciona margem para detectar antes de entrar na viewport
+      }
     );
 
     if (currentRef) {

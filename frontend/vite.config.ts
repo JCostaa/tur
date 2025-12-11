@@ -10,15 +10,15 @@ export default defineConfig({
       '/api/skoobtur': {
         target: 'https://www.skoobtur.com/api/public',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/skoobtur/, ''),
-        configure: (proxy) => {
-          proxy.on('error', (err) => {
+        rewrite: (path: string) => path.replace(/^\/api\/skoobtur/, ''),
+        configure: (proxy: { on: Function }) => {
+          proxy.on('error', (err: Error) => {
             console.log('proxy error', err);
           });
-          proxy.on('proxyReq', (_, req) => {
+          proxy.on('proxyReq', (_: unknown, req: { method: string; url: string }) => {
             console.log('Sending Request to the Target:', req.method, req.url);
           });
-          proxy.on('proxyRes', (proxyRes, req) => {
+          proxy.on('proxyRes', (proxyRes: { statusCode: number }, req: { url: string }) => {
             console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
           });
         },
